@@ -75,7 +75,7 @@ struct ProfileView: View {
             HStack(spacing: 16) {
                 ZStack {
                     Circle()
-                        .fill(LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .fill(AppTheme.Brand.gradient)
                         .frame(width: 70, height: 70)
                     Text(avatarInitials)
                         .font(.title).bold()
@@ -93,7 +93,7 @@ struct ProfileView: View {
                 Button { showEditProfile = true } label: {
                     Image(systemName: "pencil.circle.fill")
                         .font(.title2)
-                        .foregroundColor(.blue)
+                        .foregroundColor(AppTheme.Colors.primary)
                 }
             }
             .padding(.vertical, 8)
@@ -103,13 +103,13 @@ struct ProfileView: View {
     private var statsSection: some View {
         Section("Shopping Summary") {
             HStack(spacing: 0) {
-                StatBox(icon: "shippingbox.fill", value: "\(orders.count)", label: "Orders", color: .blue)
+                StatBox(icon: "shippingbox.fill", value: "\(orders.count)", label: "Orders", color: AppTheme.Colors.primary)
                 Divider()
-                StatBox(icon: "creditcard.fill", value: String(format: "$%.0f", totalSpent), label: "Spent", color: .purple)
+                StatBox(icon: "creditcard.fill", value: String(format: "$%.0f", totalSpent), label: "Spent", color: AppTheme.Colors.accent)
                 Divider()
                 StatBox(icon: "checkmark.circle.fill",
                         value: "\(orders.filter { $0.status == .delivered }.count)",
-                        label: "Delivered", color: .green)
+                        label: "Delivered", color: AppTheme.Colors.success)
             }
             .frame(height: 80)
         }
@@ -136,7 +136,7 @@ struct ProfileView: View {
                         .foregroundColor(.secondary)
                     ProgressView(value: Double(loyaltyPoints % AppConstants.Loyalty.goldThreshold),
                                  total: Double(AppConstants.Loyalty.goldThreshold))
-                        .tint(loyaltyPoints >= AppConstants.Loyalty.goldThreshold ? .yellow : .blue)
+                        .tint(loyaltyPoints >= AppConstants.Loyalty.goldThreshold ? .yellow : AppTheme.Colors.primary)
                     Text(loyaltyPoints >= AppConstants.Loyalty.goldThreshold
                          ? "You're a Gold Member!"
                          : "\(AppConstants.Loyalty.goldThreshold - (loyaltyPoints % AppConstants.Loyalty.goldThreshold)) pts to Gold")
@@ -181,7 +181,7 @@ struct ProfileView: View {
                 showAddAddress = true
             } label: {
                 Label("Add Address", systemImage: "plus.circle")
-                    .foregroundColor(.blue)
+                    .foregroundColor(AppTheme.Colors.primary)
             }
         }
     }

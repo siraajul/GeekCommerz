@@ -4,16 +4,26 @@ struct OnboardingView: View {
     @AppStorage(AppConstants.StorageKeys.hasSeenOnboarding) private var hasSeenOnboarding = false
     @State private var currentPage = 0
 
-    private let pages: [(icon: String, color: Color, title: String, subtitle: String)] = [
-        ("bag.fill", .blue,
-         "Welcome to GeekCommerze",
-         "Your one-stop shop for premium tech products, gadgets, and accessories."),
-        ("magnifyingglass.circle.fill", .purple,
-         "Find Anything Instantly",
-         "Browse hundreds of products by category, filter by price, or search for exactly what you need."),
-        ("star.fill", .orange,
-         "Earn Rewards Every Order",
-         "Collect loyalty points on every purchase. Redeem them for exclusive discounts and perks."),
+    private struct Page {
+        let icon: String
+        let color: Color
+        let title: String
+        let subtitle: String
+    }
+
+    private let pages: [Page] = [
+        Page(icon: "bag.fill",
+             color: AppTheme.Colors.primary,
+             title: "Welcome to GeekCommerz",
+             subtitle: "Your one-stop shop for premium tech products, gadgets, and accessories."),
+        Page(icon: "magnifyingglass.circle.fill",
+             color: AppTheme.Colors.accent,
+             title: "Find Anything Instantly",
+             subtitle: "Browse hundreds of products by category, filter by price, or search for exactly what you need."),
+        Page(icon: "star.fill",
+             color: Color.orange,
+             title: "Earn Rewards Every Order",
+             subtitle: "Collect loyalty points on every purchase. Redeem them for exclusive discounts and perks."),
     ]
 
     var body: some View {
@@ -44,9 +54,11 @@ struct OnboardingView: View {
                                 .font(.headline)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
-                                .background(pages[currentPage].color)
                                 .foregroundColor(.white)
-                                .clipShape(RoundedRectangle(cornerRadius: 14))
+                                .background {
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .fill(AppTheme.Brand.gradientH)
+                                }
                         }
 
                         Button {
@@ -64,9 +76,11 @@ struct OnboardingView: View {
                                 .font(.headline)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
-                                .background(pages[currentPage].color)
                                 .foregroundColor(.white)
-                                .clipShape(RoundedRectangle(cornerRadius: 14))
+                                .background {
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .fill(AppTheme.Brand.gradientH)
+                                }
                         }
                     }
                 }
@@ -83,21 +97,31 @@ struct OnboardingPage: View {
     let title: String
     let subtitle: String
 
+    @State private var appeared = false
+
     var body: some View {
         VStack(spacing: 32) {
             Spacer()
 
             ZStack {
                 Circle()
-                    .fill(color.opacity(0.12))
-                    .frame(width: 160, height: 160)
-                Circle()
-                    .fill(color.opacity(0.07))
+                    .fill(color.opacity(0.10))
                     .frame(width: 210, height: 210)
+                Circle()
+                    .fill(color.opacity(0.16))
+                    .frame(width: 160, height: 160)
                 Image(systemName: icon)
                     .font(.system(size: 70))
                     .foregroundColor(color)
             }
+            .scaleEffect(appeared ? 1.0 : 0.6)
+            .opacity(appeared ? 1.0 : 0)
+            .onAppear {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.68)) {
+                    appeared = true
+                }
+            }
+            .onDisappear { appeared = false }
 
             VStack(spacing: 16) {
                 Text(title)

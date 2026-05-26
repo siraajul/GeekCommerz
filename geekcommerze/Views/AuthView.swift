@@ -46,11 +46,7 @@ struct AuthView: View {
         VStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(LinearGradient(
-                        colors: [.blue, .purple],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ))
+                    .fill(AppTheme.Brand.gradient)
                     .frame(width: 80, height: 80)
                 Image(systemName: "bag.fill")
                     .font(.system(size: 34))
@@ -120,9 +116,11 @@ struct AuthView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(isFormValid ? Color.blue : Color.gray)
             .foregroundColor(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .background {
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(isFormValid ? AnyShapeStyle(AppTheme.Brand.gradientH) : AnyShapeStyle(Color.gray.opacity(0.5)))
+            }
         }
         .disabled(!isFormValid || isLoading)
     }
@@ -136,9 +134,9 @@ struct AuthView: View {
         } label: {
             Group {
                 if isSignUp {
-                    Text("Already have an account? ") + Text("Sign In").bold().foregroundColor(.blue)
+                    Text("Already have an account? ") + Text("Sign In").bold().foregroundColor(AppTheme.Colors.primary)
                 } else {
-                    Text("Don't have an account? ") + Text("Sign Up").bold().foregroundColor(.blue)
+                    Text("Don't have an account? ") + Text("Sign Up").bold().foregroundColor(AppTheme.Colors.primary)
                 }
             }
             .font(.subheadline)
@@ -152,7 +150,7 @@ struct AuthView: View {
         VStack(spacing: 20) {
             Image(systemName: "envelope.badge.checkmark.fill")
                 .font(.system(size: 60))
-                .foregroundColor(.blue)
+                .foregroundColor(AppTheme.Colors.primary)
             Text("Check your inbox")
                 .font(.title2).bold()
             Text("We sent a confirmation link to **\(email)**. Click it to activate your account, then sign in.")
@@ -165,7 +163,7 @@ struct AuthView: View {
                 password  = ""
             }
             .font(.subheadline.bold())
-            .foregroundColor(.blue)
+            .foregroundColor(AppTheme.Colors.primary)
         }
         .padding(24)
         .background(Color(.systemBackground))
