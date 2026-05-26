@@ -97,7 +97,7 @@ struct NotificationsView: View {
     @ViewBuilder
     private func notificationRow(_ notif: AppNotification) -> some View {
         NotificationRow(notification: notif)
-            .listRowBackground(notif.isRead ? Color(.systemBackground) : Color.blue.opacity(0.05))
+            .listRowBackground(notif.isRead ? Color(.systemBackground) : AppTheme.Brand.softTint)
             .contentShape(Rectangle())
             .onTapGesture {
                 withAnimation { notifStore.markRead(notif.id) }
@@ -109,7 +109,7 @@ struct NotificationsView: View {
                     } label: {
                         Label("Read", systemImage: "checkmark.circle")
                     }
-                    .tint(.blue)
+                    .tint(AppTheme.Colors.primary)
                 }
             }
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
@@ -154,7 +154,7 @@ struct NotificationRow: View {
 
             if !notification.isRead {
                 Circle()
-                    .fill(Color.blue)
+                    .fill(AppTheme.Colors.primary)
                     .frame(width: 8, height: 8)
                     .padding(.top, 6)
             }

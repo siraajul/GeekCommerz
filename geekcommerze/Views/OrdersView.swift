@@ -32,12 +32,14 @@ struct OrdersView: View {
                 .padding(.horizontal, 40)
             NavigationLink(destination: ShopView()) {
                 Text("Start Shopping")
-                    .font(.headline)
+                    .font(AppTheme.Typography.button)
                     .padding(.horizontal, 30)
                     .padding(.vertical, 12)
-                    .background(Color.blue)
                     .foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .background {
+                        RoundedRectangle(cornerRadius: AppTheme.Radius.card)
+                            .fill(AppTheme.Brand.gradientH)
+                    }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -80,7 +82,7 @@ struct OrderRow: View {
                 Spacer()
                 Text("$\(order.total, specifier: "%.2f")")
                     .font(.subheadline).bold()
-                    .foregroundColor(.blue)
+                    .foregroundColor(AppTheme.Colors.primary)
             }
         }
         .padding(.vertical, 4)
@@ -142,7 +144,7 @@ struct OrderDetailView: View {
         .padding(16)
         .background(Color.green.opacity(0.1))
         .foregroundColor(.green)
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
         .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.green.opacity(0.3), lineWidth: 1))
     }
 
@@ -161,7 +163,7 @@ struct OrderDetailView: View {
             .padding(16)
             .background(Color.orange.opacity(0.1))
             .foregroundColor(.orange)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
             .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.orange.opacity(0.3), lineWidth: 1))
         }
     }
@@ -174,16 +176,18 @@ struct OrderDetailView: View {
                 Image(systemName: "arrow.clockwise.circle.fill")
                     .font(.title3)
                 Text("Order Again")
-                    .font(.headline)
+                    .font(AppTheme.Typography.button)
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.caption)
                     .foregroundColor(.white.opacity(0.7))
             }
             .padding(16)
-            .background(Color.blue)
             .foregroundColor(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .background {
+                RoundedRectangle(cornerRadius: AppTheme.Radius.card)
+                    .fill(AppTheme.Brand.gradientH)
+            }
         }
     }
 
@@ -200,7 +204,7 @@ struct OrderDetailView: View {
         }
         HapticFeedback.notification(.success)
         if addedCount > 0 {
-            toastManager.show("\(addedCount) item\(addedCount > 1 ? "s" : "") added to cart", icon: "cart.badge.plus", color: .blue)
+            toastManager.show("\(addedCount) item\(addedCount > 1 ? "s" : "") added to cart", icon: "cart.badge.plus", color: AppTheme.Colors.primary)
         } else {
             toastManager.show("Items unavailable", icon: "exclamationmark.circle", color: .orange)
         }
@@ -242,7 +246,7 @@ struct OrderDetailView: View {
                         VStack(spacing: 0) {
                             ZStack {
                                 Circle()
-                                    .fill(index <= currentIdx ? Color.blue : Color(.systemGray5))
+                                    .fill(index <= currentIdx ? AppTheme.Colors.primary : Color(.systemGray5))
                                     .frame(width: 28, height: 28)
                                 Image(systemName: index < currentIdx ? "checkmark" : step.status.icon)
                                     .font(.system(size: 11, weight: .bold))
@@ -250,7 +254,7 @@ struct OrderDetailView: View {
                             }
                             if index < steps.count - 1 {
                                 Rectangle()
-                                    .fill(index < currentIdx ? Color.blue : Color(.systemGray4))
+                                    .fill(index < currentIdx ? AppTheme.Colors.primary : Color(.systemGray4))
                                     .frame(width: 2, height: 36)
                             }
                         }
@@ -261,7 +265,7 @@ struct OrderDetailView: View {
                                 .foregroundColor(index <= currentIdx ? .primary : .secondary)
                             Text(step.subtitle)
                                 .font(.caption)
-                                .foregroundColor(index == currentIdx ? .blue : .secondary)
+                                .foregroundColor(index == currentIdx ? AppTheme.Colors.primary : .secondary)
                         }
                         .padding(.top, 4)
                         Spacer()
@@ -276,7 +280,7 @@ struct OrderDetailView: View {
         }
         .padding(16)
         .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
     }
 
     private var itemsCard: some View {
@@ -286,10 +290,10 @@ struct OrderDetailView: View {
             ForEach(order.items) { item in
                 HStack {
                     Image(systemName: item.imageName)
-                        .foregroundColor(.blue.opacity(0.7))
+                        .foregroundColor(AppTheme.Colors.primary.opacity(0.75))
                         .frame(width: 40, height: 40)
-                        .background(Color.blue.opacity(0.06))
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .background(AppTheme.Colors.imageSurface)
+                        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.sm))
                     VStack(alignment: .leading, spacing: 2) {
                         Text(item.productName)
                             .font(.subheadline)
@@ -305,7 +309,7 @@ struct OrderDetailView: View {
         }
         .padding(16)
         .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
     }
 
     private var shippingCard: some View {
@@ -327,7 +331,7 @@ struct OrderDetailView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
         .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
     }
 
     private var totalCard: some View {
@@ -337,11 +341,11 @@ struct OrderDetailView: View {
             Spacer()
             Text("$\(order.total, specifier: "%.2f")")
                 .font(.title3).bold()
-                .foregroundColor(.blue)
+                .foregroundColor(AppTheme.Colors.primary)
         }
         .padding(16)
         .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
     }
 }
 
@@ -380,12 +384,14 @@ struct ReturnsSheet: View {
                         .padding(.horizontal, 32)
                     Button { dismiss() } label: {
                         Text("Done")
-                            .font(.headline)
+                            .font(AppTheme.Typography.button)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 14)
-                            .background(Color.blue)
                             .foregroundColor(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .background {
+                                RoundedRectangle(cornerRadius: AppTheme.Radius.card)
+                                    .fill(AppTheme.Brand.gradientH)
+                            }
                     }
                     .padding(.horizontal, 40)
                 }
@@ -408,7 +414,7 @@ struct ReturnsSheet: View {
                                 Spacer()
                                 if selectedReason == i {
                                     Image(systemName: "checkmark")
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(AppTheme.Colors.primary)
                                 }
                             }
                             .contentShape(Rectangle())
@@ -454,11 +460,11 @@ struct StatusBadge: View {
 
     var color: Color {
         switch status {
-        case .pending: return .orange
-        case .processing: return .blue
-        case .shipped: return .purple
-        case .delivered: return .green
-        case .cancelled: return .red
+        case .pending:    return .orange
+        case .processing: return AppTheme.Colors.primary
+        case .shipped:    return AppTheme.Colors.accent
+        case .delivered:  return AppTheme.Colors.success
+        case .cancelled:  return AppTheme.Colors.danger
         }
     }
 
