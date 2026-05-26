@@ -66,7 +66,7 @@ geekcommerze/
 | 🏠 **Home** | Auto-scroll banner · flash sale countdown · skeleton loading · recently viewed |
 | 🔍 **Search** | Real-time results · trending chips · recent history (max 8) · category browse |
 | 🛒 **Shop** | 2-col grid · sort & filter sheet · long-press context menu · pull-to-refresh |
-| 📦 **Product Detail** | Pinch-to-zoom · color/size variants · 30-day price chart · reviews · bundle upsell |
+| 📦 **Product Detail** | Pinch-to-zoom · color/size variants · 30-day price chart · reviews · collapsible bundle & related sections |
 | 🛍 **Cart** | Pill stepper · swipe → wishlist / delete · live shipping threshold |
 | 💳 **Checkout** | Saved addresses · promo codes · biometric confirm (passcode fallback) · Apple Pay (demo) · confetti |
 | 📋 **Orders** | Status timeline · reorder · return request (persisted) |
@@ -99,7 +99,7 @@ Wishlist item →  scale+opacity exit transition on remove
 
 | Layer | Technology |
 |---|---|
-| UI | SwiftUI 5 · `AppTheme` design system (adaptive indigo/violet — full dark mode support) |
+| UI | SwiftUI 5 · `AppTheme` design system (adaptive indigo/violet — full dark mode support · consistent radius/typography tokens · accessibility labels throughout) |
 | Local persistence | SwiftData |
 | Lightweight state | `@AppStorage` |
 | Remote backend | Supabase (optional — offline fallback built-in) |

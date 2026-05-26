@@ -32,6 +32,7 @@ struct ProductDetailView: View {
     @State private var notifyMeSet = false
     @State private var zoomScale: CGFloat = 1.0
     @State private var lastZoomScale: CGFloat = 1.0
+    @State private var showUpsells = false
 
     var isWishlisted: Bool {
         wishlistData.components(separatedBy: ",").contains(product.id.uuidString)
@@ -164,9 +165,27 @@ struct ProductDetailView: View {
                     productInfoSection
                     tabSection
                     deliveryReturnsSection
-                    frequentlyBoughtSection
-                    if !relatedProducts.isEmpty {
-                        peopleAlsoBuySection
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.25)) { showUpsells.toggle() }
+                    } label: {
+                        HStack {
+                            Text(showUpsells ? "Show Less" : "See Bundles & Related")
+                                .font(AppTheme.Typography.label)
+                                .foregroundColor(AppTheme.Colors.primary)
+                            Spacer()
+                            Image(systemName: showUpsells ? "chevron.up" : "chevron.down")
+                                .font(.caption)
+                                .foregroundColor(AppTheme.Colors.primary)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .background(Color(.systemBackground))
+                    }
+                    if showUpsells {
+                        frequentlyBoughtSection
+                        if !relatedProducts.isEmpty {
+                            peopleAlsoBuySection
+                        }
                     }
                     Spacer(minLength: 100)
                 }
@@ -220,11 +239,11 @@ struct ProductDetailView: View {
         ZStack(alignment: .topTrailing) {
             Image(systemName: product.imageName)
                 .font(.system(size: 100))
-                .foregroundColor(.blue.opacity(0.6))
+                .foregroundColor(AppTheme.Colors.primary.opacity(0.6))
                 .frame(maxWidth: .infinity)
                 .frame(height: 260)
                 .background(
-                    LinearGradient(colors: [Color.blue.opacity(0.08), Color.purple.opacity(0.05)],
+                    LinearGradient(colors: [AppTheme.Colors.primary.opacity(0.08), AppTheme.Colors.accent.opacity(0.05)],
                                    startPoint: .topLeading, endPoint: .bottomTrailing)
                 )
                 .scaleEffect(zoomScale)
@@ -289,9 +308,9 @@ struct ProductDetailView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text(product.category.rawValue)
                 .font(.caption)
-                .foregroundColor(.blue)
+                .foregroundColor(AppTheme.Colors.primary)
                 .padding(.horizontal, 10).padding(.vertical, 4)
-                .background(Color.blue.opacity(0.1))
+                .background(AppTheme.Colors.primary.opacity(0.1))
                 .clipShape(Capsule())
 
             Text(product.name)
@@ -327,7 +346,7 @@ struct ProductDetailView: View {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text("$\(product.price, specifier: "%.2f")")
                     .font(.title).bold()
-                    .foregroundColor(.blue)
+                    .foregroundColor(AppTheme.Colors.primary)
                 if let original = product.originalPrice {
                     Text("$\(original, specifier: "%.2f")")
                         .font(.headline)
@@ -355,7 +374,7 @@ struct ProductDetailView: View {
                                 .frame(width: 28, height: 28)
                                 .overlay(
                                     Circle().stroke(
-                                        selectedColorName == variant.name ? Color.blue : Color(.systemGray4),
+                                        selectedColorName == variant.name ? AppTheme.Colors.primary : Color(.systemGray4),
                                         lineWidth: selectedColorName == variant.name ? 2.5 : 1
                                     )
                                 )
@@ -379,12 +398,12 @@ struct ProductDetailView: View {
                                 Text(size)
                                     .font(.caption).bold()
                                     .padding(.horizontal, 14).padding(.vertical, 8)
-                                    .background(selectedSize == size ? Color.blue : Color(.systemGroupedBackground))
+                                    .background(selectedSize == size ? AppTheme.Colors.primary : Color(.systemGroupedBackground))
                                     .foregroundColor(selectedSize == size ? .white : .primary)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.xs))
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .stroke(selectedSize == size ? Color.blue : Color(.systemGray4), lineWidth: 1)
+                                        RoundedRectangle(cornerRadius: AppTheme.Radius.xs)
+                                            .stroke(selectedSize == size ? AppTheme.Colors.primary : Color(.systemGray4), lineWidth: 1)
                                     )
                                     .onTapGesture {
                                         selectedSize = size
@@ -527,7 +546,7 @@ struct ProductDetailView: View {
                     x: .value("Day", point.day),
                     y: .value("Price", point.price)
                 )
-                .foregroundStyle(Color.blue)
+                .foregroundStyle(AppTheme.Colors.primary)
                 .interpolationMethod(.catmullRom)
 
                 AreaMark(
@@ -535,7 +554,7 @@ struct ProductDetailView: View {
                     y: .value("Price", point.price)
                 )
                 .foregroundStyle(
-                    LinearGradient(colors: [Color.blue.opacity(0.25), .clear],
+                    LinearGradient(colors: [AppTheme.Colors.primary.opacity(0.25), .clear],
                                    startPoint: .top, endPoint: .bottom)
                 )
                 .interpolationMethod(.catmullRom)
@@ -564,11 +583,11 @@ struct ProductDetailView: View {
             Button { showWriteReview = true } label: {
                 Label("Write a Review", systemImage: "pencil.and.list.clipboard")
                     .font(.subheadline).bold()
-                    .foregroundColor(.blue)
+                    .foregroundColor(AppTheme.Colors.primary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                    .background(Color.blue.opacity(0.08))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .background(AppTheme.Colors.primary.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.chip))
             }
             .padding(.horizontal, 16)
 
@@ -638,7 +657,7 @@ struct ProductDetailView: View {
                 .padding(.top, 16)
 
             VStack(spacing: 0) {
-                DeliveryRow(icon: "shippingbox.fill", color: .blue,
+                DeliveryRow(icon: "shippingbox.fill", color: AppTheme.Colors.primary,
                             title: "Free Delivery",
                             subtitle: "On orders over $50. Estimated 3–5 business days.")
                 Divider().padding(.leading, 52)
@@ -655,7 +674,7 @@ struct ProductDetailView: View {
                             subtitle: "Full manufacturer warranty included with every purchase.")
             }
             .background(Color(.systemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
             .padding(.horizontal, 16)
             .padding(.bottom, 8)
         }
@@ -692,21 +711,23 @@ struct ProductDetailView: View {
                             .foregroundColor(.secondary)
                         Text("$\(bundleTotal, specifier: "%.2f")")
                             .font(.headline).bold()
-                            .foregroundColor(.blue)
+                            .foregroundColor(AppTheme.Colors.primary)
                     }
                     Spacer()
                     Button {
                         cartStore.addProduct(product, context: modelContext)
                         bundle.forEach { cartStore.addProduct($0, context: modelContext) }
                         HapticFeedback.notification(.success)
-                        toastManager.show("Bundle added to cart!", icon: "cart.badge.plus", color: .blue)
+                        toastManager.show("Bundle added to cart!", icon: "cart.badge.plus", color: AppTheme.Colors.primary)
                     } label: {
                         Text("Add Bundle")
                             .font(.subheadline).bold()
                             .padding(.horizontal, 18).padding(.vertical, 10)
-                            .background(Color.blue)
                             .foregroundColor(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .background {
+                                RoundedRectangle(cornerRadius: AppTheme.Radius.chip)
+                                    .fill(AppTheme.Brand.gradientH)
+                            }
                     }
                 }
                 .padding(.horizontal, 16)
@@ -720,13 +741,13 @@ struct ProductDetailView: View {
         VStack(spacing: 4) {
             Image(systemName: p.imageName)
                 .font(.title2)
-                .foregroundColor(.blue.opacity(0.7))
+                .foregroundColor(AppTheme.Colors.primary.opacity(0.75))
                 .frame(width: 72, height: 72)
-                .background(isMain ? Color.blue.opacity(0.12) : Color.blue.opacity(0.06))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .background(isMain ? AppTheme.Colors.primary.opacity(0.12) : AppTheme.Colors.primary.opacity(0.06))
+                .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.md))
                 .overlay(
-                    isMain ? RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.blue.opacity(0.4), lineWidth: 1.5) : nil
+                    isMain ? RoundedRectangle(cornerRadius: AppTheme.Radius.md)
+                        .stroke(AppTheme.Colors.primary.opacity(0.4), lineWidth: 1.5) : nil
                 )
             Text(p.name)
                 .font(.caption2)
@@ -735,7 +756,7 @@ struct ProductDetailView: View {
                 .frame(width: 72)
             Text("$\(p.price, specifier: "%.2f")")
                 .font(.caption2).bold()
-                .foregroundColor(.blue)
+                .foregroundColor(AppTheme.Colors.primary)
         }
     }
 
@@ -769,7 +790,7 @@ struct ProductDetailView: View {
                     .foregroundColor(isWishlisted ? .red : .secondary)
                     .frame(width: 48, height: 48)
                     .background(Color(.systemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.md))
                     .shadow(color: .black.opacity(0.08), radius: 3, y: 1)
             }
             .accessibilityLabel(isWishlisted ? "Remove from wishlist" : "Add to wishlist")
@@ -786,7 +807,7 @@ struct ProductDetailView: View {
                     .padding(.vertical, 14)
                     .background(notifyMeSet ? Color.green : Color.orange)
                     .foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
                 }
                 .disabled(notifyMeSet)
                 .animation(.easeInOut(duration: 0.2), value: notifyMeSet)
@@ -796,7 +817,7 @@ struct ProductDetailView: View {
                         cartStore.addProduct(product, context: modelContext)
                     }
                     HapticFeedback.notification(.success)
-                    toastManager.show("\(quantity > 1 ? "\(quantity)x " : "")\(product.name) added to cart", icon: "cart.badge.plus", color: .blue)
+                    toastManager.show("\(quantity > 1 ? "\(quantity)x " : "")\(product.name) added to cart", icon: "cart.badge.plus", color: AppTheme.Colors.primary)
                     addedToCart = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                         addedToCart = false
@@ -811,9 +832,11 @@ struct ProductDetailView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 14)
-                    .background(addedToCart ? Color.green : Color.blue)
                     .foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .background {
+                        RoundedRectangle(cornerRadius: AppTheme.Radius.card)
+                            .fill(addedToCart ? AnyShapeStyle(Color.green) : AnyShapeStyle(AppTheme.Brand.gradientH))
+                    }
                 }
                 .animation(.easeInOut(duration: 0.2), value: addedToCart)
             }
@@ -945,7 +968,7 @@ struct ReviewCard: View {
                     .font(.subheadline).bold()
                     .foregroundColor(.white)
                     .frame(width: 36, height: 36)
-                    .background(Color.blue.opacity(0.7))
+                    .background(AppTheme.Colors.primary.opacity(0.7))
                     .clipShape(Circle())
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -991,7 +1014,7 @@ struct ReviewCard: View {
                         systemImage: hasVotedHelpful ? "hand.thumbsup.fill" : "hand.thumbsup"
                     )
                     .font(.caption)
-                    .foregroundColor(hasVotedHelpful ? .blue : .secondary)
+                    .foregroundColor(hasVotedHelpful ? AppTheme.Colors.primary : .secondary)
                 }
                 .accessibilityLabel(hasVotedHelpful ? "Marked as helpful" : "Mark as helpful")
                 .animation(.easeInOut(duration: 0.15), value: hasVotedHelpful)
