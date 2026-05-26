@@ -19,24 +19,25 @@
 ## Architecture
 
 ```mermaid
-graph TD
-    A[SwiftUI View] -->|user action| B[@Observable Store]
-    B -->|mutate| C[SwiftData / UserDefaults]
-    C -->|@Query / @AppStorage| A
-    B -->|environment| A
+graph LR
+    View["SwiftUI View"] -->|action| Store["Observable Store"]
+    Store -->|write| SD["SwiftData"]
+    Store -->|write| AS["AppStorage"]
+    SD -->|Query| View
+    AS -->|AppStorage| View
 
     subgraph Stores
-        B1[ProductStore]
-        B2[CartStore]
-        B3[ToastManager]
-        B4[NotificationStore]
-        B5[CartAnimationManager]
-        B6[TabRouter]
+        S1["ProductStore"]
+        S2["CartStore"]
+        S3["ToastManager"]
+        S4["NotificationStore"]
+        S5["CartAnimationManager"]
+        S6["TabRouter"]
     end
 
     subgraph Persistence
-        C1[SwiftData — CartItem · Order · OrderItem]
-        C2[AppStorage — prefs · wishlist · addresses]
+        SD
+        AS
     end
 ```
 
