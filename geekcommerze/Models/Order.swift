@@ -59,7 +59,7 @@ class Order {
     var shippingAddress: String
     var shippingCity: String
     var shippingPhone: String
-    var returnRequested: Bool
+    var returnRequested: Bool?
     @Relationship(deleteRule: .cascade) var items: [OrderItem]
 
     var status: OrderStatus {
@@ -76,7 +76,7 @@ class Order {
         self.shippingAddress = shippingAddress
         self.shippingCity = shippingCity
         self.shippingPhone = shippingPhone
-        self.returnRequested = false
+        self.returnRequested = false  // nil for pre-migration rows; false for new orders
         self.items = cartItems.map { OrderItem(from: $0) }
     }
 }

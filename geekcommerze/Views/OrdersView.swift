@@ -104,7 +104,7 @@ struct OrderDetailView: View {
                 totalCard
                 reorderCard
                 if order.status == .delivered {
-                    if order.returnRequested {
+                    if order.returnRequested == true {
                         returnRequestedBadge
                     } else {
                         returnRequestButton

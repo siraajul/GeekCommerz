@@ -3,26 +3,29 @@ import SwiftUI
 // MARK: - Shimmer Modifier
 
 struct ShimmerModifier: ViewModifier {
-    @State private var phase: CGFloat = -0.5
+    @State private var phase: CGFloat = 0
 
     func body(content: Content) -> some View {
         content
             .overlay(
-                LinearGradient(
-                    stops: [
-                        .init(color: .clear, location: max(0, phase - 0.25)),
-                        .init(color: .white.opacity(0.5), location: phase),
-                        .init(color: .clear, location: min(1, phase + 0.25)),
-                    ],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-                .blendMode(.screen)
+                GeometryReader { geo in
+                    // Gradient stops are always fixed [0, 0.5, 1] — never unordered.
+                    // Only the band's X position animates.
+                    let bandWidth = geo.size.width * 0.55
+                    LinearGradient(
+                        colors: [.clear, .white.opacity(0.45), .clear],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                    .frame(width: bandWidth)
+                    .offset(x: (geo.size.width + bandWidth) * phase - bandWidth)
+                    .blendMode(.screen)
+                }
                 .clipped()
             )
             .onAppear {
                 withAnimation(.linear(duration: 1.4).repeatForever(autoreverses: false)) {
-                    phase = 1.5
+                    phase = 1
                 }
             }
     }
