@@ -1,5 +1,7 @@
 import SwiftUI
 import SwiftData
+import Sentry
+import OneSignalFramework
 
 @main
 struct geekcommerzeApp: App {
@@ -9,6 +11,24 @@ struct geekcommerzeApp: App {
 
     init() {
         AppConfig.validate()
+        Self.configureSentry()
+        Self.configureOneSignal()
+    }
+
+    private static func configureSentry() {
+        let dsn = AppConfig.Monitoring.sentryDSN
+        guard !dsn.hasPrefix("YOUR_") else { return }
+        SentrySDK.start { options in
+            options.dsn = dsn
+            options.tracesSampleRate = 0.2
+        }
+    }
+
+    private static func configureOneSignal() {
+        let appID = AppConfig.Push.oneSignalAppID
+        guard !appID.hasPrefix("YOUR_") else { return }
+        OneSignal.initialize(appID, withLaunchOptions: nil)
+        OneSignal.Notifications.requestPermission({ _ in }, fallbackToSettings: true)
     }
 
     var sharedModelContainer: ModelContainer = {

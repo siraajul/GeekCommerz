@@ -396,9 +396,9 @@ enum Monitoring {
 - [x] Stripe package added
 - [ ] Stripe payment sheet integration
 - [x] OneSignal package added
-- [ ] OneSignal push notification setup
+- [x] OneSignal initialized at launch (no-op until App ID added to AppConfig)
 - [x] Sentry package added
-- [ ] Sentry crash reporting setup
+- [x] Sentry initialized at launch (no-op until DSN added to AppConfig)
 - [ ] AsyncImage from CDN / Supabase Storage
 - [ ] iPad layout
 - [ ] Widget extension
