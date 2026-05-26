@@ -40,9 +40,22 @@
 		2DC5A3432FC5882100383CE4 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2DC5A3462FC593D400383CE4 /* Exceptions for "geekcommerze" folder in "geekcommerze" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 2DC5A2E12FC555E900383CE4 /* geekcommerze */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		2DC5A2E42FC555E900383CE4 /* geekcommerze */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2DC5A3462FC593D400383CE4 /* Exceptions for "geekcommerze" folder in "geekcommerze" target */,
+			);
 			path = geekcommerze;
 			sourceTree = "<group>";
 		};
@@ -451,6 +464,9 @@
 				DEVELOPMENT_TEAM = 622QE445GT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = geekcommerze/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GeekCommerz;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.shopping";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -483,6 +499,9 @@
 				DEVELOPMENT_TEAM = 622QE445GT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = geekcommerze/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GeekCommerz;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.shopping";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

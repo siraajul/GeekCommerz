@@ -74,6 +74,12 @@ Thumbs.db
 *.mobileprovision
 AuthKey_*.p8
 
+# AppConfig.swift holds real service keys locally.
+# After filling in your keys run:
+#   git update-index --assume-unchanged geekcommerze/geekcommerze/AppConfig.swift
+# To start tracking it again:
+#   git update-index --no-assume-unchanged geekcommerze/geekcommerze/AppConfig.swift
+
 # ─────────────────────────────────────────────
 #  Editor & IDE
 # ─────────────────────────────────────────────

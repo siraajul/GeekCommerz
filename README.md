@@ -136,19 +136,247 @@ AppConstants.App.*           // name · version · privacyURL · termsURL
 ```bash
 git clone https://github.com/siraajul/GeekCommerz.git
 open GeekCommerz/geekcommerze.xcodeproj
-# Press ⌘R — no API keys, no backend, runs fully offline
+# Press ⌘R — no API keys needed, runs fully offline out of the box
 ```
 
 **Requirements:** Xcode 16+ · iOS 17+ · macOS Sonoma 14+
 
 ---
 
+## Setup Guide
+
+All service keys live in one file: **`geekcommerze/AppConfig.swift`**  
+Check `.env.example` at the repo root for a reference of every key and where to find it.
+
+---
+
+### Step 1 — Clone & run (offline mode)
+
+```bash
+git clone https://github.com/siraajul/GeekCommerz.git
+cd GeekCommerz
+open geekcommerze.xcodeproj
+```
+
+Press `⌘R`. The app runs fully offline with mock data — no keys needed.
+
+---
+
+### Step 2 — Connect Supabase
+
+> Skip this step if you just want to explore the UI.
+
+**2.1 — Create a Supabase project**
+
+1. Go to [supabase.com](https://supabase.com) → **New project**
+2. Choose a name, region, and database password → **Create project**
+
+**2.2 — Get your API keys**
+
+1. In your Supabase project → **Project Settings** (gear icon) → **API**
+2. Copy:
+   - `Project URL` → this is your `SUPABASE_URL`
+   - `anon / public` key → this is your `SUPABASE_ANON_KEY`
+
+**2.3 — Add keys to the app**
+
+Open `geekcommerze/AppConfig.swift` and replace the placeholders:
+
+```swift
+enum Supabase {
+    static let url     = "https://xyzabc.supabase.co"   // ← paste here
+    static let anonKey = "eyJhbGci..."                  // ← paste here
+}
+```
+
+**2.4 — Protect your keys from accidental commits**
+
+```bash
+git update-index --assume-unchanged geekcommerze/geekcommerze/AppConfig.swift
+```
+
+To start tracking the file again later:
+```bash
+git update-index --no-assume-unchanged geekcommerze/geekcommerze/AppConfig.swift
+```
+
+**2.5 — Create the database tables**
+
+Run this SQL in **Supabase Dashboard → SQL Editor**:
+
+```sql
+-- User profiles (linked to Supabase Auth)
+create table profiles (
+  id uuid references auth.users primary key,
+  name text,
+  email text,
+  loyalty_points int default 0,
+  created_at timestamptz default now()
+);
+
+-- Products
+create table products (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  price numeric not null,
+  category text,
+  image_url text,
+  description text,
+  rating numeric default 0,
+  stock int default 0
+);
+
+-- Orders
+create table orders (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id),
+  total numeric not null,
+  status text default 'pending',
+  shipping_name text,
+  shipping_address text,
+  shipping_city text,
+  shipping_phone text,
+  created_at timestamptz default now()
+);
+
+-- Order items
+create table order_items (
+  id uuid primary key default gen_random_uuid(),
+  order_id uuid references orders(id),
+  product_id uuid references products(id),
+  quantity int not null,
+  price numeric not null
+);
+
+-- Cart (synced per user)
+create table cart_items (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id),
+  product_id uuid references products(id),
+  quantity int default 1
+);
+
+-- Wishlist
+create table wishlist (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id),
+  product_id uuid references products(id)
+);
+
+-- Saved addresses
+create table addresses (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id),
+  label text,
+  name text,
+  street text,
+  city text,
+  phone text
+);
+
+-- Enable Row Level Security on all tables
+alter table profiles    enable row level security;
+alter table orders      enable row level security;
+alter table order_items enable row level security;
+alter table cart_items  enable row level security;
+alter table wishlist    enable row level security;
+alter table addresses   enable row level security;
+
+-- RLS: users can only read/write their own data
+create policy "own profile"    on profiles    for all using (auth.uid() = id);
+create policy "own orders"     on orders      for all using (auth.uid() = user_id);
+create policy "own order items"on order_items for all using (
+  order_id in (select id from orders where user_id = auth.uid())
+);
+create policy "own cart"       on cart_items  for all using (auth.uid() = user_id);
+create policy "own wishlist"   on wishlist    for all using (auth.uid() = user_id);
+create policy "own addresses"  on addresses   for all using (auth.uid() = user_id);
+```
+
+**2.6 — Add the Supabase Swift package**
+
+1. In Xcode → **File → Add Package Dependencies**
+2. Enter: `https://github.com/supabase/supabase-swift`
+3. Version: **Up to Next Major** from `2.0.0`
+4. Add to target: `geekcommerze`
+
+---
+
+### Step 3 — Add Stripe (payments)
+
+> Add this when you're ready to accept real payments.
+
+1. Create account at [stripe.com](https://stripe.com) → **Developers → API Keys**
+2. Copy your **Publishable key** (`pk_test_...` for dev, `pk_live_...` for prod)
+3. Paste into `AppConfig.swift`:
+
+```swift
+enum Stripe {
+    static let publishableKey = "pk_test_..."   // ← paste here
+}
+```
+
+4. Add the Stripe iOS SDK via Swift Package Manager:
+   `https://github.com/stripe/stripe-ios-spm`
+
+---
+
+### Step 4 — Add Push Notifications (OneSignal)
+
+1. Create account at [onesignal.com](https://onesignal.com) → **New App**
+2. Choose **Apple iOS** as platform
+3. Upload your APNs `.p8` key (from [developer.apple.com](https://developer.apple.com) → Certificates → Keys)
+4. Copy your **OneSignal App ID**
+5. Paste into `AppConfig.swift`:
+
+```swift
+enum Push {
+    static let oneSignalAppID = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"   // ← paste here
+}
+```
+
+6. In Xcode → Target → **Signing & Capabilities** → `+` → **Push Notifications**
+7. Also add **Background Modes** → tick **Remote notifications**
+
+---
+
+### Step 5 — Add Crash Reporting (Sentry)
+
+1. Create account at [sentry.io](https://sentry.io) → **New Project → Apple**
+2. Copy your **DSN** from Project Settings → Client Keys
+3. Paste into `AppConfig.swift`:
+
+```swift
+enum Monitoring {
+    static let sentryDSN = "https://xxxx@oXXX.ingest.sentry.io/XXXX"   // ← paste here
+}
+```
+
+4. Add Sentry via Swift Package Manager:
+   `https://github.com/getsentry/sentry-cocoa`
+
+---
+
+### Step 6 — Before App Store submission
+
+- [ ] Replace `AppConfig.URLs.privacy` and `AppConfig.URLs.terms` with real URLs
+- [ ] Switch Stripe key from `pk_test_...` to `pk_live_...`
+- [ ] Add `PrivacyInfo.xcprivacy` manifest (required since iOS 17)
+- [ ] Enable **Sign in with Apple** capability in Xcode (required if you add any social login)
+- [ ] Set your Apple Pay Merchant ID in Xcode → Signing & Capabilities → Apple Pay
+- [ ] Bump version in `AppConstants.App.version`
+
+---
+
 ## Roadmap
 
-- [ ] Real backend (REST / GraphQL)
+- [x] AppConfig — single file env key system
+- [x] Biometric auth at checkout (Face ID / Touch ID + passcode fallback)
+- [ ] Supabase Auth (email + Sign in with Apple)
+- [ ] Supabase data layer (products, orders, cart sync)
+- [ ] Stripe payments
 - [ ] APNs push notifications
-- [ ] AsyncImage from CDN
-- [ ] Apple Pay live integration
+- [ ] AsyncImage from CDN / Supabase Storage
 - [ ] iPad layout
 - [ ] Widget extension
 - [ ] App Clip
@@ -157,6 +385,6 @@ open GeekCommerz/geekcommerze.xcodeproj
 
 <div align="center">
 
-Built with Swift & SwiftUI · Runs entirely on-device
+Built with Swift & SwiftUI · Designed to go from local → production by filling in `AppConfig.swift`
 
 </div>

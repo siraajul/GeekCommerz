@@ -413,9 +413,10 @@ struct CheckoutView: View {
     private func authenticateAndPlaceOrder() {
         let context = LAContext()
         var error: NSError?
-        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+        // Use deviceOwnerAuthentication so passcode is always available as fallback
+        if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
             context.evaluatePolicy(
-                .deviceOwnerAuthenticationWithBiometrics,
+                .deviceOwnerAuthentication,
                 localizedReason: "Confirm your $\(String(format: "%.2f", grandTotal)) purchase"
             ) { success, _ in
                 DispatchQueue.main.async {
@@ -423,7 +424,10 @@ struct CheckoutView: View {
                 }
             }
         } else {
-            placeOrder()
+            // Device has no passcode set — block the order instead of silently bypassing auth
+            DispatchQueue.main.async {
+                toastManager.show("Please set a passcode in Settings to place orders", icon: "lock.fill", color: .red)
+            }
         }
     }
 

@@ -6,6 +6,10 @@ struct geekcommerzeApp: App {
     @AppStorage(AppConstants.StorageKeys.hasSeenOnboarding) private var hasSeenOnboarding = false
     @AppStorage(AppConstants.StorageKeys.darkModeEnabled) private var darkModeEnabled = false
 
+    init() {
+        AppConfig.validate()
+    }
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             CartItem.self,
