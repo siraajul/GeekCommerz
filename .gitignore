@@ -1,0 +1,99 @@
+# ─────────────────────────────────────────────
+#  Xcode
+# ─────────────────────────────────────────────
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+DerivedData/
+*.hmap
+*.ipa
+*.xcuserstate
+*.xcscmblueprint
+
+# Xcode Patch
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+*.xcworkspace/xcuserdata/
+
+# ─────────────────────────────────────────────
+#  Swift Package Manager
+# ─────────────────────────────────────────────
+.build/
+.swiftpm/
+*.resolved
+
+# ─────────────────────────────────────────────
+#  CocoaPods  (uncomment if used)
+# ─────────────────────────────────────────────
+# Pods/
+# Podfile.lock
+
+# ─────────────────────────────────────────────
+#  Tuist (uncomment if used)
+# ─────────────────────────────────────────────
+# graph.dot
+# Derived/
+
+# ─────────────────────────────────────────────
+#  macOS
+# ─────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# ─────────────────────────────────────────────
+#  Simulators & device logs
+# ─────────────────────────────────────────────
+*.dSYM.zip
+*.dSYM
+
+# ─────────────────────────────────────────────
+#  Environment & secrets
+# ─────────────────────────────────────────────
+.env
+.env.local
+*.pem
+*.p12
+*.mobileprovision
+AuthKey_*.p8
+
+# ─────────────────────────────────────────────
+#  Editor & IDE
+# ─────────────────────────────────────────────
+.idea/
+*.swp
+*.swo
+*~
+.vscode/
+
+# ─────────────────────────────────────────────
+#  Fastlane (uncomment if used)
+# ─────────────────────────────────────────────
+# fastlane/report.xml
+# fastlane/Preview.html
+# fastlane/screenshots/**/*.png
+# fastlane/test_output
+
+# ─────────────────────────────────────────────
+#  Products  (compiled outputs – never commit)
+# ─────────────────────────────────────────────
+*.app
+*.ipa
+*.xcarchive
