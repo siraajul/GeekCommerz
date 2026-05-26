@@ -406,7 +406,7 @@ struct BannerCard: View {
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            LinearGradient(colors: [.blue.opacity(0.8), .purple.opacity(0.6)], startPoint: .topLeading, endPoint: .bottomTrailing)
+            AppTheme.Brand.gradient
                 .clipShape(RoundedRectangle(cornerRadius: 16))
 
             HStack {
@@ -447,9 +447,9 @@ struct CategoryChip: View {
             VStack(spacing: 8) {
                 Image(systemName: category.icon)
                     .font(.title2)
-                    .foregroundColor(.blue)
+                    .foregroundColor(AppTheme.Colors.primary)
                     .frame(width: 52, height: 52)
-                    .background(Color.blue.opacity(0.1))
+                    .background(AppTheme.Brand.tint)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                 Text(category.rawValue)
                     .font(.caption)
@@ -480,7 +480,7 @@ struct SectionHeader<D: View>: View {
             NavigationLink(destination: destination) {
                 Text("See All")
                     .font(.subheadline)
-                    .foregroundColor(.blue)
+                    .foregroundColor(AppTheme.Colors.primary)
             }
         }
         .padding(.horizontal, 16)

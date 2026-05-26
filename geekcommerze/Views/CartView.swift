@@ -50,9 +50,11 @@ struct CartView: View {
                     .font(.headline)
                     .padding(.horizontal, 30)
                     .padding(.vertical, 12)
-                    .background(Color.blue)
+                    .background {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(AppTheme.Brand.gradientH)
+                    }
                     .foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -113,7 +115,7 @@ struct CartView: View {
                     Spacer()
                     Text("$\(grandTotal, specifier: "%.2f")")
                         .font(.headline).bold()
-                        .foregroundColor(.blue)
+                        .foregroundColor(AppTheme.Colors.primary)
                 }
             }
             .padding(16)
@@ -144,9 +146,11 @@ struct CartView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
-            .background(Color.blue)
+            .background {
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(AppTheme.Brand.gradientH)
+            }
             .foregroundColor(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
         }
@@ -165,9 +169,9 @@ struct CartItemRow: View {
         HStack(spacing: 12) {
             Image(systemName: item.imageName)
                 .font(.title)
-                .foregroundColor(.blue.opacity(0.7))
+                .foregroundColor(AppTheme.Brand.primary.opacity(0.75))
                 .frame(width: 60, height: 60)
-                .background(Color.blue.opacity(0.06))
+                .background(AppTheme.Colors.imageSurface)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
 
             VStack(alignment: .leading, spacing: 4) {
@@ -179,7 +183,7 @@ struct CartItemRow: View {
                     .foregroundColor(.secondary)
                 Text("$\(item.subtotal, specifier: "%.2f")")
                     .font(.subheadline).bold()
-                    .foregroundColor(.blue)
+                    .foregroundColor(AppTheme.Colors.primary)
                     .contentTransition(.numericText())
                     .animation(.spring(response: 0.3, dampingFraction: 0.7), value: item.quantity)
             }
@@ -198,9 +202,9 @@ struct CartItemRow: View {
                 } label: {
                     Image(systemName: item.quantity > 1 ? "minus" : "trash")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(decBounce ? .white : (item.quantity > 1 ? .blue : .red))
+                        .foregroundColor(decBounce ? .white : (item.quantity > 1 ? AppTheme.Colors.primary : AppTheme.Colors.danger))
                         .frame(width: 30, height: 30)
-                        .background(decBounce ? (item.quantity > 1 ? Color.blue : Color.red) : Color.clear)
+                        .background(decBounce ? (item.quantity > 1 ? AppTheme.Colors.primary : AppTheme.Colors.danger) : Color.clear)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
 
@@ -220,9 +224,9 @@ struct CartItemRow: View {
                 } label: {
                     Image(systemName: "plus")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(incBounce ? .white : .blue)
+                        .foregroundColor(incBounce ? .white : AppTheme.Colors.primary)
                         .frame(width: 30, height: 30)
-                        .background(incBounce ? Color.blue : Color.clear)
+                        .background(incBounce ? AppTheme.Colors.primary : Color.clear)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             }

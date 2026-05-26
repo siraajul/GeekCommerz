@@ -56,7 +56,7 @@ struct ShopView: View {
                                 Image(systemName: "slider.horizontal.3")
                                 if activeFilterCount > 0 {
                                     Circle()
-                                        .fill(Color.blue)
+                                        .fill(AppTheme.Colors.primary)
                                         .frame(width: 8, height: 8)
                                         .offset(x: 8, y: -8)
                                 }
@@ -209,8 +209,8 @@ struct ActiveFilterChip: View {
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
-        .background(Color.blue.opacity(0.12))
-        .foregroundColor(.blue)
+        .background(AppTheme.Brand.tint)
+        .foregroundColor(AppTheme.Colors.primary)
         .clipShape(Capsule())
         .transition(.scale(scale: 0.7).combined(with: .opacity))
     }
@@ -227,7 +227,7 @@ struct FilterChip: View {
                 .font(.subheadline)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 7)
-                .background(isSelected ? Color.blue : Color(.systemBackground))
+                .background(isSelected ? AppTheme.Colors.primary : Color(.systemBackground))
                 .foregroundColor(isSelected ? .white : .primary)
                 .clipShape(Capsule())
                 .shadow(color: .black.opacity(0.05), radius: 2, y: 1)
@@ -253,7 +253,7 @@ struct SortFilterSheet: View {
                             Spacer()
                             if sortOption == option {
                                 Image(systemName: "checkmark")
-                                    .foregroundColor(.blue)
+                                    .foregroundColor(AppTheme.Colors.primary)
                             }
                         }
                         .contentShape(Rectangle())
@@ -333,9 +333,9 @@ struct ProductCard: View {
             ZStack(alignment: .topTrailing) {
                 Image(systemName: product.imageName)
                     .font(.system(size: 50))
-                    .foregroundColor(.blue.opacity(0.7))
+                    .foregroundColor(AppTheme.Brand.primary.opacity(0.75))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.blue.opacity(0.06))
+                    .background(AppTheme.Colors.imageSurface)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
 
                 if let discount = product.discount {
@@ -409,7 +409,7 @@ struct ProductCard: View {
                 HStack(spacing: 4) {
                     Text("$\(product.price, specifier: "%.2f")")
                         .font(.subheadline).bold()
-                        .foregroundColor(.blue)
+                        .foregroundColor(AppTheme.Colors.primary)
                     if let original = product.originalPrice {
                         Text("$\(original, specifier: "%.2f")")
                             .font(.caption)
@@ -438,9 +438,17 @@ struct ProductCard: View {
                         .font(.caption).bold()
                         .frame(maxWidth: .infinity)
                         .frame(height: 30)
-                        .background(product.isInStock ? (addedToCart ? Color.green : Color.blue) : Color.gray)
+                        .background {
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(
+                                    product.isInStock
+                                        ? (addedToCart
+                                            ? AnyShapeStyle(AppTheme.Colors.success)
+                                            : AnyShapeStyle(AppTheme.Brand.gradientH))
+                                        : AnyShapeStyle(Color.gray.opacity(0.5))
+                                )
+                        }
                         .foregroundColor(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
                         .scaleEffect(addedToCart ? 0.93 : 1.0)
                 }
                 .disabled(!product.isInStock)
@@ -485,16 +493,16 @@ struct ProductCard: View {
             VStack(spacing: 8) {
                 Image(systemName: product.imageName)
                     .font(.system(size: 60))
-                    .foregroundColor(.blue.opacity(0.7))
+                    .foregroundColor(AppTheme.Brand.primary.opacity(0.75))
                     .frame(width: 160, height: 120)
-                    .background(Color.blue.opacity(0.06))
+                    .background(AppTheme.Colors.imageSurface)
                 Text(product.name)
                     .font(.subheadline).bold()
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 12)
                 Text("$\(product.price, specifier: "%.2f")")
                     .font(.subheadline)
-                    .foregroundColor(.blue)
+                    .foregroundColor(AppTheme.Colors.primary)
                     .padding(.bottom, 8)
             }
             .frame(width: 200)
