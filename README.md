@@ -2,12 +2,13 @@
 
 # GeekCommerz
 
-**Production-grade iOS e-commerce — zero third-party dependencies**
+**Production-grade iOS e-commerce — offline-first, Supabase-ready**
 
 [![Swift](https://img.shields.io/badge/Swift-5.9-F05138?style=for-the-badge&logo=swift&logoColor=white)](https://swift.org)
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-5.0-0071E3?style=for-the-badge&logo=apple&logoColor=white)](https://developer.apple.com/xcode/swiftui/)
 [![iOS](https://img.shields.io/badge/iOS-17%2B-000000?style=for-the-badge&logo=apple&logoColor=white)](https://developer.apple.com/ios/)
 [![Xcode](https://img.shields.io/badge/Xcode-16-147EFB?style=for-the-badge&logo=xcode&logoColor=white)](https://developer.apple.com/xcode/)
+[![Supabase](https://img.shields.io/badge/Supabase-ready-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
 *Shop smarter. Earn rewards. Track everything.*
@@ -23,31 +24,35 @@ graph LR
     View["SwiftUI View"] -->|action| Store["Observable Store"]
     Store -->|write| SD["SwiftData"]
     Store -->|write| AS["AppStorage"]
+    Store -->|async fetch| SB["Supabase"]
     SD -->|Query| View
     AS -->|AppStorage| View
+    SB -->|products / auth| Store
 
     subgraph Stores
         S1["ProductStore"]
         S2["CartStore"]
-        S3["ToastManager"]
-        S4["NotificationStore"]
-        S5["CartAnimationManager"]
-        S6["TabRouter"]
+        S3["AuthStore"]
+        S4["ToastManager"]
+        S5["NotificationStore"]
     end
 
     subgraph Persistence
         SD
         AS
+        SB
     end
 ```
 
 ```
 geekcommerze/
-├── Models/          CartItem · Order · OrderItem · Product
-├── Stores/          CartStore · ProductStore
-├── Views/           13 screens
+├── Models/          CartItem · Order · OrderItem · Product (Codable)
+├── Stores/          CartStore · ProductStore · AuthStore
+├── Views/           14 screens  (+ AuthView)
+├── SupabaseService  Nil-safe SupabaseClient singleton
 ├── ToastManager     Toast · HapticFeedback · CartAnimationManager · TabRouter
 ├── NotificationStore
+├── AppConfig        All service keys + offline-mode detection
 └── AppConstants     All magic values in one place
 ```
 
@@ -57,12 +62,13 @@ geekcommerze/
 
 | Screen | Highlights |
 |---|---|
+| 🔐 **Auth** | Email sign-in · sign-up · password show/hide · email confirmation state · offline bypass |
 | 🏠 **Home** | Auto-scroll banner · flash sale countdown · skeleton loading · recently viewed |
 | 🔍 **Search** | Real-time results · trending chips · recent history (max 8) · category browse |
 | 🛒 **Shop** | 2-col grid · sort & filter sheet · long-press context menu · pull-to-refresh |
 | 📦 **Product Detail** | Pinch-to-zoom · color/size variants · 30-day price chart · reviews · bundle upsell |
 | 🛍 **Cart** | Pill stepper · swipe → wishlist / delete · live shipping threshold |
-| 💳 **Checkout** | Saved addresses · promo codes · biometric confirm · Apple Pay (demo) · confetti |
+| 💳 **Checkout** | Saved addresses · promo codes · biometric confirm (passcode fallback) · Apple Pay (demo) · confetti |
 | 📋 **Orders** | Status timeline · reorder · return request (persisted) |
 | ❤️ **Wishlist** | Heart toggle from any screen · spring-exit on remove |
 | 👤 **Profile** | Loyalty tier · address book · dark mode · stats |
@@ -93,16 +99,18 @@ Wishlist item →  scale+opacity exit transition on remove
 | Layer | Technology |
 |---|---|
 | UI | SwiftUI 5 |
-| Persistence | SwiftData |
+| Local persistence | SwiftData |
 | Lightweight state | `@AppStorage` |
+| Remote backend | Supabase (optional — offline fallback built-in) |
+| Auth | Supabase Auth (email/password · session restore) |
 | Charts | Swift Charts |
-| Biometrics | LocalAuthentication |
+| Biometrics | LocalAuthentication (Face ID / Touch ID + passcode fallback) |
 | Haptics | UIImpactFeedbackGenerator |
 | Concurrency | Swift async/await |
 | Architecture | `@Observable` (Observation framework) |
 | Testing | Swift Testing + XCUIAutomation |
 
-> **Zero third-party dependencies.**
+> Runs **fully offline with mock data** out of the box. Add Supabase keys to go live.
 
 ---
 
@@ -370,10 +378,18 @@ enum Monitoring {
 
 ## Roadmap
 
-- [x] AppConfig — single file env key system
+- [x] AppConfig — single-file env key system with offline-mode detection
 - [x] Biometric auth at checkout (Face ID / Touch ID + passcode fallback)
-- [ ] Supabase Auth (email + Sign in with Apple)
-- [ ] Supabase data layer (products, orders, cart sync)
+- [x] Supabase Swift package integrated (`supabase-swift` v2)
+- [x] SupabaseService — nil-safe client singleton
+- [x] AuthStore — sign in / sign up / sign out / session restore
+- [x] AuthView — email login + signup UI
+- [x] ProductStore — async Supabase fetch with mock data fallback
+- [x] Product model — `Codable` with snake_case CodingKeys for Supabase
+- [ ] Sign in with Apple
+- [ ] Cart & wishlist sync to Supabase
+- [ ] Orders written to Supabase
+- [ ] User profile sync (loyalty points, addresses)
 - [ ] Stripe payments
 - [ ] APNs push notifications
 - [ ] AsyncImage from CDN / Supabase Storage
