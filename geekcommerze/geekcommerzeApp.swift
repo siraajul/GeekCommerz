@@ -48,17 +48,12 @@ struct geekcommerzeApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                if authStore.isLoading {
-                    // Splash while session is being restored
-                    ZStack {
-                        Color(.systemBackground).ignoresSafeArea()
-                        VStack(spacing: 16) {
-                            Image(systemName: "bag.fill")
-                                .font(.system(size: 48))
-                                .foregroundColor(AppTheme.Colors.primary)
-                            ProgressView()
-                        }
-                    }
+                if !hasSeenOnboarding {
+                    // First launch: go straight to onboarding, no splash
+                    OnboardingView()
+                } else if authStore.isLoading {
+                    // Returning user: branded splash while session restores
+                    SplashView()
                 } else if authStore.needsAuth {
                     AuthView()
                         .environment(authStore)
@@ -69,9 +64,6 @@ struct geekcommerzeApp: App {
             }
             .preferredColorScheme(darkModeEnabled ? .dark : .light)
             .tint(AppTheme.Colors.primary)
-            .fullScreenCover(isPresented: .constant(!hasSeenOnboarding)) {
-                OnboardingView()
-            }
             .task {
                 await authStore.initialize()
             }

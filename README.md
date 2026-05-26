@@ -73,7 +73,8 @@ geekcommerze/
 | ❤️ **Wishlist** | Heart toggle from any screen · spring-exit on remove |
 | 👤 **Profile** | Loyalty tier · address book · dark mode · stats |
 | 🔔 **Notifications** | In-app centre · badge · swipe actions · seeded on first launch |
-| 🎬 **Onboarding** | 3-page flow · shown once |
+| 🚀 **Splash** | Branded gradient splash on every return launch · skipped on first launch |
+| 🎬 **Onboarding** | 3-page flow · shown once on first launch · no splash before it |
 | ✨ **Animations** | Cart fly · heart pulse · filter spring · numeric ticker |
 
 ---
