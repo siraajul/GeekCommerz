@@ -51,7 +51,7 @@ struct OnboardingView: View {
                             withAnimation { currentPage += 1 }
                         } label: {
                             Text("Next")
-                                .font(.headline)
+                                .font(AppTheme.Typography.button)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
                                 .foregroundColor(.white)
@@ -73,7 +73,7 @@ struct OnboardingView: View {
                             hasSeenOnboarding = true
                         } label: {
                             Text("Get Started")
-                                .font(.headline)
+                                .font(AppTheme.Typography.button)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
                                 .foregroundColor(.white)

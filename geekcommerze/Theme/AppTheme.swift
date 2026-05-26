@@ -84,11 +84,17 @@ enum AppTheme {
 
     // MARK: Typography
     enum Typography {
+        // Hierarchy: display > screenTitle > sectionHeader > cardTitle/price > body > label > caption > badge
+        static let display       = Font.system(size: 22, weight: .black, design: .rounded)
+        static let screenTitle   = Font.title2.bold()
         static let sectionHeader = Font.title3.bold()
         static let cardTitle     = Font.subheadline.bold()
-        static let badge         = Font.caption2.bold()
-        static let caption       = Font.caption
         static let price         = Font.subheadline.bold()
-        static let display       = Font.system(size: 22, weight: .bold, design: .rounded)
+        static let button        = Font.headline
+        static let body          = Font.body
+        static let label         = Font.subheadline
+        static let caption       = Font.caption
+        static let badge         = Font.caption2.bold()
+        static let tag           = Font.caption.bold()
     }
 }

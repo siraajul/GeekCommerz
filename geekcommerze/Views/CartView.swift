@@ -47,7 +47,7 @@ struct CartView: View {
                 .padding(.horizontal, 40)
             NavigationLink(destination: ShopView()) {
                 Text("Start Shopping")
-                    .font(.headline)
+                    .font(AppTheme.Typography.button)
                     .padding(.horizontal, 30)
                     .padding(.vertical, 12)
                     .background {
@@ -111,10 +111,10 @@ struct CartView: View {
                 Divider()
                 HStack {
                     Text("Total")
-                        .font(.headline).bold()
+                        .font(AppTheme.Typography.sectionHeader)
                     Spacer()
                     Text("$\(grandTotal, specifier: "%.2f")")
-                        .font(.headline).bold()
+                        .font(AppTheme.Typography.sectionHeader)
                         .foregroundColor(AppTheme.Colors.primary)
                 }
             }
@@ -139,10 +139,10 @@ struct CartView: View {
         Button { showCheckout = true } label: {
             HStack {
                 Text("Proceed to Checkout")
-                    .font(.headline)
+                    .font(AppTheme.Typography.button)
                 Spacer()
                 Text("$\(grandTotal, specifier: "%.2f")")
-                    .font(.headline)
+                    .font(AppTheme.Typography.button)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 16)

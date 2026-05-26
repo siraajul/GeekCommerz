@@ -86,7 +86,7 @@ struct SearchView: View {
                 if !recentSearches.isEmpty {
                     HStack {
                         Text("Recent")
-                            .font(.headline)
+                            .font(AppTheme.Typography.sectionHeader)
                         Spacer()
                         Button("Clear All") { recentSearchesData = "" }
                             .font(.subheadline)
@@ -121,7 +121,7 @@ struct SearchView: View {
 
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Trending")
-                        .font(.headline)
+                        .font(AppTheme.Typography.sectionHeader)
                         .padding(.horizontal, 16)
                         .padding(.top, 16)
 
@@ -153,7 +153,7 @@ struct SearchView: View {
 
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Browse Categories")
-                        .font(.headline)
+                        .font(AppTheme.Typography.sectionHeader)
                         .padding(.horizontal, 16)
                         .padding(.top, 8)
 

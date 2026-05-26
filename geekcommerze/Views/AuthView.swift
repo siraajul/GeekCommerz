@@ -111,7 +111,7 @@ struct AuthView: View {
                     ProgressView().tint(.white)
                 } else {
                     Text(isSignUp ? "Create Account" : "Sign In")
-                        .font(.headline)
+                        .font(AppTheme.Typography.button)
                 }
             }
             .frame(maxWidth: .infinity)
