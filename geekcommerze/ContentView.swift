@@ -6,14 +6,22 @@ struct ContentView: View {
     @State private var cartStore = CartStore()
     @State private var toastManager = ToastManager()
     @State private var notificationStore = NotificationStore()
-    @State private var selectedTab = 0
+    @State private var tabRouter = TabRouter()
     @State private var showPromoPopup = false
     @State private var promoShownThisLaunch = false
+    @State private var cartAnimationManager = CartAnimationManager()
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
+        GeometryReader { geo in
+          contentStack(screenSize: geo.size)
+        }
+        .ignoresSafeArea()
+    }
+
+    private func contentStack(screenSize: CGSize) -> some View {
         ZStack(alignment: .bottom) {
-            TabView(selection: $selectedTab) {
+            TabView(selection: $tabRouter.selectedTab) {
                 HomeView()
                     .tabItem { Label("Home", systemImage: "house") }
                     .tag(0)
@@ -43,6 +51,15 @@ struct ContentView: View {
             .environment(cartStore)
             .environment(toastManager)
             .environment(notificationStore)
+            .environment(cartAnimationManager)
+            .environment(tabRouter)
+            .onAppear {
+                // Cart is the 4th tab (index 3) of 5 — center at 70% of width
+                cartAnimationManager.cartTabCenter = CGPoint(
+                    x: screenSize.width * 0.7,
+                    y: screenSize.height - 44
+                )
+            }
             .sheet(isPresented: $showPromoPopup) {
                 PromoPopupView()
                     .presentationDragIndicator(.hidden)
@@ -63,6 +80,18 @@ struct ContentView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .zIndex(999)
             }
+
+            // Flying cart particles — rendered above everything, non-interactive
+            ForEach(cartAnimationManager.particles) { particle in
+                FlyingCartParticle(
+                    start: particle.start,
+                    end: cartAnimationManager.cartTabCenter,
+                    imageName: particle.imageName,
+                    onFinished: { cartAnimationManager.remove(id: particle.id) }
+                )
+            }
+            .allowsHitTesting(false)
+            .zIndex(1000)
         }
     }
 }

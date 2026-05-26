@@ -34,7 +34,7 @@ struct CheckoutView: View {
         return decoded
     }
 
-    let paymentMethods = ["Credit/Debit Card", "Cash on Delivery", "Mobile Banking"]
+    let paymentMethods = ["Credit/Debit Card (Demo)", "Cash on Delivery", "Mobile Banking"]
     let paymentIcons = ["creditcard", "banknote", "iphone"]
 
     var total: Double { cartItems.reduce(0) { $0 + $1.subtotal } }

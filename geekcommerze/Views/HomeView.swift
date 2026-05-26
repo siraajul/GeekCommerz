@@ -7,6 +7,7 @@ struct HomeView: View {
     @Environment(ProductStore.self) private var productStore
     @Environment(CartStore.self) private var cartStore
     @Environment(NotificationStore.self) private var notifStore
+    @Environment(TabRouter.self) private var tabRouter
     @State private var selectedProduct: Product? = nil
     @AppStorage(AppConstants.StorageKeys.recentlyViewed) private var recentlyViewedData: String = ""
     @State private var currentBannerIndex: Int = 0
@@ -57,7 +58,7 @@ struct HomeView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: CartView()) {
+                    Button { tabRouter.selectedTab = 3 } label: {
                         CartBadgeIcon(count: cartStore.itemCount)
                     }
                 }

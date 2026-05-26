@@ -158,6 +158,8 @@ struct CartItemRow: View {
     let item: CartItem
     @Environment(\.modelContext) private var modelContext
     @Environment(CartStore.self) private var cartStore
+    @State private var incBounce = false
+    @State private var decBounce = false
 
     var body: some View {
         HStack(spacing: 12) {
@@ -178,31 +180,54 @@ struct CartItemRow: View {
                 Text("$\(item.subtotal, specifier: "%.2f")")
                     .font(.subheadline).bold()
                     .foregroundColor(.blue)
+                    .contentTransition(.numericText())
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: item.quantity)
             }
 
             Spacer()
 
-            VStack(spacing: 6) {
+            // Stepper pill — fixed size so nothing clips the quantity number
+            HStack(spacing: 0) {
                 Button {
-                    cartStore.updateQuantity(item, quantity: item.quantity + 1, context: modelContext)
+                    withAnimation(.easeInOut(duration: 0.12)) { decBounce = true }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.14) {
+                        withAnimation { decBounce = false }
+                    }
+                    cartStore.updateQuantity(item, quantity: item.quantity - 1, context: modelContext)
+                    HapticFeedback.selection()
                 } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.title3)
-                        .foregroundColor(.blue)
+                    Image(systemName: item.quantity > 1 ? "minus" : "trash")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(decBounce ? .white : (item.quantity > 1 ? .blue : .red))
+                        .frame(width: 30, height: 30)
+                        .background(decBounce ? (item.quantity > 1 ? Color.blue : Color.red) : Color.clear)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
 
                 Text("\(item.quantity)")
                     .font(.subheadline).bold()
-                    .frame(minWidth: 24)
+                    .frame(width: 32)
+                    .contentTransition(.numericText())
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: item.quantity)
 
                 Button {
-                    cartStore.updateQuantity(item, quantity: item.quantity - 1, context: modelContext)
+                    withAnimation(.easeInOut(duration: 0.12)) { incBounce = true }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.14) {
+                        withAnimation { incBounce = false }
+                    }
+                    cartStore.updateQuantity(item, quantity: item.quantity + 1, context: modelContext)
+                    HapticFeedback.selection()
                 } label: {
-                    Image(systemName: item.quantity > 1 ? "minus.circle.fill" : "trash.circle.fill")
-                        .font(.title3)
-                        .foregroundColor(item.quantity > 1 ? .blue : .red)
+                    Image(systemName: "plus")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(incBounce ? .white : .blue)
+                        .frame(width: 30, height: 30)
+                        .background(incBounce ? Color.blue : Color.clear)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             }
+            .background(Color(.systemGray6))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
         }
         .padding(.vertical, 4)
     }

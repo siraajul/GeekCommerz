@@ -104,7 +104,11 @@ struct OrderDetailView: View {
                 totalCard
                 reorderCard
                 if order.status == .delivered {
-                    returnRequestButton
+                    if order.returnRequested {
+                        returnRequestedBadge
+                    } else {
+                        returnRequestButton
+                    }
                 }
             }
             .padding(16)
@@ -116,8 +120,30 @@ struct OrderDetailView: View {
             ReturnsSheet(
                 orderId: String(order.id.uuidString.prefix(8)).uppercased(),
                 toastManager: toastManager
-            )
+            ) {
+                order.returnRequested = true
+            }
         }
+    }
+
+    private var returnRequestedBadge: some View {
+        HStack {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.title3)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Return Requested")
+                    .font(.headline)
+                Text("We'll contact you within 24 hours.")
+                    .font(.caption)
+                    .opacity(0.75)
+            }
+            Spacer()
+        }
+        .padding(16)
+        .background(Color.green.opacity(0.1))
+        .foregroundColor(.green)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.green.opacity(0.3), lineWidth: 1))
     }
 
     private var returnRequestButton: some View {
@@ -322,6 +348,7 @@ struct OrderDetailView: View {
 struct ReturnsSheet: View {
     let orderId: String
     let toastManager: ToastManager
+    let onSubmit: () -> Void
     @Environment(\.dismiss) private var dismiss
     @State private var selectedReason = 0
     @State private var description = ""
@@ -410,6 +437,7 @@ struct ReturnsSheet: View {
                         Button("Submit") {
                             HapticFeedback.notification(.success)
                             toastManager.show("Return request submitted", icon: "arrow.uturn.left.circle", color: .orange)
+                            onSubmit()
                             submitted = true
                         }
                         .bold()

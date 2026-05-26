@@ -75,13 +75,16 @@ struct WishlistView: View {
                         }
                         .padding(6)
                     }
+                    .transition(.scale(scale: 0.75).combined(with: .opacity))
                 }
             }
             .padding(16)
+            .animation(.spring(response: 0.38, dampingFraction: 0.78), value: wishlistedProducts.count)
         }
     }
 
     private func removeFromWishlist(_ product: Product) {
+        HapticFeedback.impact(.medium)
         var ids = wishlistData.components(separatedBy: ",").filter { !$0.isEmpty }
         ids.removeAll { $0 == product.id.uuidString }
         wishlistData = ids.joined(separator: ",")

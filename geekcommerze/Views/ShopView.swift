@@ -23,6 +23,7 @@ enum SortOption: String, CaseIterable, Identifiable {
 struct ShopView: View {
     @Environment(ProductStore.self) private var productStore
     @Environment(CartStore.self) private var cartStore
+    @Environment(TabRouter.self) private var tabRouter
     @State private var selectedProduct: Product? = nil
     @State private var searchText: String = ""
     @State private var selectedCategory: ProductCategory? = nil
@@ -61,7 +62,7 @@ struct ShopView: View {
                                 }
                             }
                         }
-                        NavigationLink(destination: CartView()) {
+                        Button { tabRouter.selectedTab = 3 } label: {
                             CartBadgeIcon(count: cartStore.itemCount)
                         }
                     }
@@ -149,6 +150,7 @@ struct ShopView: View {
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 8)
+            .animation(.spring(response: 0.35, dampingFraction: 0.75), value: activeFilterCount)
         }
     }
 
@@ -210,6 +212,7 @@ struct ActiveFilterChip: View {
         .background(Color.blue.opacity(0.12))
         .foregroundColor(.blue)
         .clipShape(Capsule())
+        .transition(.scale(scale: 0.7).combined(with: .opacity))
     }
 }
 
@@ -228,7 +231,9 @@ struct FilterChip: View {
                 .foregroundColor(isSelected ? .white : .primary)
                 .clipShape(Capsule())
                 .shadow(color: .black.opacity(0.05), radius: 2, y: 1)
+                .scaleEffect(isSelected ? 1.05 : 1.0)
         }
+        .animation(.spring(response: 0.28, dampingFraction: 0.65), value: isSelected)
     }
 }
 
@@ -283,14 +288,22 @@ struct ProductCard: View {
     @Environment(ProductStore.self) private var productStore
     @Environment(CartStore.self) private var cartStore
     @Environment(ToastManager.self) private var toastManager
+    @Environment(CartAnimationManager.self) private var cartAnimationManager
     @Environment(\.modelContext) private var modelContext
     @AppStorage(AppConstants.StorageKeys.wishlist) private var wishlistData: String = ""
+    @State private var addButtonGlobalFrame: CGRect = .zero
+    @State private var heartPulse = false
+    @State private var addedToCart = false
 
     var isWishlisted: Bool {
         wishlistData.components(separatedBy: ",").contains(product.id.uuidString)
     }
 
     func toggleWishlist() {
+        withAnimation(.spring(response: 0.25, dampingFraction: 0.4)) { heartPulse = true }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.28) {
+            withAnimation(.spring(response: 0.2, dampingFraction: 0.6)) { heartPulse = false }
+        }
         var ids = wishlistData.components(separatedBy: ",").filter { !$0.isEmpty }
         let uid = product.id.uuidString
         if ids.contains(uid) {
@@ -350,6 +363,23 @@ struct ProductCard: View {
                         }
                     }
                 }
+
+                // Heart button — bottom-trailing of image
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button { toggleWishlist() } label: {
+                            Image(systemName: isWishlisted ? "heart.fill" : "heart")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundColor(isWishlisted ? .red : .white)
+                                .frame(width: 26, height: 26)
+                                .background(.ultraThinMaterial, in: Circle())
+                                .scaleEffect(heartPulse ? 1.45 : 1.0)
+                        }
+                        .padding(6)
+                    }
+                }
             }
             .frame(height: 110)
 
@@ -393,20 +423,36 @@ struct ProductCard: View {
                 Spacer()
 
                 Button {
+                    guard product.isInStock else { return }
+                    withAnimation(.spring(response: 0.18, dampingFraction: 0.5)) { addedToCart = true }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.22) {
+                        withAnimation(.spring) { addedToCart = false }
+                    }
+                    let center = CGPoint(x: addButtonGlobalFrame.midX, y: addButtonGlobalFrame.midY)
+                    cartAnimationManager.trigger(from: center, imageName: product.imageName)
                     cartStore.addProduct(product, context: modelContext)
                     HapticFeedback.notification(.success)
                     toastManager.show("\(product.name) added to cart", icon: "cart.badge.plus", color: .blue)
                 } label: {
-                    Label("Add to Cart", systemImage: "cart.badge.plus")
+                    Label("Add to Cart", systemImage: addedToCart ? "checkmark" : "cart.badge.plus")
                         .font(.caption).bold()
                         .frame(maxWidth: .infinity)
                         .frame(height: 30)
-                        .background(product.isInStock ? Color.blue : Color.gray)
+                        .background(product.isInStock ? (addedToCart ? Color.green : Color.blue) : Color.gray)
                         .foregroundColor(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .scaleEffect(addedToCart ? 0.93 : 1.0)
                 }
                 .disabled(!product.isInStock)
                 .padding(.bottom, 10)
+                .background(
+                    GeometryReader { geo -> Color in
+                        DispatchQueue.main.async {
+                            addButtonGlobalFrame = geo.frame(in: .global)
+                        }
+                        return Color.clear
+                    }
+                )
             }
             .padding(.horizontal, 8)
         }
