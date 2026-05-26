@@ -103,6 +103,9 @@ Wishlist item →  scale+opacity exit transition on remove
 | Lightweight state | `@AppStorage` |
 | Remote backend | Supabase (optional — offline fallback built-in) |
 | Auth | Supabase Auth (email/password · session restore) |
+| Payments | Stripe (package added · integration pending) |
+| Push notifications | OneSignal (package added · integration pending) |
+| Crash reporting | Sentry (package added · integration pending) |
 | Charts | Swift Charts |
 | Biometrics | LocalAuthentication (Face ID / Touch ID + passcode fallback) |
 | Haptics | UIImpactFeedbackGenerator |
@@ -110,7 +113,7 @@ Wishlist item →  scale+opacity exit transition on remove
 | Architecture | `@Observable` (Observation framework) |
 | Testing | Swift Testing + XCUIAutomation |
 
-> Runs **fully offline with mock data** out of the box. Add Supabase keys to go live.
+> Runs **fully offline with mock data** out of the box. Add keys to `AppConfig.swift` to go live.
 
 ---
 
@@ -390,8 +393,12 @@ enum Monitoring {
 - [ ] Cart & wishlist sync to Supabase
 - [ ] Orders written to Supabase
 - [ ] User profile sync (loyalty points, addresses)
-- [ ] Stripe payments
-- [ ] APNs push notifications
+- [x] Stripe package added
+- [ ] Stripe payment sheet integration
+- [x] OneSignal package added
+- [ ] OneSignal push notification setup
+- [x] Sentry package added
+- [ ] Sentry crash reporting setup
 - [ ] AsyncImage from CDN / Supabase Storage
 - [ ] iPad layout
 - [ ] Widget extension

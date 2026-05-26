@@ -13,6 +13,29 @@
 		2D64A4822FC5E2CB00EB0FC4 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4812FC5E2CB00EB0FC4 /* Realtime */; };
 		2D64A4842FC5E2CB00EB0FC4 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4832FC5E2CB00EB0FC4 /* Storage */; };
 		2D64A4862FC5E2CB00EB0FC4 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4852FC5E2CB00EB0FC4 /* Supabase */; };
+		2D64A4892FC606C300EB0FC4 /* Stripe in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4882FC606C300EB0FC4 /* Stripe */; };
+		2D64A48B2FC606C300EB0FC4 /* StripeApplePay in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A48A2FC606C300EB0FC4 /* StripeApplePay */; };
+		2D64A48D2FC606C300EB0FC4 /* StripeCardScan in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A48C2FC606C300EB0FC4 /* StripeCardScan */; };
+		2D64A48F2FC606C300EB0FC4 /* StripeConnect in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A48E2FC606C300EB0FC4 /* StripeConnect */; };
+		2D64A4912FC606C300EB0FC4 /* StripeCryptoOnramp in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4902FC606C300EB0FC4 /* StripeCryptoOnramp */; };
+		2D64A4932FC606C300EB0FC4 /* StripeFinancialConnections in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4922FC606C300EB0FC4 /* StripeFinancialConnections */; };
+		2D64A4952FC606C300EB0FC4 /* StripeIdentity in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4942FC606C300EB0FC4 /* StripeIdentity */; };
+		2D64A4972FC606C300EB0FC4 /* StripeIssuing in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4962FC606C300EB0FC4 /* StripeIssuing */; };
+		2D64A4992FC606C300EB0FC4 /* StripePaymentSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4982FC606C300EB0FC4 /* StripePaymentSheet */; };
+		2D64A49B2FC606C300EB0FC4 /* StripePayments in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A49A2FC606C300EB0FC4 /* StripePayments */; };
+		2D64A49D2FC606C300EB0FC4 /* StripePaymentsUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A49C2FC606C300EB0FC4 /* StripePaymentsUI */; };
+		2D64A4A02FC6093300EB0FC4 /* OneSignalExtension in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A49F2FC6093300EB0FC4 /* OneSignalExtension */; };
+		2D64A4A22FC6093300EB0FC4 /* OneSignalFramework in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4A12FC6093300EB0FC4 /* OneSignalFramework */; };
+		2D64A4A42FC6093300EB0FC4 /* OneSignalInAppMessages in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4A32FC6093300EB0FC4 /* OneSignalInAppMessages */; };
+		2D64A4A62FC6093300EB0FC4 /* OneSignalLocation in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4A52FC6093300EB0FC4 /* OneSignalLocation */; };
+		2D64A4A92FC60C9E00EB0FC4 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4A82FC60C9E00EB0FC4 /* Sentry */; };
+		2D64A4AB2FC60C9E00EB0FC4 /* Sentry-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4AA2FC60C9E00EB0FC4 /* Sentry-Dynamic */; };
+		2D64A4AD2FC60C9E00EB0FC4 /* Sentry-Dynamic-WithARM64e in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4AC2FC60C9E00EB0FC4 /* Sentry-Dynamic-WithARM64e */; };
+		2D64A4AF2FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4AE2FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit */; };
+		2D64A4B12FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit-WithARM64e in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4B02FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit-WithARM64e */; };
+		2D64A4B32FC60C9E00EB0FC4 /* SentryDistribution in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4B22FC60C9E00EB0FC4 /* SentryDistribution */; };
+		2D64A4B52FC60C9E00EB0FC4 /* SentrySPM in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4B42FC60C9E00EB0FC4 /* SentrySPM */; };
+		2D64A4B72FC60C9E00EB0FC4 /* SentrySwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4B62FC60C9E00EB0FC4 /* SentrySwiftUI */; };
 		2DC5A3442FC5882100383CE4 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC5A3432FC5882100383CE4 /* AppConstants.swift */; };
 /* End PBXBuildFile section */
 
@@ -82,11 +105,34 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D64A48D2FC606C300EB0FC4 /* StripeCardScan in Frameworks */,
+				2D64A4AB2FC60C9E00EB0FC4 /* Sentry-Dynamic in Frameworks */,
+				2D64A4B52FC60C9E00EB0FC4 /* SentrySPM in Frameworks */,
+				2D64A4A02FC6093300EB0FC4 /* OneSignalExtension in Frameworks */,
+				2D64A4932FC606C300EB0FC4 /* StripeFinancialConnections in Frameworks */,
+				2D64A4892FC606C300EB0FC4 /* Stripe in Frameworks */,
+				2D64A4A22FC6093300EB0FC4 /* OneSignalFramework in Frameworks */,
+				2D64A4A92FC60C9E00EB0FC4 /* Sentry in Frameworks */,
+				2D64A4912FC606C300EB0FC4 /* StripeCryptoOnramp in Frameworks */,
+				2D64A4992FC606C300EB0FC4 /* StripePaymentSheet in Frameworks */,
+				2D64A48B2FC606C300EB0FC4 /* StripeApplePay in Frameworks */,
+				2D64A4B12FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit-WithARM64e in Frameworks */,
+				2D64A4B72FC60C9E00EB0FC4 /* SentrySwiftUI in Frameworks */,
+				2D64A49B2FC606C300EB0FC4 /* StripePayments in Frameworks */,
 				2D64A4802FC5E2CB00EB0FC4 /* PostgREST in Frameworks */,
+				2D64A4A42FC6093300EB0FC4 /* OneSignalInAppMessages in Frameworks */,
+				2D64A49D2FC606C300EB0FC4 /* StripePaymentsUI in Frameworks */,
+				2D64A4972FC606C300EB0FC4 /* StripeIssuing in Frameworks */,
+				2D64A48F2FC606C300EB0FC4 /* StripeConnect in Frameworks */,
+				2D64A4AD2FC60C9E00EB0FC4 /* Sentry-Dynamic-WithARM64e in Frameworks */,
+				2D64A4B32FC60C9E00EB0FC4 /* SentryDistribution in Frameworks */,
 				2D64A47E2FC5E2CB00EB0FC4 /* Functions in Frameworks */,
+				2D64A4952FC606C300EB0FC4 /* StripeIdentity in Frameworks */,
+				2D64A4AF2FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit in Frameworks */,
 				2D64A4862FC5E2CB00EB0FC4 /* Supabase in Frameworks */,
 				2D64A47C2FC5E2CB00EB0FC4 /* Auth in Frameworks */,
 				2D64A4842FC5E2CB00EB0FC4 /* Storage in Frameworks */,
+				2D64A4A62FC6093300EB0FC4 /* OneSignalLocation in Frameworks */,
 				2D64A4822FC5E2CB00EB0FC4 /* Realtime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -193,6 +239,29 @@
 				2D64A4812FC5E2CB00EB0FC4 /* Realtime */,
 				2D64A4832FC5E2CB00EB0FC4 /* Storage */,
 				2D64A4852FC5E2CB00EB0FC4 /* Supabase */,
+				2D64A4882FC606C300EB0FC4 /* Stripe */,
+				2D64A48A2FC606C300EB0FC4 /* StripeApplePay */,
+				2D64A48C2FC606C300EB0FC4 /* StripeCardScan */,
+				2D64A48E2FC606C300EB0FC4 /* StripeConnect */,
+				2D64A4902FC606C300EB0FC4 /* StripeCryptoOnramp */,
+				2D64A4922FC606C300EB0FC4 /* StripeFinancialConnections */,
+				2D64A4942FC606C300EB0FC4 /* StripeIdentity */,
+				2D64A4962FC606C300EB0FC4 /* StripeIssuing */,
+				2D64A4982FC606C300EB0FC4 /* StripePaymentSheet */,
+				2D64A49A2FC606C300EB0FC4 /* StripePayments */,
+				2D64A49C2FC606C300EB0FC4 /* StripePaymentsUI */,
+				2D64A49F2FC6093300EB0FC4 /* OneSignalExtension */,
+				2D64A4A12FC6093300EB0FC4 /* OneSignalFramework */,
+				2D64A4A32FC6093300EB0FC4 /* OneSignalInAppMessages */,
+				2D64A4A52FC6093300EB0FC4 /* OneSignalLocation */,
+				2D64A4A82FC60C9E00EB0FC4 /* Sentry */,
+				2D64A4AA2FC60C9E00EB0FC4 /* Sentry-Dynamic */,
+				2D64A4AC2FC60C9E00EB0FC4 /* Sentry-Dynamic-WithARM64e */,
+				2D64A4AE2FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit */,
+				2D64A4B02FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit-WithARM64e */,
+				2D64A4B22FC60C9E00EB0FC4 /* SentryDistribution */,
+				2D64A4B42FC60C9E00EB0FC4 /* SentrySPM */,
+				2D64A4B62FC60C9E00EB0FC4 /* SentrySwiftUI */,
 			);
 			productName = geekcommerze;
 			productReference = 2DC5A2E22FC555E900383CE4 /* geekcommerze.app */;
@@ -278,6 +347,9 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				2D64A47A2FC5E2CB00EB0FC4 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */,
+				2D64A49E2FC6093300EB0FC4 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */,
+				2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2DC5A2E32FC555E900383CE4 /* Products */;
@@ -679,6 +751,30 @@
 				minimumVersion = 2.5.1;
 			};
 		};
+		2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stripe/stripe-ios-spm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 25.15.0;
+			};
+		};
+		2D64A49E2FC6093300EB0FC4 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/OneSignal/OneSignal-XCFramework";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.5.1;
+			};
+		};
+		2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.14.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -711,6 +807,121 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2D64A47A2FC5E2CB00EB0FC4 /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
+		};
+		2D64A4882FC606C300EB0FC4 /* Stripe */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = Stripe;
+		};
+		2D64A48A2FC606C300EB0FC4 /* StripeApplePay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = StripeApplePay;
+		};
+		2D64A48C2FC606C300EB0FC4 /* StripeCardScan */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = StripeCardScan;
+		};
+		2D64A48E2FC606C300EB0FC4 /* StripeConnect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = StripeConnect;
+		};
+		2D64A4902FC606C300EB0FC4 /* StripeCryptoOnramp */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = StripeCryptoOnramp;
+		};
+		2D64A4922FC606C300EB0FC4 /* StripeFinancialConnections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = StripeFinancialConnections;
+		};
+		2D64A4942FC606C300EB0FC4 /* StripeIdentity */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = StripeIdentity;
+		};
+		2D64A4962FC606C300EB0FC4 /* StripeIssuing */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = StripeIssuing;
+		};
+		2D64A4982FC606C300EB0FC4 /* StripePaymentSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = StripePaymentSheet;
+		};
+		2D64A49A2FC606C300EB0FC4 /* StripePayments */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = StripePayments;
+		};
+		2D64A49C2FC606C300EB0FC4 /* StripePaymentsUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4872FC606C300EB0FC4 /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = StripePaymentsUI;
+		};
+		2D64A49F2FC6093300EB0FC4 /* OneSignalExtension */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A49E2FC6093300EB0FC4 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */;
+			productName = OneSignalExtension;
+		};
+		2D64A4A12FC6093300EB0FC4 /* OneSignalFramework */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A49E2FC6093300EB0FC4 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */;
+			productName = OneSignalFramework;
+		};
+		2D64A4A32FC6093300EB0FC4 /* OneSignalInAppMessages */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A49E2FC6093300EB0FC4 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */;
+			productName = OneSignalInAppMessages;
+		};
+		2D64A4A52FC6093300EB0FC4 /* OneSignalLocation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A49E2FC6093300EB0FC4 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */;
+			productName = OneSignalLocation;
+		};
+		2D64A4A82FC60C9E00EB0FC4 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		2D64A4AA2FC60C9E00EB0FC4 /* Sentry-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = "Sentry-Dynamic";
+		};
+		2D64A4AC2FC60C9E00EB0FC4 /* Sentry-Dynamic-WithARM64e */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = "Sentry-Dynamic-WithARM64e";
+		};
+		2D64A4AE2FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = "Sentry-WithoutUIKitOrAppKit";
+		};
+		2D64A4B02FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit-WithARM64e */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = "Sentry-WithoutUIKitOrAppKit-WithARM64e";
+		};
+		2D64A4B22FC60C9E00EB0FC4 /* SentryDistribution */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = SentryDistribution;
+		};
+		2D64A4B42FC60C9E00EB0FC4 /* SentrySPM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = SentrySPM;
+		};
+		2D64A4B62FC60C9E00EB0FC4 /* SentrySwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = SentrySwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
