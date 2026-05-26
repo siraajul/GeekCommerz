@@ -98,7 +98,7 @@ Wishlist item →  scale+opacity exit transition on remove
 
 | Layer | Technology |
 |---|---|
-| UI | SwiftUI 5 · `AppTheme` design system (brand indigo/violet palette) |
+| UI | SwiftUI 5 · `AppTheme` design system (adaptive indigo/violet — full dark mode support) |
 | Local persistence | SwiftData |
 | Lightweight state | `@AppStorage` |
 | Remote backend | Supabase (optional — offline fallback built-in) |

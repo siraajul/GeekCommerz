@@ -4,19 +4,32 @@ enum AppTheme {
 
     // MARK: Brand
     enum Brand {
-        static let primary = Color(red: 0.31, green: 0.25, blue: 0.91)
-        static let accent  = Color(red: 0.55, green: 0.22, blue: 0.96)
+        // Adaptive: deep indigo in light mode, periwinkle in dark mode (sufficient contrast on system backgrounds)
+        static let primary = Color(UIColor { t in
+            t.userInterfaceStyle == .dark
+                ? UIColor(red: 0.62, green: 0.58, blue: 1.00, alpha: 1)
+                : UIColor(red: 0.31, green: 0.25, blue: 0.91, alpha: 1)
+        })
+        static let accent = Color(UIColor { t in
+            t.userInterfaceStyle == .dark
+                ? UIColor(red: 0.78, green: 0.56, blue: 1.00, alpha: 1)
+                : UIColor(red: 0.55, green: 0.22, blue: 0.96, alpha: 1)
+        })
+
+        // Fixed bold fills for gradient backgrounds — white text always has contrast
+        private static let fill1 = Color(red: 0.31, green: 0.25, blue: 0.91)
+        private static let fill2 = Color(red: 0.55, green: 0.22, blue: 0.96)
 
         static var gradient: LinearGradient {
-            LinearGradient(colors: [primary, accent], startPoint: .topLeading, endPoint: .bottomTrailing)
+            LinearGradient(colors: [fill1, fill2], startPoint: .topLeading, endPoint: .bottomTrailing)
         }
 
         static var gradientH: LinearGradient {
-            LinearGradient(colors: [primary, accent], startPoint: .leading, endPoint: .trailing)
+            LinearGradient(colors: [fill1, fill2], startPoint: .leading, endPoint: .trailing)
         }
 
-        static let tint     = primary.opacity(0.10)
-        static let softTint = primary.opacity(0.05)
+        static let tint     = primary.opacity(0.12)
+        static let softTint = primary.opacity(0.06)
     }
 
     // MARK: Corner radii
