@@ -306,7 +306,7 @@ struct PromoBannerCard: View {
 // MARK: - Promotional Popup
 
 struct PromoPopupView: View {
-    @Environment(\.dismiss) private var dismiss
+    let onDismiss: () -> Void
 
     var body: some View {
         ZStack {
@@ -320,7 +320,7 @@ struct PromoPopupView: View {
             VStack(spacing: 0) {
                 HStack {
                     Spacer()
-                    Button { dismiss() } label: {
+                    Button { onDismiss() } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.title2)
                             .foregroundStyle(.white.opacity(0.7))
@@ -374,7 +374,7 @@ struct PromoPopupView: View {
                     }
 
                     VStack(spacing: 14) {
-                        Button { dismiss() } label: {
+                        Button { onDismiss() } label: {
                             Text("Shop Now")
                                 .font(.headline)
                                 .frame(maxWidth: .infinity)
@@ -384,7 +384,7 @@ struct PromoPopupView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 14))
                         }
 
-                        Button { dismiss() } label: {
+                        Button { onDismiss() } label: {
                             Text("Maybe Later")
                                 .font(.subheadline)
                                 .foregroundColor(.white.opacity(0.6))

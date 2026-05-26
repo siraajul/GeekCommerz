@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var promoShownThisLaunch = false
     @State private var cartAnimationManager = CartAnimationManager()
     @Environment(\.scenePhase) private var scenePhase
+    @AppStorage(AppConstants.StorageKeys.hasSeenOnboarding) private var hasSeenOnboarding = false
 
     var body: some View {
         GeometryReader { geo in
@@ -64,16 +65,13 @@ struct ContentView: View {
                     y: screenSize.height - 44
                 )
             }
-            .sheet(isPresented: $showPromoPopup) {
-                PromoPopupView()
-                    .presentationDragIndicator(.hidden)
-                    .presentationCornerRadius(28)
-            }
             .onChange(of: scenePhase) { _, newPhase in
-                if newPhase == .active && !promoShownThisLaunch {
+                if newPhase == .active && !promoShownThisLaunch && hasSeenOnboarding {
                     promoShownThisLaunch = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                        showPromoPopup = true
+                        withAnimation(.easeInOut(duration: 0.35)) {
+                            showPromoPopup = true
+                        }
                     }
                 }
             }
@@ -96,7 +94,28 @@ struct ContentView: View {
             }
             .allowsHitTesting(false)
             .zIndex(1000)
+
+            // Promo popup — ZStack overlay avoids sheet-conflict warnings
+            if showPromoPopup {
+                Color.black.opacity(0.45)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.3)) { showPromoPopup = false }
+                    }
+                    .zIndex(1001)
+                    .transition(.opacity)
+
+                PromoPopupView(onDismiss: {
+                    withAnimation(.easeInOut(duration: 0.3)) { showPromoPopup = false }
+                })
+                .clipShape(RoundedRectangle(cornerRadius: 28))
+                .padding(.horizontal, 0)
+                .ignoresSafeArea(edges: .bottom)
+                .zIndex(1002)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
         }
+        .animation(.easeInOut(duration: 0.35), value: showPromoPopup)
     }
 }
 
