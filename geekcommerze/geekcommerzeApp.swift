@@ -55,7 +55,7 @@ struct geekcommerzeApp: App {
                         VStack(spacing: 16) {
                             Image(systemName: "bag.fill")
                                 .font(.system(size: 48))
-                                .foregroundColor(.blue)
+                                .foregroundColor(AppTheme.Colors.primary)
                             ProgressView()
                         }
                     }
@@ -68,6 +68,7 @@ struct geekcommerzeApp: App {
                 }
             }
             .preferredColorScheme(darkModeEnabled ? .dark : .light)
+            .tint(AppTheme.Colors.primary)
             .fullScreenCover(isPresented: .constant(!hasSeenOnboarding)) {
                 OnboardingView()
             }

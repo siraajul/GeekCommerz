@@ -17,6 +17,7 @@ struct ContentView: View {
           contentStack(screenSize: geo.size)
         }
         .ignoresSafeArea()
+        .tint(AppTheme.Colors.primary)
         .task {
             await productStore.loadProducts()
         }
