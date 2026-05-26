@@ -90,7 +90,7 @@ struct SearchView: View {
                         Spacer()
                         Button("Clear All") { recentSearchesData = "" }
                             .font(.subheadline)
-                            .foregroundColor(.blue)
+                            .foregroundColor(AppTheme.Colors.primary)
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
@@ -165,9 +165,9 @@ struct SearchView: View {
                                 HStack(spacing: 10) {
                                     Image(systemName: cat.icon)
                                         .font(.title3)
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(AppTheme.Colors.primary)
                                         .frame(width: 36, height: 36)
-                                        .background(Color.blue.opacity(0.1))
+                                        .background(AppTheme.Brand.tint)
                                         .clipShape(RoundedRectangle(cornerRadius: 10))
                                     Text(cat.rawValue)
                                         .font(.subheadline)
