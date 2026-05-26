@@ -1,9 +1,37 @@
 import Foundation
 import Observation
+import Supabase
 
 @Observable
 class ProductStore {
-    var products: [Product] = ProductStore.mockProducts
+    var products: [Product] = []
+    var isLoading = false
+    var loadError: String? = nil
+
+    // MARK: - Load
+
+    func loadProducts() async {
+        guard let client = SupabaseService.client else {
+            // Offline mode — use bundled mock data
+            products = ProductStore.mockProducts
+            return
+        }
+        isLoading = true
+        loadError = nil
+        do {
+            let fetched: [Product] = try await client
+                .from("products")
+                .select()
+                .order("name")
+                .execute()
+                .value
+            products = fetched.isEmpty ? ProductStore.mockProducts : fetched
+        } catch {
+            loadError = error.localizedDescription
+            products = ProductStore.mockProducts   // fallback so UI is never empty
+        }
+        isLoading = false
+    }
 
     // Search and category are UI state — kept local to ShopView, not here
     func filtered(search: String, category: ProductCategory?) -> [Product] {

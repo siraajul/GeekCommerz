@@ -17,6 +17,9 @@ struct ContentView: View {
           contentStack(screenSize: geo.size)
         }
         .ignoresSafeArea()
+        .task {
+            await productStore.loadProducts()
+        }
     }
 
     private func contentStack(screenSize: CGSize) -> some View {

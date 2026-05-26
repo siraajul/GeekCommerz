@@ -5,6 +5,7 @@ import SwiftData
 struct geekcommerzeApp: App {
     @AppStorage(AppConstants.StorageKeys.hasSeenOnboarding) private var hasSeenOnboarding = false
     @AppStorage(AppConstants.StorageKeys.darkModeEnabled) private var darkModeEnabled = false
+    @State private var authStore = AuthStore()
 
     init() {
         AppConfig.validate()
@@ -26,11 +27,33 @@ struct geekcommerzeApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .preferredColorScheme(darkModeEnabled ? .dark : .light)
-                .fullScreenCover(isPresented: .constant(!hasSeenOnboarding)) {
-                    OnboardingView()
+            Group {
+                if authStore.isLoading {
+                    // Splash while session is being restored
+                    ZStack {
+                        Color(.systemBackground).ignoresSafeArea()
+                        VStack(spacing: 16) {
+                            Image(systemName: "bag.fill")
+                                .font(.system(size: 48))
+                                .foregroundColor(.blue)
+                            ProgressView()
+                        }
+                    }
+                } else if authStore.needsAuth {
+                    AuthView()
+                        .environment(authStore)
+                } else {
+                    ContentView()
+                        .environment(authStore)
                 }
+            }
+            .preferredColorScheme(darkModeEnabled ? .dark : .light)
+            .fullScreenCover(isPresented: .constant(!hasSeenOnboarding)) {
+                OnboardingView()
+            }
+            .task {
+                await authStore.initialize()
+            }
         }
         .modelContainer(sharedModelContainer)
     }

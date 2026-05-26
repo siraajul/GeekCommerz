@@ -18,7 +18,7 @@ enum ProductCategory: String, CaseIterable, Codable {
     }
 }
 
-struct Product: Identifiable {
+struct Product: Identifiable, Codable {
     let id: UUID
     let name: String
     let description: String
@@ -31,6 +31,15 @@ struct Product: Identifiable {
     let isFeatured: Bool
     let stock: Int
     let tags: [String]
+
+    // Maps Swift camelCase to Supabase snake_case column names
+    enum CodingKeys: String, CodingKey {
+        case id, name, description, price, category, rating, stock, tags
+        case originalPrice = "original_price"
+        case imageName     = "image_name"
+        case reviewCount   = "review_count"
+        case isFeatured    = "is_featured"
+    }
 
     var discount: Int? {
         guard let original = originalPrice, original > price else { return nil }

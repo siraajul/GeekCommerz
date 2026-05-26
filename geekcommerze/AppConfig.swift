@@ -45,15 +45,20 @@ enum AppConfig {
     }
 
     // MARK: - Validator
-    // Called at app launch in DEBUG builds — crashes immediately if any
-    // required key still holds a placeholder value, so you can't miss it.
-    // Skipped in Xcode Previews so previews work without real keys.
+    // Called at app launch in DEBUG builds. Skipped in Xcode Previews.
+    //
+    // Only validates keys that are REQUIRED for the app to run at all.
+    // Optional services (Supabase, Stripe, etc.) use placeholder detection
+    // in their own service files and degrade gracefully to offline/mock mode,
+    // so they are NOT listed here.
+    //
+    // Add an entry below only when a key is truly non-optional.
     static func validate() {
         #if DEBUG
         guard ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != "1" else { return }
         let required: [(String, String)] = [
-            ("Supabase URL",      Supabase.url),
-            ("Supabase Anon Key", Supabase.anonKey),
+            // No hard-required keys yet — add here when needed, e.g.:
+            // ("Payment Key", Stripe.publishableKey),
         ]
         for (name, value) in required {
             precondition(
