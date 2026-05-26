@@ -62,6 +62,7 @@ struct ShopView: View {
                                 }
                             }
                         }
+                        .accessibilityLabel(activeFilterCount > 0 ? "Sort and filter (\(activeFilterCount) active)" : "Sort and filter")
                         Button { tabRouter.selectedTab = 3 } label: {
                             CartBadgeIcon(count: cartStore.itemCount)
                         }
@@ -97,6 +98,7 @@ struct ShopView: View {
                 Button { searchText = "" } label: {
                     Image(systemName: "xmark.circle.fill").foregroundColor(.secondary)
                 }
+                .accessibilityLabel("Clear search")
             }
         }
         .padding(10)
@@ -204,6 +206,7 @@ struct ActiveFilterChip: View {
                 .font(.caption)
             Button(action: onRemove) {
                 Image(systemName: "xmark")
+                    .accessibilityLabel("Remove filter")
                     .font(.caption2).bold()
             }
         }
@@ -377,6 +380,7 @@ struct ProductCard: View {
                                 .background(.ultraThinMaterial, in: Circle())
                                 .scaleEffect(heartPulse ? 1.45 : 1.0)
                         }
+                        .accessibilityLabel(isWishlisted ? "Remove from wishlist" : "Add to wishlist")
                         .padding(6)
                     }
                 }

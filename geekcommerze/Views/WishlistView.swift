@@ -73,6 +73,7 @@ struct WishlistView: View {
                                 .background(Color.red)
                                 .clipShape(Circle())
                         }
+                        .accessibilityLabel("Remove from wishlist")
                         .padding(6)
                     }
                     .transition(.scale(scale: 0.75).combined(with: .opacity))

@@ -325,6 +325,7 @@ struct PromoPopupView: View {
                             .font(.title2)
                             .foregroundStyle(.white.opacity(0.7))
                     }
+                    .accessibilityLabel("Dismiss offer")
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)

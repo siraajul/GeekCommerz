@@ -207,6 +207,7 @@ struct CartItemRow: View {
                         .background(decBounce ? (item.quantity > 1 ? AppTheme.Colors.primary : AppTheme.Colors.danger) : Color.clear)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
+                .accessibilityLabel(item.quantity > 1 ? "Decrease quantity" : "Remove item")
 
                 Text("\(item.quantity)")
                     .font(.subheadline).bold()
@@ -229,6 +230,7 @@ struct CartItemRow: View {
                         .background(incBounce ? AppTheme.Colors.primary : Color.clear)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
+                .accessibilityLabel("Increase quantity")
             }
             .background(Color(.systemGray6))
             .clipShape(RoundedRectangle(cornerRadius: 10))

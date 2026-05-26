@@ -180,6 +180,7 @@ struct ProductDetailView: View {
                         Image(systemName: "xmark")
                             .foregroundColor(.primary)
                     }
+                    .accessibilityLabel("Close")
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 16) {
@@ -425,9 +426,11 @@ struct ProductDetailView: View {
                             .frame(width: 36, height: 36)
                             .background(Color(.systemBackground))
                     }
+                    .accessibilityLabel("Decrease quantity")
                     Text("\(quantity)")
                         .frame(width: 40)
                         .font(.headline)
+                        .accessibilityLabel("Quantity: \(quantity)")
                     Button {
                         if quantity < product.stock { quantity += 1 }
                     } label: {
@@ -435,6 +438,7 @@ struct ProductDetailView: View {
                             .frame(width: 36, height: 36)
                             .background(Color(.systemBackground))
                     }
+                    .accessibilityLabel("Increase quantity")
                 }
                 .background(Color(.systemBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -768,6 +772,7 @@ struct ProductDetailView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .shadow(color: .black.opacity(0.08), radius: 3, y: 1)
             }
+            .accessibilityLabel(isWishlisted ? "Remove from wishlist" : "Add to wishlist")
 
             if !product.isInStock {
                 Button { notifyWhenAvailable() } label: {
@@ -988,6 +993,7 @@ struct ReviewCard: View {
                     .font(.caption)
                     .foregroundColor(hasVotedHelpful ? .blue : .secondary)
                 }
+                .accessibilityLabel(hasVotedHelpful ? "Marked as helpful" : "Mark as helpful")
                 .animation(.easeInOut(duration: 0.15), value: hasVotedHelpful)
             }
         }
