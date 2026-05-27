@@ -26,7 +26,7 @@ struct HomeView: View {
     @State private var flashSaleCountdown = ""
     @State private var isInitialLoading = true
 
-    private var isCompactScreen: Bool { UIScreen.main.bounds.height < 700 }
+    private var isCompactScreen: Bool { windowScreenHeight() < 700 }
 
     // MARK: - Body
 
@@ -378,9 +378,9 @@ struct PromoPopupView: View {
 
                 Spacer()
 
-                VStack(spacing: UIScreen.main.bounds.height < 700 ? 16 : 28) {
+                VStack(spacing: windowScreenHeight() < 700 ? 16 : 28) {
                     ZStack {
-                        let r: CGFloat = UIScreen.main.bounds.height < 700 ? 90 : 130
+                        let r: CGFloat = windowScreenHeight() < 700 ? 90 : 130
                         Circle()
                             .fill(.white.opacity(0.12))
                             .frame(width: r, height: r)
@@ -388,7 +388,7 @@ struct PromoPopupView: View {
                             .fill(.white.opacity(0.08))
                             .frame(width: r * 0.77, height: r * 0.77)
                         Image(systemName: "gift.fill")
-                            .font(.system(size: UIScreen.main.bounds.height < 700 ? 36 : 52))
+                            .font(.system(size: windowScreenHeight() < 700 ? 36 : 52))
                             .foregroundColor(.white)
                     }
 
@@ -601,6 +601,13 @@ struct CartBadgeIcon: View {
             withAnimation(.spring(duration: 0.2).delay(0.16)) { scale = 1.0 }
         }
     }
+}
+
+// Reads screen height via the active UIWindowScene — avoids the deprecated UIScreen.main API.
+private func windowScreenHeight() -> CGFloat {
+    UIApplication.shared.connectedScenes
+        .compactMap { $0 as? UIWindowScene }
+        .first?.screen.bounds.height ?? 812
 }
 
 #Preview {

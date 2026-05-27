@@ -144,9 +144,9 @@ struct AuthView: View {
         } label: {
             Group {
                 if isSignUp {
-                    Text("Already have an account? ") + Text("Sign In").bold().foregroundColor(AppTheme.Colors.primary)
+                    Text("Already have an account? \(Text("Sign In").bold().foregroundColor(AppTheme.Colors.primary))")
                 } else {
-                    Text("Don't have an account? ") + Text("Sign Up").bold().foregroundColor(AppTheme.Colors.primary)
+                    Text("Don't have an account? \(Text("Sign Up").bold().foregroundColor(AppTheme.Colors.primary))")
                 }
             }
             .font(.subheadline)

@@ -71,7 +71,7 @@ final class AuthStore {
             session = response.session
             // Create profile row — fire and forget, non-critical
             if let uid = response.session?.user.id {
-                try? await client
+                _ = try? await client
                     .from("profiles")
                     .insert(["id": uid.uuidString, "name": name, "email": email])
                     .execute()

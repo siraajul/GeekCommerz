@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import Charts
 import UserNotifications
 
@@ -273,7 +274,7 @@ struct ProductDetailView: View {
                 .font(.system(size: 100))
                 .foregroundColor(AppTheme.Colors.primary.opacity(0.6))
                 .frame(maxWidth: .infinity)
-                .frame(height: UIScreen.main.bounds.height < 700 ? 210 : 260)
+                .frame(height: windowScreenHeight() < 700 ? 210 : 260)
                 .background(
                     LinearGradient(colors: [AppTheme.Colors.primary.opacity(0.08), AppTheme.Colors.accent.opacity(0.05)],
                                    startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -1217,4 +1218,11 @@ struct SizeGuideSheet: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
+}
+
+// Reads screen height via the active UIWindowScene — avoids the deprecated UIScreen.main API.
+private func windowScreenHeight() -> CGFloat {
+    UIApplication.shared.connectedScenes
+        .compactMap { $0 as? UIWindowScene }
+        .first?.screen.bounds.height ?? 812
 }
