@@ -63,7 +63,7 @@ geekcommerze/
 | Screen | Highlights |
 |---|---|
 | 🔐 **Auth** | Email sign-in · sign-up · password show/hide · email confirmation state · offline bypass |
-| 🏠 **Home** | Auto-scroll banner · flash sale countdown · skeleton loading · recently viewed |
+| 🏠 **Home** | Auto-scroll banner · flash sale countdown · skeleton loading · recently viewed · responsive on iPhone SE |
 | 🔍 **Search** | Real-time results · trending chips · recent history (max 8) · category browse |
 | 🛒 **Shop** | 2-col grid · sort & filter sheet · long-press context menu · pull-to-refresh |
 | 📦 **Product Detail** | Pinch-to-zoom · full-screen 4-slide gallery · color/size variants · size guide sheet (clothing) · 30-day price chart · reviews · collapsible bundle & related sections |

@@ -273,7 +273,7 @@ struct ProductDetailView: View {
                 .font(.system(size: 100))
                 .foregroundColor(AppTheme.Colors.primary.opacity(0.6))
                 .frame(maxWidth: .infinity)
-                .frame(height: 260)
+                .frame(height: UIScreen.main.bounds.height < 700 ? 210 : 260)
                 .background(
                     LinearGradient(colors: [AppTheme.Colors.primary.opacity(0.08), AppTheme.Colors.accent.opacity(0.05)],
                                    startPoint: .topLeading, endPoint: .bottomTrailing)

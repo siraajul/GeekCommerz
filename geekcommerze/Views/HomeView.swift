@@ -21,6 +21,8 @@ struct HomeView: View {
     @State private var flashSaleCountdown = ""
     @State private var isInitialLoading = true
 
+    private var isCompactScreen: Bool { UIScreen.main.bounds.height < 700 }
+
     // MARK: - Body
 
     var body: some View {
@@ -29,7 +31,7 @@ struct HomeView: View {
                 if isInitialLoading {
                     skeletonContent
                 } else {
-                    VStack(alignment: .leading, spacing: 24) {
+                    VStack(alignment: .leading, spacing: isCompactScreen ? 16 : 24) {
                         bannerSection
                         categorySection
                         flashSaleBanner
@@ -224,7 +226,7 @@ struct HomeView: View {
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
-        .frame(height: 200)
+        .frame(height: isCompactScreen ? 160 : 200)
         .padding(.top, 8)
         .onReceive(Timer.publish(every: 3.5, on: .main, in: .common).autoconnect()) { _ in
             guard !featured.isEmpty else { return }
@@ -362,16 +364,17 @@ struct PromoPopupView: View {
 
                 Spacer()
 
-                VStack(spacing: 28) {
+                VStack(spacing: UIScreen.main.bounds.height < 700 ? 16 : 28) {
                     ZStack {
+                        let r: CGFloat = UIScreen.main.bounds.height < 700 ? 90 : 130
                         Circle()
                             .fill(.white.opacity(0.12))
-                            .frame(width: 130, height: 130)
+                            .frame(width: r, height: r)
                         Circle()
                             .fill(.white.opacity(0.08))
-                            .frame(width: 100, height: 100)
+                            .frame(width: r * 0.77, height: r * 0.77)
                         Image(systemName: "gift.fill")
-                            .font(.system(size: 52))
+                            .font(.system(size: UIScreen.main.bounds.height < 700 ? 36 : 52))
                             .foregroundColor(.white)
                     }
 
@@ -538,14 +541,15 @@ struct CartBadgeIcon: View {
         ZStack(alignment: .topTrailing) {
             Image(systemName: "cart")
                 .font(.title3)
+                .padding(.top, 8)
+                .padding(.trailing, 8)
             if count > 0 {
-                Text("\(count)")
-                    .font(.caption2).bold()
+                Text(count > 9 ? "9+" : "\(count)")
+                    .font(.system(size: 9, weight: .bold))
                     .foregroundColor(.white)
                     .frame(minWidth: 16, minHeight: 16)
                     .background(Color.red)
                     .clipShape(Circle())
-                    .offset(x: 8, y: -8)
             }
         }
         .scaleEffect(scale)
