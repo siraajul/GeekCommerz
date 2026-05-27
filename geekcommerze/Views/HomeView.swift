@@ -338,6 +338,16 @@ struct PromoBannerCard: View {
 struct PromoPopupView: View {
     let onDismiss: () -> Void
 
+    // MARK: - Helpers
+
+    /// Reads the device status-bar height via UIKit so the close button always clears the safe area,
+    /// even inside ContentView's .ignoresSafeArea() context where SwiftUI can't report insets.
+    private var statusBarHeight: CGFloat {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first?.keyWindow?.safeAreaInsets.top ?? 44
+    }
+
     // MARK: - Body
 
     var body: some View {
@@ -360,7 +370,7 @@ struct PromoPopupView: View {
                     .accessibilityLabel("Dismiss offer")
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 20)
+                .padding(.top, statusBarHeight + 8)
 
                 Spacer()
 
