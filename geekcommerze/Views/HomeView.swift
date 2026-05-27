@@ -63,8 +63,15 @@ struct HomeView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button { tabRouter.selectedTab = 3 } label: {
-                        CartBadgeIcon(count: cartStore.itemCount)
+                    HStack(spacing: 16) {
+                        NavigationLink(destination: WishlistView()) {
+                            Image(systemName: "heart")
+                                .font(.title3)
+                        }
+                        .accessibilityLabel("Wishlist")
+                        Button { tabRouter.selectedTab = 3 } label: {
+                            CartBadgeIcon(count: cartStore.itemCount)
+                        }
                     }
                 }
             }

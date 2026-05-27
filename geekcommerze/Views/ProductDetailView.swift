@@ -44,6 +44,7 @@ struct ProductDetailView: View {
     @State private var lastZoomScale: CGFloat = 1.0
     @State private var showUpsells = false
     @State private var showImageGallery = false
+    @State private var showSizeGuide = false
 
     /// True when the current product's UUID is stored in the `@AppStorage` wishlist string.
     var isWishlisted: Bool {
@@ -252,6 +253,9 @@ struct ProductDetailView: View {
             .sheet(isPresented: $showImageGallery) {
                 ProductImageGalleryView(product: product)
             }
+            .sheet(isPresented: $showSizeGuide) {
+                SizeGuideSheet()
+            }
             .onAppear {
                 trackRecentlyViewed()
                 if !colorVariants.isEmpty { selectedColorName = colorVariants[0].name }
@@ -439,7 +443,14 @@ struct ProductDetailView: View {
             // Size variants
             if !sizeVariants.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Size:").font(.subheadline).bold()
+                    HStack(spacing: 8) {
+                        Text("Size:").font(.subheadline).bold()
+                        if product.category == .clothing {
+                            Button("Guide") { showSizeGuide = true }
+                                .font(.caption)
+                                .foregroundColor(AppTheme.Colors.primary)
+                        }
+                    }
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
                             ForEach(sizeVariants, id: \.self) { size in
@@ -1142,5 +1153,68 @@ struct DetailRow: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         Divider().padding(.leading, 16)
+    }
+}
+
+// MARK: - Size Guide Sheet
+
+/// Half-height sheet presenting a clothing measurement table (XS–XXL) with chest, waist, and hips in inches.
+/// Shown from ProductDetailView when the user taps "Guide" next to the Size selector on clothing products.
+struct SizeGuideSheet: View {
+    @Environment(\.dismiss) private var dismiss
+
+    private let sizes = ["XS", "S", "M", "L", "XL", "XXL"]
+    private let chest = ["32–34", "34–36", "36–38", "38–40", "40–42", "42–44"]
+    private let waist = ["24–26", "26–28", "28–30", "30–32", "32–34", "34–36"]
+    private let hips  = ["34–36", "36–38", "38–40", "40–42", "42–44", "44–46"]
+
+    // MARK: - Body
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 0) {
+                    measureRow("Size", chest: "Chest (in)", waist: "Waist (in)", hips: "Hips (in)", isHeader: true)
+                    Divider()
+                    ForEach(sizes.indices, id: \.self) { i in
+                        measureRow(sizes[i], chest: chest[i], waist: waist[i], hips: hips[i], isHeader: false)
+                        if i < sizes.count - 1 { Divider().padding(.leading, 16) }
+                    }
+                }
+                .background(Color(.systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
+                .padding(16)
+
+                Text("Measurements are in inches. Measure yourself and compare to the chart for the best fit.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 16)
+            }
+            .background(Color(.systemGroupedBackground))
+            .navigationTitle("Size Guide")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }.bold()
+                }
+            }
+        }
+        .presentationDetents([.medium])
+    }
+
+    /// Single row in the size guide table; header row uses caption weight, data rows use subheadline.
+    private func measureRow(_ size: String, chest: String, waist: String, hips: String, isHeader: Bool) -> some View {
+        HStack {
+            Text(size).frame(maxWidth: .infinity)
+            Text(chest).frame(maxWidth: .infinity)
+            Text(waist).frame(maxWidth: .infinity)
+            Text(hips).frame(maxWidth: .infinity)
+        }
+        .font(isHeader ? .caption.bold() : .subheadline)
+        .foregroundColor(isHeader ? .secondary : .primary)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
     }
 }

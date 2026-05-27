@@ -66,11 +66,11 @@ geekcommerze/
 | 🏠 **Home** | Auto-scroll banner · flash sale countdown · skeleton loading · recently viewed |
 | 🔍 **Search** | Real-time results · trending chips · recent history (max 8) · category browse |
 | 🛒 **Shop** | 2-col grid · sort & filter sheet · long-press context menu · pull-to-refresh |
-| 📦 **Product Detail** | Pinch-to-zoom · color/size variants · 30-day price chart · reviews · collapsible bundle & related sections |
+| 📦 **Product Detail** | Pinch-to-zoom · full-screen 4-slide gallery · color/size variants · size guide sheet (clothing) · 30-day price chart · reviews · collapsible bundle & related sections |
 | 🛍 **Cart** | Pill stepper · swipe → wishlist / delete · live shipping threshold |
 | 💳 **Checkout** | Saved addresses · promo codes · biometric confirm (passcode fallback) · Apple Pay (demo) · confetti |
 | 📋 **Orders** | Status timeline · reorder · return request (persisted) |
-| ❤️ **Wishlist** | Heart toggle from any screen · spring-exit on remove |
+| ❤️ **Wishlist** | Heart toggle from any screen · spring-exit on remove · quick-access heart icon in HomeView toolbar |
 | 👤 **Profile** | Loyalty tier · address book · dark mode · stats |
 | 🔔 **Notifications** | In-app centre · badge · swipe actions · seeded on first launch |
 | 🚀 **Splash** | Branded gradient splash on every return launch · skipped on first launch |
