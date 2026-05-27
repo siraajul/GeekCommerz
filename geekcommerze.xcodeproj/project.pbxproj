@@ -29,13 +29,6 @@
 		2D64A4A42FC6093300EB0FC4 /* OneSignalInAppMessages in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4A32FC6093300EB0FC4 /* OneSignalInAppMessages */; };
 		2D64A4A62FC6093300EB0FC4 /* OneSignalLocation in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4A52FC6093300EB0FC4 /* OneSignalLocation */; };
 		2D64A4A92FC60C9E00EB0FC4 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4A82FC60C9E00EB0FC4 /* Sentry */; };
-		2D64A4AB2FC60C9E00EB0FC4 /* Sentry-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4AA2FC60C9E00EB0FC4 /* Sentry-Dynamic */; };
-		2D64A4AD2FC60C9E00EB0FC4 /* Sentry-Dynamic-WithARM64e in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4AC2FC60C9E00EB0FC4 /* Sentry-Dynamic-WithARM64e */; };
-		2D64A4AF2FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4AE2FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit */; };
-		2D64A4B12FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit-WithARM64e in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4B02FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit-WithARM64e */; };
-		2D64A4B32FC60C9E00EB0FC4 /* SentryDistribution in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4B22FC60C9E00EB0FC4 /* SentryDistribution */; };
-		2D64A4B52FC60C9E00EB0FC4 /* SentrySPM in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4B42FC60C9E00EB0FC4 /* SentrySPM */; };
-		2D64A4B72FC60C9E00EB0FC4 /* SentrySwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2D64A4B62FC60C9E00EB0FC4 /* SentrySwiftUI */; };
 		2DC5A3442FC5882100383CE4 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC5A3432FC5882100383CE4 /* AppConstants.swift */; };
 /* End PBXBuildFile section */
 
@@ -106,8 +99,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D64A48D2FC606C300EB0FC4 /* StripeCardScan in Frameworks */,
-				2D64A4AB2FC60C9E00EB0FC4 /* Sentry-Dynamic in Frameworks */,
-				2D64A4B52FC60C9E00EB0FC4 /* SentrySPM in Frameworks */,
 				2D64A4A02FC6093300EB0FC4 /* OneSignalExtension in Frameworks */,
 				2D64A4932FC606C300EB0FC4 /* StripeFinancialConnections in Frameworks */,
 				2D64A4892FC606C300EB0FC4 /* Stripe in Frameworks */,
@@ -116,19 +107,14 @@
 				2D64A4912FC606C300EB0FC4 /* StripeCryptoOnramp in Frameworks */,
 				2D64A4992FC606C300EB0FC4 /* StripePaymentSheet in Frameworks */,
 				2D64A48B2FC606C300EB0FC4 /* StripeApplePay in Frameworks */,
-				2D64A4B12FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit-WithARM64e in Frameworks */,
-				2D64A4B72FC60C9E00EB0FC4 /* SentrySwiftUI in Frameworks */,
 				2D64A49B2FC606C300EB0FC4 /* StripePayments in Frameworks */,
 				2D64A4802FC5E2CB00EB0FC4 /* PostgREST in Frameworks */,
 				2D64A4A42FC6093300EB0FC4 /* OneSignalInAppMessages in Frameworks */,
 				2D64A49D2FC606C300EB0FC4 /* StripePaymentsUI in Frameworks */,
 				2D64A4972FC606C300EB0FC4 /* StripeIssuing in Frameworks */,
 				2D64A48F2FC606C300EB0FC4 /* StripeConnect in Frameworks */,
-				2D64A4AD2FC60C9E00EB0FC4 /* Sentry-Dynamic-WithARM64e in Frameworks */,
-				2D64A4B32FC60C9E00EB0FC4 /* SentryDistribution in Frameworks */,
 				2D64A47E2FC5E2CB00EB0FC4 /* Functions in Frameworks */,
 				2D64A4952FC606C300EB0FC4 /* StripeIdentity in Frameworks */,
-				2D64A4AF2FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit in Frameworks */,
 				2D64A4862FC5E2CB00EB0FC4 /* Supabase in Frameworks */,
 				2D64A47C2FC5E2CB00EB0FC4 /* Auth in Frameworks */,
 				2D64A4842FC5E2CB00EB0FC4 /* Storage in Frameworks */,
@@ -255,13 +241,6 @@
 				2D64A4A32FC6093300EB0FC4 /* OneSignalInAppMessages */,
 				2D64A4A52FC6093300EB0FC4 /* OneSignalLocation */,
 				2D64A4A82FC60C9E00EB0FC4 /* Sentry */,
-				2D64A4AA2FC60C9E00EB0FC4 /* Sentry-Dynamic */,
-				2D64A4AC2FC60C9E00EB0FC4 /* Sentry-Dynamic-WithARM64e */,
-				2D64A4AE2FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit */,
-				2D64A4B02FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit-WithARM64e */,
-				2D64A4B22FC60C9E00EB0FC4 /* SentryDistribution */,
-				2D64A4B42FC60C9E00EB0FC4 /* SentrySPM */,
-				2D64A4B62FC60C9E00EB0FC4 /* SentrySwiftUI */,
 			);
 			productName = geekcommerze;
 			productReference = 2DC5A2E22FC555E900383CE4 /* geekcommerze.app */;
@@ -887,41 +866,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
-		};
-		2D64A4AA2FC60C9E00EB0FC4 /* Sentry-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = "Sentry-Dynamic";
-		};
-		2D64A4AC2FC60C9E00EB0FC4 /* Sentry-Dynamic-WithARM64e */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = "Sentry-Dynamic-WithARM64e";
-		};
-		2D64A4AE2FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = "Sentry-WithoutUIKitOrAppKit";
-		};
-		2D64A4B02FC60C9E00EB0FC4 /* Sentry-WithoutUIKitOrAppKit-WithARM64e */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = "Sentry-WithoutUIKitOrAppKit-WithARM64e";
-		};
-		2D64A4B22FC60C9E00EB0FC4 /* SentryDistribution */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = SentryDistribution;
-		};
-		2D64A4B42FC60C9E00EB0FC4 /* SentrySPM */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = SentrySPM;
-		};
-		2D64A4B62FC60C9E00EB0FC4 /* SentrySwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2D64A4A72FC60C9E00EB0FC4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = SentrySwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

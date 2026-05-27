@@ -231,9 +231,12 @@ struct ProfileView: View {
 
     // MARK: - About Section
 
-    /// Static app-info section showing version number, Privacy Policy link, and Terms of Service link.
+    /// App-info section with a Help & Support link, version number, and legal links.
     private var aboutSection: some View {
         Section("About") {
+            NavigationLink(destination: SupportView()) {
+                Label("Help & Support", systemImage: "questionmark.circle.fill")
+            }
             LabeledContent("App Version", value: AppConstants.App.version)
             Link(destination: URL(string: AppConstants.App.privacyURL)!) {
                 Label("Privacy Policy", systemImage: "hand.raised")

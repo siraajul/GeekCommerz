@@ -43,6 +43,7 @@ struct ProductDetailView: View {
     @State private var zoomScale: CGFloat = 1.0
     @State private var lastZoomScale: CGFloat = 1.0
     @State private var showUpsells = false
+    @State private var showImageGallery = false
 
     /// True when the current product's UUID is stored in the `@AppStorage` wishlist string.
     var isWishlisted: Bool {
@@ -248,6 +249,9 @@ struct ProductDetailView: View {
             .sheet(isPresented: $showWriteReview) {
                 WriteReviewSheet(productName: product.name, toastManager: toastManager)
             }
+            .sheet(isPresented: $showImageGallery) {
+                ProductImageGalleryView(product: product)
+            }
             .onAppear {
                 trackRecentlyViewed()
                 if !colorVariants.isEmpty { selectedColorName = colorVariants[0].name }
@@ -321,6 +325,24 @@ struct ProductDetailView: View {
                             .foregroundColor(.white)
                             .clipShape(Capsule())
                             .padding(12)
+                    }
+                }
+            }
+
+            if zoomScale <= 1.0 {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Button { showImageGallery = true } label: {
+                            Image(systemName: "arrow.up.left.and.arrow.down.right")
+                                .font(.caption)
+                                .padding(8)
+                                .background(.ultraThinMaterial)
+                                .clipShape(Circle())
+                        }
+                        .accessibilityLabel("Open full-screen gallery")
+                        .padding(12)
+                        Spacer()
                     }
                 }
             }

@@ -123,6 +123,7 @@ struct OrderDetailView: View {
                 itemsCard
                 shippingCard
                 totalCard
+                receiptCard
                 reorderCard
                 if order.status == .delivered {
                     if order.returnRequested == true {
@@ -149,25 +150,51 @@ struct OrderDetailView: View {
 
     // MARK: - Return Controls
 
-    /// Confirmation banner shown when a return has already been requested for this delivered order.
+    /// NavigationLink badge shown when a return is requested. Tapping opens ReturnStatusView to track the return pipeline.
     private var returnRequestedBadge: some View {
-        HStack {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.title3)
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Return Requested")
-                    .font(.headline)
-                Text("We'll contact you within 24 hours.")
+        NavigationLink(destination: ReturnStatusView(order: order)) {
+            HStack {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.title3)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Return Requested")
+                        .font(.headline)
+                    Text("Tap to track your return")
+                        .font(.caption)
+                        .opacity(0.75)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
                     .font(.caption)
-                    .opacity(0.75)
+                    .opacity(0.6)
             }
-            Spacer()
+            .padding(16)
+            .background(Color.green.opacity(0.1))
+            .foregroundColor(.green)
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
+            .overlay(RoundedRectangle(cornerRadius: AppTheme.Radius.card).stroke(Color.green.opacity(0.3), lineWidth: 1))
         }
-        .padding(16)
-        .background(Color.green.opacity(0.1))
-        .foregroundColor(.green)
-        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
-        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.green.opacity(0.3), lineWidth: 1))
+    }
+
+    /// NavigationLink card that opens the full order receipt/invoice in OrderReceiptView.
+    private var receiptCard: some View {
+        NavigationLink(destination: OrderReceiptView(order: order)) {
+            HStack {
+                Image(systemName: "doc.text.fill")
+                    .font(.title3)
+                    .foregroundColor(AppTheme.Colors.primary)
+                Text("View Receipt")
+                    .font(AppTheme.Typography.button)
+                    .foregroundColor(.primary)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(16)
+            .background(Color(.systemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
+        }
     }
 
     /// Tappable button that sets showReturns to true, presenting ReturnsSheet. Visible only for delivered, non-returned orders.
