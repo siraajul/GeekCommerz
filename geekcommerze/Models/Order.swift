@@ -36,6 +36,8 @@ class OrderItem {
     var price: Double
     var quantity: Int
     var imageName: String
+    var selectedColor: String?
+    var selectedSize: String?
     var order: Order?
 
     init(from cartItem: CartItem) {
@@ -44,6 +46,8 @@ class OrderItem {
         self.price = cartItem.price
         self.quantity = cartItem.quantity
         self.imageName = cartItem.imageName
+        self.selectedColor = cartItem.selectedColor
+        self.selectedSize = cartItem.selectedSize
     }
 
     var subtotal: Double { price * Double(quantity) }

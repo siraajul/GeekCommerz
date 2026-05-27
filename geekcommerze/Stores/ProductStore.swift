@@ -75,6 +75,20 @@ class ProductStore {
         products.first { $0.id.uuidString == id }
     }
 
+    /// Decrements stock for each item on Supabase after a successful order. Requires the `decrement_stock(p_product_id, p_qty)` Postgres function to exist. No-op when offline.
+    func decrementStock(for items: [CartItem]) async {
+        guard let client = SupabaseService.client else { return }
+        struct Params: Encodable {
+            let p_product_id: String
+            let p_qty: Int
+        }
+        for item in items {
+            _ = try? await client
+                .rpc("decrement_stock", params: Params(p_product_id: item.productId, p_qty: item.quantity))
+                .execute()
+        }
+    }
+
     // MARK: - Mock Data
 
     /// Bundled fallback product catalogue used when Supabase is unreachable or returns an empty response. Ensures the UI is never empty in offline or development builds.

@@ -890,8 +890,10 @@ struct ProductDetailView: View {
                 .animation(.easeInOut(duration: 0.2), value: notifyMeSet)
             } else {
                 Button {
+                    let color = selectedColorName.isEmpty ? nil : selectedColorName
+                    let size  = selectedSize.isEmpty ? nil : selectedSize
                     for _ in 0..<quantity {
-                        cartStore.addProduct(product, context: modelContext)
+                        cartStore.addProduct(product, selectedColor: color, selectedSize: size, context: modelContext)
                     }
                     HapticFeedback.notification(.success)
                     toastManager.show("\(quantity > 1 ? "\(quantity)x " : "")\(product.name) added to cart", icon: "cart.badge.plus", color: AppTheme.Colors.primary)

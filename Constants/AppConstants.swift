@@ -33,14 +33,6 @@ enum AppConstants {
         static let standardCost: Double  = 4.99
     }
 
-    // MARK: Valid promo codes
-    enum PromoCodes {
-        static let save10   = "SAVE10"
-        static let save20   = "SAVE20"
-        static let welcome5 = "WELCOME5"
-        static let freeShip = "FREESHIP"
-    }
-
     // MARK: App-level metadata & external URLs
     enum App {
         static let name           = "GeekCommerz"

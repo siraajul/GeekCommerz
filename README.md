@@ -289,6 +289,15 @@ create table addresses (
   phone text
 );
 
+-- Atomically decrement stock on order placement (prevents overselling)
+create or replace function decrement_stock(p_product_id uuid, p_qty int)
+returns void language plpgsql security definer as $$
+begin
+  update products set stock = greatest(0, stock - p_qty)
+  where id = p_product_id;
+end;
+$$;
+
 -- Enable Row Level Security on all tables
 alter table profiles    enable row level security;
 alter table orders      enable row level security;
@@ -391,7 +400,8 @@ enum Monitoring {
 - `Views/ShopView.swift` — ShopView, FilterChip, ActiveFilterChip, SortFilterSheet, ProductCard
 - `Views/NotificationsView.swift` — NotificationsView, NotificationRow, BellBadgeIcon
 - `Views/CheckoutView.swift` — CheckoutView, TrustBadge, SavedAddressPickerSheet, CheckoutField
-- `Stores/CartStore.swift` — CartStore mutations-only store (freeShippingThreshold, shippingCost, shipping(for:), addProduct, removeItem, updateQuantity, clearCart, clearAllUserData)
+- `Stores/CartStore.swift` — CartStore mutations-only store (freeShippingThreshold, shippingCost, shipping(for:), addProduct(selectedColor:selectedSize:), removeItem, updateQuantity, clearCart, clearAllUserData)
+- `PromoService.swift` — Hash-based promo code validation (SHA-256; plaintext codes never stored in binary)
 - `Stores/ProductStore.swift` — ProductStore (products, isLoading, loadError, loadProducts, filtered, featuredProducts, products(for:), product(id:), mockProducts)
 - `ToastManager.swift` — ToastManager, ToastItem, ToastOverlay
 - `TabRouter.swift` — TabRouter (programmatic tab switching)

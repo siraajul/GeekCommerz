@@ -8,6 +8,7 @@ import LocalAuthentication
 struct CheckoutView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(CartStore.self) private var cartStore
+    @Environment(ProductStore.self) private var productStore
     @Environment(ToastManager.self) private var toastManager
     @Environment(NotificationStore.self) private var notifStore
     @Environment(\.dismiss) private var dismiss
@@ -165,7 +166,7 @@ struct CheckoutView: View {
 
     // MARK: - Promo Code
 
-    /// Promo code input section shown in CheckoutView. Validates against AppConstants.PromoCodes and applies a discount to promoDiscount.
+    /// Promo code input section shown in CheckoutView. Validates via PromoService (SHA-256 hash comparison) and applies a discount to promoDiscount.
     private var promoSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("Promo Code", systemImage: "tag")
@@ -415,32 +416,13 @@ struct CheckoutView: View {
 
     // MARK: - Actions
 
-    /// Validates the promo code string against AppConstants.PromoCodes and applies the matching discount to promoDiscount. Called by the "Apply" button.
+    /// Delegates to PromoService for hash-based validation; binds the result to local promo state. Called by the "Apply" button.
     private func applyPromo() {
-        let code = promoCode.trimmingCharacters(in: .whitespaces).uppercased()
-        let currentShipping = CartStore.shipping(for: total)
-        switch code {
-        case AppConstants.PromoCodes.save10:
-            promoDiscount = total * 0.10
-            promoMessage = "10% off applied! You save \(String(format: "$%.2f", promoDiscount))"
-            promoIsError = false; appliedPromo = code
-        case AppConstants.PromoCodes.save20:
-            promoDiscount = total * 0.20
-            promoMessage = "20% off applied! You save \(String(format: "$%.2f", promoDiscount))"
-            promoIsError = false; appliedPromo = code
-        case AppConstants.PromoCodes.welcome5:
-            promoDiscount = min(5.0, total)
-            promoMessage = "$5 off applied!"
-            promoIsError = false; appliedPromo = code
-        case AppConstants.PromoCodes.freeShip:
-            promoDiscount = currentShipping
-            promoMessage = currentShipping > 0 ? "Free shipping applied!" : "Shipping is already free."
-            promoIsError = false; appliedPromo = code
-        default:
-            promoDiscount = 0
-            promoMessage = "Invalid code. Try SAVE10, SAVE20, WELCOME5, or FREESHIP."
-            promoIsError = true; appliedPromo = nil
-        }
+        let result = PromoService.apply(code: promoCode, cartTotal: total, shipping: CartStore.shipping(for: total))
+        promoDiscount  = result.discount
+        promoMessage   = result.message
+        promoIsError   = !result.isValid
+        appliedPromo   = result.appliedCode
     }
 
     /// Clears the applied promo code, discount amount, and feedback message, resetting the promo section to its initial state.
@@ -474,12 +456,13 @@ struct CheckoutView: View {
         }
     }
 
-    /// Inserts a new Order into the SwiftData model context, awards loyalty points, clears the cart, posts an in-app notification, and transitions to the success state.
+    /// Inserts a new Order into SwiftData, awards loyalty points, clears the cart, posts an in-app notification, decrements stock on Supabase, and transitions to the success state.
     private func placeOrder() {
         isPlacingOrder = true
+        let itemsSnapshot = cartItems
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
             let order = Order(
-                cartItems: cartItems,
+                cartItems: itemsSnapshot,
                 total: grandTotal,
                 shippingName: name,
                 shippingAddress: address,
@@ -498,6 +481,7 @@ struct CheckoutView: View {
             )
             isPlacingOrder = false
             orderPlaced = true
+            Task { await productStore.decrementStock(for: itemsSnapshot) }
         }
     }
 }

@@ -26,13 +26,17 @@ class CartStore {
 
     // MARK: - Mutations
 
-    /// Adds one unit of `product`, incrementing quantity if a line already exists.
-    func addProduct(_ product: Product, context: ModelContext) {
+    /// Adds one unit of `product` with the given variant selection, incrementing an existing line only when both product and variant match.
+    func addProduct(_ product: Product, selectedColor: String? = nil, selectedSize: String? = nil, context: ModelContext) {
         let existing = (try? context.fetch(FetchDescriptor<CartItem>())) ?? []
-        if let match = existing.first(where: { $0.productId == product.id.uuidString }) {
+        if let match = existing.first(where: {
+            $0.productId == product.id.uuidString &&
+            $0.selectedColor == selectedColor &&
+            $0.selectedSize == selectedSize
+        }) {
             match.quantity += 1
         } else {
-            context.insert(CartItem(product: product))
+            context.insert(CartItem(product: product, selectedColor: selectedColor, selectedSize: selectedSize))
         }
     }
 
