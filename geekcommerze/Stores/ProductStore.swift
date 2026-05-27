@@ -2,14 +2,26 @@ import Foundation
 import Observation
 import Supabase
 
+/// App-wide `@Observable` product store injected via `.environment()`. Fetches the product catalogue
+/// from Supabase asynchronously and falls back to `mockProducts` when offline or on error.
+/// Observed by HomeView, ShopView, SearchView, WishlistView, ProductDetailView, and OrderDetailView (reorder).
 @Observable
 class ProductStore {
+
+    // MARK: - Properties
+
+    /// Master list of all products loaded from Supabase or the mock dataset. Drives every product-browsing screen in the app.
     var products: [Product] = []
+
+    /// `true` while the Supabase fetch is in flight. Observed by HomeView and ShopView to show a loading indicator.
     var isLoading = false
+
+    /// Localised error message from the last failed Supabase fetch, or `nil` when healthy. Displayed by ShopView and HomeView error states.
     var loadError: String? = nil
 
-    // MARK: - Load
+    // MARK: - Actions
 
+    /// Awaits a Supabase query for all products ordered by name; falls back to `mockProducts` when the client is unavailable or the call throws. Sets `isLoading` and `loadError` accordingly. Called from HomeView and ShopView `.task` modifiers.
     func loadProducts() async {
         guard let client = SupabaseService.client else {
             // Offline mode — use bundled mock data
@@ -34,6 +46,8 @@ class ProductStore {
     }
 
     // Search and category are UI state — kept local to ShopView, not here
+
+    /// Returns the subset of `products` matching both the category filter and the search query. Called by ShopView and SearchView to drive their displayed lists.
     func filtered(search: String, category: ProductCategory?) -> [Product] {
         products.filter { product in
             let matchesCategory = category == nil || product.category == category
@@ -42,18 +56,28 @@ class ProductStore {
         }
     }
 
+    // MARK: - Computed
+
+    /// Subset of `products` where `isFeatured` is `true`. Consumed by HomeView's featured carousel section.
     var featuredProducts: [Product] {
         products.filter { $0.isFeatured }
     }
 
+    // MARK: - Actions
+
+    /// Returns all products belonging to `category`. Used by HomeView category rows and ShopView category filter tabs.
     func products(for category: ProductCategory) -> [Product] {
         products.filter { $0.category == category }
     }
 
+    /// Looks up a single product by its UUID string. Used by OrderDetailView to resolve product references in past orders for the reorder flow.
     func product(id: String) -> Product? {
         products.first { $0.id.uuidString == id }
     }
 
+    // MARK: - Mock Data
+
+    /// Bundled fallback product catalogue used when Supabase is unreachable or returns an empty response. Ensures the UI is never empty in offline or development builds.
     static let mockProducts: [Product] = [
         // Electronics
         Product(id: UUID(), name: "Wireless Headphones Pro", description: "Premium noise-cancelling wireless headphones with 30-hour battery life. Experience studio-quality sound wherever you go with active noise cancellation and foldable design.", price: 149.99, originalPrice: 199.99, category: .electronics, imageName: "headphones", rating: 4.7, reviewCount: 312, isFeatured: true, stock: 25, tags: ["audio", "wireless", "noise-cancelling"]),

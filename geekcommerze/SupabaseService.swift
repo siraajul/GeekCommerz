@@ -11,9 +11,12 @@ import Supabase
 //   Add to target: geekcommerze
 // ─────────────────────────────────────────────────────────────────────────────
 
+/// Nil-safe Supabase client singleton. Returns `nil` instead of crashing when keys are missing so the app operates in offline mode. Used by `AuthStore` and `ProductStore`.
 enum SupabaseService {
 
-    // Nil when AppConfig keys are still placeholders — app runs in offline mode
+    // MARK: - Properties
+
+    /// Lazily initialized `SupabaseClient` built from `AppConfig.Supabase` keys; nil when keys are still placeholder values, enabling offline mode.
     static let client: SupabaseClient? = {
         guard
             !AppConfig.Supabase.url.hasPrefix("YOUR_"),
@@ -23,5 +26,6 @@ enum SupabaseService {
         return SupabaseClient(supabaseURL: url, supabaseKey: AppConfig.Supabase.anonKey)
     }()
 
+    /// True when `client` is non-nil, meaning valid Supabase keys are present and auth/data features are available.
     static var isConfigured: Bool { client != nil }
 }

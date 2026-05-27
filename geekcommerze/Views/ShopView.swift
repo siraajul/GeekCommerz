@@ -33,9 +33,12 @@ struct ShopView: View {
     @State private var showSortFilter: Bool = false
     var initialCategory: ProductCategory? = nil
 
+    /// Count of active non-default filters; used to show the badge dot on the filter toolbar button in ShopView.
     var activeFilterCount: Int {
         (showInStockOnly ? 1 : 0) + (showDiscountOnly ? 1 : 0) + (sortOption != .featured ? 1 : 0)
     }
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -88,6 +91,9 @@ struct ShopView: View {
         }
     }
 
+    // MARK: - Search Bar
+
+    /// Inline search field at the top of ShopView; clears searchText when the X button is tapped.
     private var searchBar: some View {
         HStack {
             Image(systemName: "magnifyingglass")
@@ -108,6 +114,9 @@ struct ShopView: View {
         .padding(.vertical, 8)
     }
 
+    // MARK: - Category Filter
+
+    /// Horizontal scrollable row of category pills in ShopView; sets selectedCategory to filter the product grid.
     private var categoryFilter: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
@@ -125,6 +134,9 @@ struct ShopView: View {
         }
     }
 
+    // MARK: - Active Filter Chips
+
+    /// Scrollable row of removable chips showing each active filter; only shown in ShopView when activeFilterCount > 0.
     @ViewBuilder
     private var activeFiltersChips: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -156,6 +168,9 @@ struct ShopView: View {
         }
     }
 
+    // MARK: - Product Grid
+
+    /// Two-column lazy grid of ProductCards in ShopView; applies search, category, stock, discount, and sort filters before rendering.
     private var productGrid: some View {
         let base = productStore.filtered(search: searchText, category: selectedCategory)
         let inStockFiltered = showInStockOnly ? base.filter { $0.isInStock } : base
@@ -196,9 +211,14 @@ struct ShopView: View {
     }
 }
 
+// MARK: - ActiveFilterChip
+
+/// Removable pill chip shown in ShopView's active-filter row; displays a label and calls onRemove when the X is tapped.
 struct ActiveFilterChip: View {
     let label: String
     let onRemove: () -> Void
+
+    // MARK: - Body
 
     var body: some View {
         HStack(spacing: 4) {
@@ -219,10 +239,15 @@ struct ActiveFilterChip: View {
     }
 }
 
+// MARK: - FilterChip
+
+/// Toggleable category pill used in ShopView's horizontal category row; highlights with brand color when selected.
 struct FilterChip: View {
     let title: String
     let isSelected: Bool
     let action: () -> Void
+
+    // MARK: - Body
 
     var body: some View {
         Button(action: action) {
@@ -240,11 +265,16 @@ struct FilterChip: View {
     }
 }
 
+// MARK: - SortFilterSheet
+
+/// Bottom sheet presented from ShopView's filter toolbar button; lets the user pick a sort order and toggle stock/discount filters.
 struct SortFilterSheet: View {
     @Binding var sortOption: SortOption
     @Binding var showInStockOnly: Bool
     @Binding var showDiscountOnly: Bool
     @Environment(\.dismiss) private var dismiss
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -286,6 +316,9 @@ struct SortFilterSheet: View {
     }
 }
 
+// MARK: - ProductCard
+
+/// Reusable product card used in the ShopView grid and wherever a 2-col product layout is needed; handles wishlist, add-to-cart, and long-press context menu.
 struct ProductCard: View {
     let product: Product
     @Environment(ProductStore.self) private var productStore
@@ -298,10 +331,12 @@ struct ProductCard: View {
     @State private var heartPulse = false
     @State private var addedToCart = false
 
+    /// Whether the current product is saved in the persisted wishlist string in AppStorage.
     var isWishlisted: Bool {
         wishlistData.components(separatedBy: ",").contains(product.id.uuidString)
     }
 
+    /// Toggles the product's wishlist membership and shows a toast; also triggers a heart-pulse animation. Called by the heart button in ProductCard.
     func toggleWishlist() {
         withAnimation(.spring(response: 0.25, dampingFraction: 0.4)) { heartPulse = true }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.28) {
@@ -320,6 +355,7 @@ struct ProductCard: View {
         HapticFeedback.impact(.medium)
     }
 
+    /// Determines the priority badge (LIMITED / HOT DEAL / BESTSELLER) to overlay on the card image based on stock, discount, and rating thresholds.
     private var productBadge: (label: String, color: Color)? {
         if product.isInStock && product.stock <= 5 {
             return ("LIMITED", .orange)
@@ -330,6 +366,8 @@ struct ProductCard: View {
         }
         return nil
     }
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {

@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Login and sign-up screen presented when no authenticated session exists. Delegates all auth operations to AuthStore.
 struct AuthView: View {
     @Environment(AuthStore.self) private var authStore
     @State private var isSignUp    = false
@@ -10,6 +11,9 @@ struct AuthView: View {
     @State private var isLoading   = false
     @State private var emailSent   = false
 
+    // MARK: - Validation
+
+    /// Returns true when all visible fields satisfy minimum requirements for the current mode (sign-in or sign-up).
     var isFormValid: Bool {
         let trimEmail    = email.trimmingCharacters(in: .whitespaces)
         let trimPassword = password.trimmingCharacters(in: .whitespaces)
@@ -18,6 +22,8 @@ struct AuthView: View {
         let passwordOK   = trimPassword.count >= 6
         return isSignUp ? (emailOK && passwordOK && !trimName.isEmpty) : (emailOK && passwordOK)
     }
+
+    // MARK: - Body
 
     var body: some View {
         ScrollView {
@@ -42,6 +48,7 @@ struct AuthView: View {
 
     // MARK: - Header
 
+    /// Brand logo circle and contextual greeting title that updates when the user switches between sign-in and sign-up.
     private var header: some View {
         VStack(spacing: 12) {
             ZStack {
@@ -62,6 +69,7 @@ struct AuthView: View {
 
     // MARK: - Form
 
+    /// Card containing the inline error banner, optional name field (sign-up only), email field, and password field with show/hide toggle.
     private var formSection: some View {
         VStack(spacing: 12) {
             if let error = authStore.authError {
@@ -102,6 +110,7 @@ struct AuthView: View {
 
     // MARK: - Action Button
 
+    /// Primary CTA button that invokes `submit()`. Renders a gradient fill when the form is valid, grey when disabled.
     private var actionButton: some View {
         Button {
             Task { await submit() }
@@ -127,6 +136,7 @@ struct AuthView: View {
 
     // MARK: - Toggle
 
+    /// Inline text button that flips `isSignUp` and clears any lingering `authStore.authError`.
     private var toggleMode: some View {
         Button {
             isSignUp.toggle()
@@ -146,6 +156,7 @@ struct AuthView: View {
 
     // MARK: - Email Sent Confirmation
 
+    /// Success state shown after sign-up when Supabase returns no session, prompting the user to confirm their email.
     private var emailSentView: some View {
         VStack(spacing: 20) {
             Image(systemName: "envelope.badge.checkmark.fill")
@@ -172,6 +183,7 @@ struct AuthView: View {
 
     // MARK: - Submit
 
+    /// Calls `authStore.signIn` or `authStore.signUp` based on `isSignUp`, sets `emailSent` when Supabase requires email confirmation.
     private func submit() async {
         isLoading = true
         defer { isLoading = false }
@@ -196,6 +208,7 @@ struct AuthView: View {
 
 // MARK: - AuthField
 
+/// Reusable styled text-field row with a leading SF Symbol icon, supporting both plain and secure entry modes.
 private struct AuthField: View {
     let icon: String
     let placeholder: String
@@ -203,6 +216,8 @@ private struct AuthField: View {
     var keyboardType: UIKeyboardType = .default
     var capitalization: TextInputAutocapitalization = .sentences
     var isSecure: Bool = false
+
+    // MARK: - Body
 
     var body: some View {
         HStack(spacing: 12) {

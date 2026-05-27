@@ -1,18 +1,44 @@
 import SwiftUI
 import SwiftData
 
+/// Root view of the app. Owns all environment stores and renders the 5-tab TabView, cart-fly animation overlay, and the once-per-launch promo popup.
 struct ContentView: View {
+
+    // MARK: - Properties
+
+    /// Observable store for product catalog data; injected into the environment for child views.
     @State private var productStore = ProductStore()
+
+    /// Observable store for cart contents and item count; injected into the environment for child views.
     @State private var cartStore = CartStore()
+
+    /// Observable manager for transient toast banners shown above the tab bar.
     @State private var toastManager = ToastManager()
+
+    /// Observable store for in-app notifications; injected into the environment for child views.
     @State private var notificationStore = NotificationStore()
+
+    /// Observable router that drives programmatic tab switching from anywhere in the app.
     @State private var tabRouter = TabRouter()
+
+    /// Controls visibility of the promo popup ZStack overlay.
     @State private var showPromoPopup = false
+
+    /// Guards the promo popup so it fires at most once per app launch regardless of scene phase changes.
     @State private var promoShownThisLaunch = false
+
+    /// Observable manager that coordinates flying cart particle animations toward the Cart tab icon.
     @State private var cartAnimationManager = CartAnimationManager()
+
+    /// Current scene phase; observed to trigger the promo popup on foreground transitions.
     @Environment(\.scenePhase) private var scenePhase
+
+    /// Persisted flag indicating the user has completed onboarding; promo popup only fires after this is true.
     @AppStorage(AppConstants.StorageKeys.hasSeenOnboarding) private var hasSeenOnboarding = false
 
+    // MARK: - Body
+
+    /// Root body: a full-screen GeometryReader that passes the screen size into `contentStack` for accurate cart animation targeting.
     var body: some View {
         GeometryReader { geo in
           contentStack(screenSize: geo.size)
@@ -24,6 +50,9 @@ struct ContentView: View {
         }
     }
 
+    // MARK: - Actions
+
+    /// Builds the main ZStack containing the TabView, toast overlay, cart particle overlay, and promo popup overlay; calculates the cart tab center from `screenSize`.
     private func contentStack(screenSize: CGSize) -> some View {
         ZStack(alignment: .bottom) {
             TabView(selection: $tabRouter.selectedTab) {

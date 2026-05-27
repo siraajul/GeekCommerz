@@ -380,6 +380,23 @@ enum Monitoring {
 
 ---
 
+## Code Documentation
+
+`// MARK: -` section headers and `///` doc comments have been added to:
+
+- `Views/HomeView.swift` — HomeView, PromoBannerCard, PromoPopupView, BannerCard, CategoryChip, SectionHeader, CartBadgeIcon
+- `Views/ShopView.swift` — ShopView, FilterChip, ActiveFilterChip, SortFilterSheet, ProductCard
+- `Views/NotificationsView.swift` — NotificationsView, NotificationRow, BellBadgeIcon
+- `Views/CheckoutView.swift` — CheckoutView, TrustBadge, SavedAddressPickerSheet, CheckoutField
+- `Stores/CartStore.swift` — CartStore (itemCount, freeShippingThreshold, shippingCost, shipping(for:), refresh, addProduct, removeItem, updateQuantity, clearCart, refreshFromContext)
+- `Stores/ProductStore.swift` — ProductStore (products, isLoading, loadError, loadProducts, filtered, featuredProducts, products(for:), product(id:), mockProducts)
+- `ToastManager.swift` — ToastManager, ToastItem, ToastOverlay, HapticFeedback, TabRouter, CartAnimationManager (Particle, particles, cartTabCenter, trigger, remove), FlyingCartParticle
+- `Views/ProductDetailView.swift` — ProductDetailView, ProductReview (all stored properties), all computed vars (isWishlisted, relatedProducts, frequentlyBoughtTogether, socialProofViewing, socialProofSoldToday, colorVariants, sizeVariants, priceHistory, mockReviews, ratingBreakdown), all private view-builder vars (productImageSection, productInfoSection, tabSection, priceSparkline, reviewsSection, ratingOverview, deliveryReturnsSection, frequentlyBoughtSection, peopleAlsoBuySection, addToCartBar), all action/helper functions (toggleWishlist, trackRecentlyViewed, notifyWhenAvailable, miniProductCard), and helper structs (WriteReviewSheet, ReviewCard, DeliveryRow, DetailRow)
+
+Each property, function, and type declaration is annotated with a one-line `///` doc comment describing what it stores or does, which screens use it, and why it exists.
+
+---
+
 ## Roadmap
 
 - [x] AppConfig — single-file env key system with offline-mode detection

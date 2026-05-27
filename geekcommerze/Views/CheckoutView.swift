@@ -2,6 +2,9 @@ import SwiftUI
 import SwiftData
 import LocalAuthentication
 
+// MARK: - CheckoutView
+
+/// Final purchase screen reached from CartView. Handles address selection, promo codes, payment, biometric auth, and order persistence via SwiftData.
 struct CheckoutView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(CartStore.self) private var cartStore
@@ -27,6 +30,9 @@ struct CheckoutView: View {
     @State private var promoMessage: String? = nil
     @State private var promoIsError: Bool = false
 
+    // MARK: - Computed Properties
+
+    /// Decodes saved addresses from the JSON-encoded AppStorage string, returning an empty array on failure.
     var savedAddresses: [SavedAddress] {
         guard let data = savedAddressesData.data(using: .utf8),
               let decoded = try? JSONDecoder().decode([SavedAddress].self, from: data)
@@ -37,16 +43,24 @@ struct CheckoutView: View {
     let paymentMethods = ["Credit/Debit Card (Demo)", "Cash on Delivery", "Mobile Banking"]
     let paymentIcons = ["creditcard", "banknote", "iphone"]
 
+    /// Sum of all cart item subtotals before shipping and discounts.
     var total: Double { cartItems.reduce(0) { $0 + $1.subtotal } }
+
+    /// Shipping cost derived from CartStore's tiered shipping logic based on the subtotal.
     var shipping: Double { CartStore.shipping(for: total) }
+
+    /// Final amount charged: subtotal plus shipping minus any applied promo discount, floored at zero.
     var grandTotal: Double { max(0, total + shipping - promoDiscount) }
 
+    /// Returns true when all required shipping fields contain non-whitespace text.
     var isFormValid: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty &&
         !address.trimmingCharacters(in: .whitespaces).isEmpty &&
         !city.trimmingCharacters(in: .whitespaces).isEmpty &&
         !phone.trimmingCharacters(in: .whitespaces).isEmpty
     }
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -58,6 +72,9 @@ struct CheckoutView: View {
         }
     }
 
+    // MARK: - Checkout Form
+
+    /// Root scrollable form shown before an order is placed; composes all checkout sections and the sticky place-order bar.
     private var checkoutForm: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -85,6 +102,9 @@ struct CheckoutView: View {
         }
     }
 
+    // MARK: - Trust Badges
+
+    /// Horizontal row of four trust badges (Secure Checkout, Safe Payment, 30-Day Return, Buyer Protection).
     private var trustSection: some View {
         HStack(spacing: 0) {
             TrustBadge(icon: "lock.shield.fill", label: "Secure\nCheckout", color: .blue)
@@ -100,6 +120,9 @@ struct CheckoutView: View {
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 
+    // MARK: - Shipping
+
+    /// Shipping information card with name, address, city, and phone fields; offers a saved-address picker sheet when addresses exist.
     private var shippingSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -140,6 +163,9 @@ struct CheckoutView: View {
         }
     }
 
+    // MARK: - Promo Code
+
+    /// Promo code input section shown in CheckoutView. Validates against AppConstants.PromoCodes and applies a discount to promoDiscount.
     private var promoSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("Promo Code", systemImage: "tag")
@@ -187,6 +213,9 @@ struct CheckoutView: View {
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 
+    // MARK: - Payment
+
+    /// Payment method selector showing Credit/Debit Card, Cash on Delivery, and Mobile Banking options.
     private var paymentSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("Payment Method", systemImage: "creditcard")
@@ -220,6 +249,9 @@ struct CheckoutView: View {
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 
+    // MARK: - Order Summary
+
+    /// Itemized order summary showing each cart item, subtotal, shipping, promo discount, grand total, and projected loyalty points.
     private var orderSummarySection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("Order Summary", systemImage: "list.bullet.rectangle")
@@ -285,6 +317,9 @@ struct CheckoutView: View {
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 
+    // MARK: - Place Order Button
+
+    /// Sticky bottom bar with an Apple Pay demo button and the primary Face ID / Place Order button; both are disabled when the form is invalid or an order is in flight.
     private var placeOrderButton: some View {
         VStack(spacing: 8) {
             Button {
@@ -331,6 +366,9 @@ struct CheckoutView: View {
         .background(.regularMaterial)
     }
 
+    // MARK: - Order Success
+
+    /// Full-screen success state displayed after an order is placed; triggers confetti animation and a haptic notification on appear.
     private var orderSuccessView: some View {
         ZStack {
             VStack(spacing: 24) {
@@ -375,6 +413,9 @@ struct CheckoutView: View {
         }
     }
 
+    // MARK: - Actions
+
+    /// Validates the promo code string against AppConstants.PromoCodes and applies the matching discount to promoDiscount. Called by the "Apply" button.
     private func applyPromo() {
         let code = promoCode.trimmingCharacters(in: .whitespaces).uppercased()
         let currentShipping = CartStore.shipping(for: total)
@@ -402,6 +443,7 @@ struct CheckoutView: View {
         }
     }
 
+    /// Clears the applied promo code, discount amount, and feedback message, resetting the promo section to its initial state.
     private func removePromo() {
         promoCode = ""
         appliedPromo = nil
@@ -410,6 +452,7 @@ struct CheckoutView: View {
         promoIsError = false
     }
 
+    /// Uses LocalAuthentication's deviceOwnerAuthentication policy (Face ID, Touch ID, or passcode fallback) to verify the user before calling placeOrder(). Blocks the purchase if no passcode is configured.
     private func authenticateAndPlaceOrder() {
         let context = LAContext()
         var error: NSError?
@@ -431,6 +474,7 @@ struct CheckoutView: View {
         }
     }
 
+    /// Inserts a new Order into the SwiftData model context, awards loyalty points, clears the cart, posts an in-app notification, and transitions to the success state.
     private func placeOrder() {
         isPlacingOrder = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
@@ -458,10 +502,15 @@ struct CheckoutView: View {
     }
 }
 
+// MARK: - TrustBadge
+
+/// Reusable icon-and-label badge used in the trust strip at the top of CheckoutView.
 struct TrustBadge: View {
     let icon: String
     let label: String
     let color: Color
+
+    // MARK: - Body
 
     var body: some View {
         VStack(spacing: 6) {
@@ -477,10 +526,15 @@ struct TrustBadge: View {
     }
 }
 
+// MARK: - SavedAddressPickerSheet
+
+/// Modal sheet that lists the user's saved addresses and calls onSelect with the chosen SavedAddress so CheckoutView can pre-fill the shipping fields.
 struct SavedAddressPickerSheet: View {
     let addresses: [SavedAddress]
     let onSelect: (SavedAddress) -> Void
     @Environment(\.dismiss) private var dismiss
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -520,12 +574,17 @@ struct SavedAddressPickerSheet: View {
     }
 }
 
+// MARK: - CheckoutField
+
+/// Labelled text field with a leading SF Symbol icon, used for all shipping input rows in CheckoutView.
 struct CheckoutField: View {
     let label: String
     let placeholder: String
     @Binding var text: String
     let icon: String
     var keyboardType: UIKeyboardType = .default
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {

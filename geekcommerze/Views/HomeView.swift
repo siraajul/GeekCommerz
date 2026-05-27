@@ -2,6 +2,9 @@ import SwiftUI
 import SwiftData
 import Combine
 
+/// Root view for the Home tab in GeekCommerz. Renders the promotional banner, category chips,
+/// flash-sale countdown, recently-viewed products, featured and new-arrivals sections, and hosts
+/// the PromoPopupView overlay injected from ContentView.
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(ProductStore.self) private var productStore
@@ -17,6 +20,8 @@ struct HomeView: View {
     @State private var flashSaleEnd = Date().addingTimeInterval(6 * 3600)
     @State private var flashSaleCountdown = ""
     @State private var isInitialLoading = true
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -106,6 +111,9 @@ struct HomeView: View {
         }
     }
 
+    // MARK: - Skeleton
+
+    /// Full-screen skeleton placeholder shown in HomeView while the initial product data loads.
     @ViewBuilder
     private var skeletonContent: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -129,6 +137,7 @@ struct HomeView: View {
 
     // MARK: - Inline Promo Banners
 
+    /// Flash-sale inline banner shown in HomeView; displays a live countdown ticker that refreshes every second via a Combine timer.
     private var flashSaleBanner: some View {
         PromoBannerCard(
             title: "⚡ Flash Sale — Today Only!",
@@ -144,6 +153,7 @@ struct HomeView: View {
         }
     }
 
+    /// Recomputes `flashSaleCountdown` from the remaining seconds until `flashSaleEnd`; called on appear and every second by the banner's Combine timer.
     private func updateFlashSaleCountdown() {
         let remaining = flashSaleEnd.timeIntervalSinceNow
         guard remaining > 0 else { flashSaleCountdown = "Ended"; return }
@@ -153,6 +163,7 @@ struct HomeView: View {
         flashSaleCountdown = String(format: "%02d:%02d:%02d", h, m, s)
     }
 
+    /// Free-shipping inline banner shown in HomeView below the featured section; tapping navigates to ShopView with no category filter.
     private var freeShippingBanner: some View {
         PromoBannerCard(
             title: "🚚 Free Shipping",
@@ -165,6 +176,7 @@ struct HomeView: View {
 
     // MARK: - Sections
 
+    /// Resolves the ordered list of recently viewed products from the comma-separated IDs stored in `recentlyViewedData` for HomeView.
     private func recentlyViewedProducts() -> [Product] {
         let ids = recentlyViewedData.components(separatedBy: ",").filter { !$0.isEmpty }.reversed()
         return ids.compactMap { idStr in
@@ -173,6 +185,7 @@ struct HomeView: View {
         }
     }
 
+    /// Horizontally scrollable row of recently viewed products in HomeView; hidden when the list is empty.
     @ViewBuilder
     private var recentlyViewedSection: some View {
         let products = recentlyViewedProducts()
@@ -193,6 +206,7 @@ struct HomeView: View {
         }
     }
 
+    /// Auto-advancing hero banner in HomeView that cycles through up to four featured products every 3.5 seconds via a Combine timer.
     private var bannerSection: some View {
         let featured = Array(productStore.featuredProducts.prefix(4))
         return TabView(selection: $currentBannerIndex) {
@@ -213,6 +227,7 @@ struct HomeView: View {
         }
     }
 
+    /// Horizontally scrollable row of category chips in HomeView; each chip deep-links into ShopView filtered by that category.
     private var categorySection: some View {
         VStack(alignment: .leading, spacing: 12) {
             SectionHeader(title: "Categories", destination: ShopView())
@@ -227,6 +242,7 @@ struct HomeView: View {
         }
     }
 
+    /// Horizontally scrollable row of editor-curated featured products in HomeView; tapping a card opens ProductDetailView as a sheet.
     private var featuredSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             SectionHeader(title: "Featured", destination: ShopView())
@@ -243,6 +259,7 @@ struct HomeView: View {
         }
     }
 
+    /// Two-column grid showing the six most recently added products in HomeView, surfacing new inventory to returning users.
     private var newArrivalsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             SectionHeader(title: "New Arrivals", destination: ShopView())
@@ -259,12 +276,15 @@ struct HomeView: View {
 
 // MARK: - Inline Promo Banner Card
 
+/// Reusable gradient banner card used for inline promotions (flash sale, free shipping) throughout HomeView.
 struct PromoBannerCard: View {
     let title: String
     let subtitle: String
     let ctaText: String
     let gradient: [Color]
     let icon: String
+
+    // MARK: - Body
 
     var body: some View {
         ZStack(alignment: .leading) {
@@ -305,8 +325,11 @@ struct PromoBannerCard: View {
 
 // MARK: - Promotional Popup
 
+/// Full-screen welcome offer overlay injected as a ZStack layer from ContentView; shown once after first launch to present the SAVE20 discount code.
 struct PromoPopupView: View {
     let onDismiss: () -> Void
+
+    // MARK: - Body
 
     var body: some View {
         ZStack {
@@ -402,8 +425,11 @@ struct PromoPopupView: View {
 
 // MARK: - Supporting Views
 
+/// Full-width gradient card used in the HomeView hero banner; displays a featured product's name, price, and discount badge.
 struct BannerCard: View {
     let product: Product
+
+    // MARK: - Body
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
@@ -439,9 +465,12 @@ struct BannerCard: View {
     }
 }
 
+/// Tappable pill used in the HomeView category row; shows a category icon and label and navigates to ShopView filtered by that category.
 struct CategoryChip: View {
     let category: ProductCategory
     @Environment(ProductStore.self) private var productStore
+
+    // MARK: - Body
 
     var body: some View {
         NavigationLink(destination: ShopView(initialCategory: category)) {
@@ -464,6 +493,7 @@ struct CategoryChip: View {
     }
 }
 
+/// Generic section header with a bold title on the left and a "See All" navigation link on the right, reused across all HomeView content rows.
 struct SectionHeader<D: View>: View {
     let title: String
     let destination: D
@@ -472,6 +502,8 @@ struct SectionHeader<D: View>: View {
         self.title = title
         self.destination = destination
     }
+
+    // MARK: - Body
 
     var body: some View {
         HStack {
@@ -488,9 +520,12 @@ struct SectionHeader<D: View>: View {
     }
 }
 
+/// Animated cart icon with a red badge count shown in the HomeView navigation bar trailing position; bounces on count change.
 struct CartBadgeIcon: View {
     let count: Int
     @State private var scale: CGFloat = 1.0
+
+    // MARK: - Body
 
     var body: some View {
         ZStack(alignment: .topTrailing) {

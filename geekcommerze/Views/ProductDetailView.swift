@@ -2,17 +2,27 @@ import SwiftUI
 import Charts
 import UserNotifications
 
+/// Immutable data model for a single user-submitted product review, used by `mockReviews` and `ReviewCard`.
 struct ProductReview: Identifiable {
+    /// Unique string identifier combining the product UUID and pool index.
     let id: String
+    /// Display name of the reviewer (e.g. "Sarah M.").
     let name: String
+    /// Two-letter initials shown in the avatar circle.
     let initials: String
+    /// Star rating given by the reviewer, from 1 to 5.
     let rating: Int
+    /// Formatted date string when the review was posted (e.g. "May 12, 2026").
     let date: String
+    /// Full review text body.
     let comment: String
+    /// True when the review is marked as a verified purchase.
     let isVerified: Bool
+    /// Number of users who found this review helpful at time of creation.
     let helpfulCount: Int
 }
 
+/// Full-screen detail sheet for a single product, featuring image zoom, variant selectors, price sparkline, reviews, and add-to-cart.
 struct ProductDetailView: View {
     let product: Product
     @Environment(\.modelContext) private var modelContext
@@ -34,10 +44,12 @@ struct ProductDetailView: View {
     @State private var lastZoomScale: CGFloat = 1.0
     @State private var showUpsells = false
 
+    /// True when the current product's UUID is stored in the `@AppStorage` wishlist string.
     var isWishlisted: Bool {
         wishlistData.components(separatedBy: ",").contains(product.id.uuidString)
     }
 
+    /// Up to 6 products in the same category, excluding the current product. Used by `peopleAlsoBuySection`.
     var relatedProducts: [Product] {
         productStore.products
             .filter { $0.category == product.category && $0.id != product.id }
@@ -45,6 +57,7 @@ struct ProductDetailView: View {
             .map { $0 }
     }
 
+    /// Two deterministically selected products (seeded by the product's UUID hash) shown in the bundle upsell row.
     var frequentlyBoughtTogether: [Product] {
         let others = productStore.products.filter { $0.id != product.id }
         guard others.count >= 2 else { return Array(others.prefix(2)) }
@@ -57,18 +70,21 @@ struct ProductDetailView: View {
         return [others[idx1], others[idx2]]
     }
 
+    /// Deterministic pseudo-random count (3–30) of concurrent viewers, seeded per product UUID.
     var socialProofViewing: Int {
         var seed = UInt(bitPattern: product.id.hashValue) &* 2_246_822_519
         seed = seed &* 1_664_525 &+ 1_013_904_223
         return 3 + Int(seed % 28)
     }
 
+    /// Deterministic pseudo-random count (4–50) of units sold today, seeded per product UUID.
     var socialProofSoldToday: Int {
         var seed = UInt(bitPattern: product.id.hashValue) &* 3_266_489_917
         seed = seed &* 1_664_525 &+ 1_013_904_223
         return 4 + Int(seed % 47)
     }
 
+    /// Category-specific list of color name/`Color` pairs shown as tappable swatches in the info section.
     var colorVariants: [(name: String, color: Color)] {
         switch product.category {
         case .electronics:
@@ -84,6 +100,7 @@ struct ProductDetailView: View {
         }
     }
 
+    /// Category-specific size labels (clothing sizes, storage capacities, or sport fit ranges); empty for categories without size variants.
     var sizeVariants: [String] {
         switch product.category {
         case .clothing:
@@ -97,6 +114,7 @@ struct ProductDetailView: View {
         }
     }
 
+    /// 30 daily price points with ±10% pseudo-random variation around the product's current price, used by `priceSparkline`.
     var priceHistory: [(day: Int, price: Double)] {
         var seed = UInt(bitPattern: product.id.hashValue) &* 2_891_336_453
         return (0..<30).map { day in
@@ -124,6 +142,7 @@ struct ProductDetailView: View {
         ("Lucas M.", "LM", "Does the job well. Not perfect but for this price point it's hard to beat.", false, 7),
     ]
 
+    /// Five reviews deterministically selected from `reviewPool` using the product UUID as a seed, with dates and ratings derived from the product's rating.
     var mockReviews: [ProductReview] {
         let pool = ProductDetailView.reviewPool
         var indices: [Int] = []
@@ -145,6 +164,7 @@ struct ProductDetailView: View {
         }
     }
 
+    /// Star-to-fraction mapping (5 down to 1) derived from the product's overall rating bucket, used to render the histogram bars in `ratingOverview`.
     var ratingBreakdown: [(stars: Int, fraction: Double)] {
         let r = product.rating
         let fractions: [Double]
@@ -156,6 +176,8 @@ struct ProductDetailView: View {
         }
         return zip([5, 4, 3, 2, 1], fractions).map { (stars: $0, fraction: $1) }
     }
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -235,6 +257,8 @@ struct ProductDetailView: View {
     }
 
     // MARK: - Image Section
+
+    /// Hero image section with pinch-to-zoom gesture, discount badge overlay, and double-tap reset hint.
     private var productImageSection: some View {
         ZStack(alignment: .topTrailing) {
             Image(systemName: product.imageName)
@@ -304,6 +328,8 @@ struct ProductDetailView: View {
     }
 
     // MARK: - Info Section
+
+    /// Product metadata block: category pill, name, star rating, social proof counts, price with strikethrough, color/size selectors, stock status, quantity stepper, and tag chips.
     private var productInfoSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(product.category.rawValue)
@@ -484,6 +510,8 @@ struct ProductDetailView: View {
     }
 
     // MARK: - Tab Section
+
+    /// Segmented picker switching between Description, Details (with price sparkline), and Reviews tabs.
     private var tabSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             Picker("", selection: $selectedTab) {
@@ -522,6 +550,8 @@ struct ProductDetailView: View {
     }
 
     // MARK: - Price Sparkline
+
+    /// Swift Charts line-and-area chart showing the 30-day price history with high/low annotations, rendered inside the Details tab.
     @ViewBuilder
     private var priceSparkline: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -577,6 +607,8 @@ struct ProductDetailView: View {
     }
 
     // MARK: - Reviews Section
+
+    /// Reviews tab content: write-review CTA button, rating overview histogram, and the list of five `ReviewCard` rows.
     private var reviewsSection: some View {
         let reviews = mockReviews
         return VStack(alignment: .leading, spacing: 16) {
@@ -603,6 +635,7 @@ struct ProductDetailView: View {
         .padding(.vertical, 16)
     }
 
+    /// Large numeric rating score on the left paired with a 5-row star-fraction histogram on the right.
     private var ratingOverview: some View {
         HStack(alignment: .center, spacing: 20) {
             VStack(spacing: 4) {
@@ -649,6 +682,8 @@ struct ProductDetailView: View {
     }
 
     // MARK: - Delivery & Returns
+
+    /// Static card listing free delivery, express delivery, 30-day returns, and 2-year warranty policies as `DeliveryRow` entries.
     private var deliveryReturnsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Delivery & Returns")
@@ -681,6 +716,8 @@ struct ProductDetailView: View {
     }
 
     // MARK: - Frequently Bought Together
+
+    /// Horizontal scroll of the current product plus two companion picks, with a one-tap "Add Bundle" button showing the combined total.
     private var frequentlyBoughtSection: some View {
         let bundle = frequentlyBoughtTogether
         guard !bundle.isEmpty else { return AnyView(EmptyView()) }
@@ -736,6 +773,7 @@ struct ProductDetailView: View {
         )
     }
 
+    /// Compact 72 pt square product thumbnail with name and price, used in the bundle row; the main product receives a highlighted border when `isMain` is true.
     @ViewBuilder
     private func miniProductCard(_ p: Product, isMain: Bool) -> some View {
         VStack(spacing: 4) {
@@ -761,6 +799,8 @@ struct ProductDetailView: View {
     }
 
     // MARK: - You May Also Like
+
+    /// Horizontally scrollable row of up to 6 same-category `ProductCard` views that open a nested `ProductDetailView` on tap.
     private var peopleAlsoBuySection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("You May Also Like")
@@ -782,6 +822,8 @@ struct ProductDetailView: View {
     }
 
     // MARK: - Add to Cart Bar
+
+    /// Sticky bottom bar containing the wishlist toggle button and either the add-to-cart button (in-stock) or the notify-me button (out-of-stock).
     private var addToCartBar: some View {
         HStack(spacing: 12) {
             Button { toggleWishlist() } label: {
@@ -846,6 +888,7 @@ struct ProductDetailView: View {
         .background(.regularMaterial)
     }
 
+    /// Adds or removes the product UUID from the `@AppStorage` wishlist string and fires a haptic and toast confirmation.
     private func toggleWishlist() {
         var ids = wishlistData.components(separatedBy: ",").filter { !$0.isEmpty }
         let uid = product.id.uuidString
@@ -861,6 +904,7 @@ struct ProductDetailView: View {
         wishlistData = ids.joined(separator: ",")
     }
 
+    /// Appends the current product UUID to the `@AppStorage` recently-viewed list, capping the list at 10 entries.
     private func trackRecentlyViewed() {
         var ids = recentlyViewedData.components(separatedBy: ",").filter { !$0.isEmpty }
         let idStr = product.id.uuidString
@@ -870,6 +914,7 @@ struct ProductDetailView: View {
         recentlyViewedData = ids.joined(separator: ",")
     }
 
+    /// Requests `UNUserNotificationCenter` permission and schedules a 30-second restock notification, then sets `notifyMeSet` to lock the button.
     private func notifyWhenAvailable() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, _ in
             guard granted else { return }
@@ -893,6 +938,7 @@ struct ProductDetailView: View {
 
 // MARK: - Write Review Sheet
 
+/// Modal form sheet for submitting a star rating and free-text review for a named product.
 struct WriteReviewSheet: View {
     let productName: String
     let toastManager: ToastManager
@@ -957,6 +1003,7 @@ struct WriteReviewSheet: View {
 
 // MARK: - Review Card
 
+/// Single review row showing avatar initials, reviewer name, verified badge, star rating, date, review body, and a helpful-vote toggle button.
 struct ReviewCard: View {
     let review: ProductReview
     @State private var hasVotedHelpful = false
@@ -1026,6 +1073,7 @@ struct ReviewCard: View {
 
 // MARK: - Delivery Row
 
+/// Single policy row for the delivery & returns card, displaying a colored SF Symbol icon, a bold title, and a subtitle description.
 struct DeliveryRow: View {
     let icon: String
     let color: Color
@@ -1054,6 +1102,7 @@ struct DeliveryRow: View {
 
 // MARK: - Detail Row
 
+/// Two-column label/value row with a bottom divider, used in the Details tab to display structured product metadata.
 struct DetailRow: View {
     let label: String
     let value: String

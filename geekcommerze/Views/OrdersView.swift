@@ -1,8 +1,12 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - OrdersView
+
 struct OrdersView: View {
     @Query(sort: \Order.date, order: .reverse) private var orders: [Order]
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -18,6 +22,9 @@ struct OrdersView: View {
         }
     }
 
+    // MARK: - Empty State
+
+    /// Full-screen empty-state illustration shown when the SwiftData orders query returns no results.
     private var emptyOrders: some View {
         VStack(spacing: 20) {
             Image(systemName: "shippingbox")
@@ -45,6 +52,9 @@ struct OrdersView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
+    // MARK: - Order List
+
+    /// Scrollable list of past orders; each row is an OrderRow that navigates to OrderDetailView.
     private var orderList: some View {
         List {
             ForEach(orders) { order in
@@ -59,8 +69,13 @@ struct OrdersView: View {
     }
 }
 
+// MARK: - OrderRow
+
+/// Summary row displayed in the OrdersView list. Shows order ID, date, item count, total, and a StatusBadge.
 struct OrderRow: View {
     let order: Order
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -89,6 +104,8 @@ struct OrderRow: View {
     }
 }
 
+// MARK: - OrderDetailView
+
 struct OrderDetailView: View {
     let order: Order
     @Environment(\.modelContext) private var modelContext
@@ -96,6 +113,8 @@ struct OrderDetailView: View {
     @Environment(ProductStore.self) private var productStore
     @Environment(ToastManager.self) private var toastManager
     @State private var showReturns = false
+
+    // MARK: - Body
 
     var body: some View {
         ScrollView {
@@ -128,6 +147,9 @@ struct OrderDetailView: View {
         }
     }
 
+    // MARK: - Return Controls
+
+    /// Confirmation banner shown when a return has already been requested for this delivered order.
     private var returnRequestedBadge: some View {
         HStack {
             Image(systemName: "checkmark.circle.fill")
@@ -148,6 +170,7 @@ struct OrderDetailView: View {
         .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.green.opacity(0.3), lineWidth: 1))
     }
 
+    /// Tappable button that sets showReturns to true, presenting ReturnsSheet. Visible only for delivered, non-returned orders.
     private var returnRequestButton: some View {
         Button { showReturns = true } label: {
             HStack {
@@ -168,6 +191,9 @@ struct OrderDetailView: View {
         }
     }
 
+    // MARK: - Reorder Card
+
+    /// Gradient action card that triggers reorder() to re-add all available order items to the cart.
     private var reorderCard: some View {
         Button {
             reorder()
@@ -191,6 +217,9 @@ struct OrderDetailView: View {
         }
     }
 
+    // MARK: - Actions
+
+    /// Adds each in-stock item from the order back to CartStore and fires a toast. Called by the reorderCard button.
     private func reorder() {
         var addedCount = 0
         for item in order.items {
@@ -210,6 +239,9 @@ struct OrderDetailView: View {
         }
     }
 
+    // MARK: - Order Cards
+
+    /// Step-by-step tracking timeline card showing order progress from Pending through Delivered, or a cancelled state.
     private var trackingTimeline: some View {
         let steps: [(status: OrderStatus, subtitle: String)] = [
             (.pending,    "Order received"),
@@ -283,6 +315,7 @@ struct OrderDetailView: View {
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
     }
 
+    /// Card listing each ordered item with its image icon, name, quantity, unit price, and line subtotal.
     private var itemsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Items Ordered")
@@ -312,6 +345,7 @@ struct OrderDetailView: View {
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
     }
 
+    /// Card displaying the shipping name, street address, city, and contact phone number for the order.
     private var shippingCard: some View {
         VStack(alignment: .leading, spacing: 10) {
             Label("Shipping Address", systemImage: "mappin.circle")
@@ -334,6 +368,7 @@ struct OrderDetailView: View {
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
     }
 
+    /// Single-row card showing the order grand total in the brand primary color.
     private var totalCard: some View {
         HStack {
             Text("Total Paid")
@@ -349,6 +384,9 @@ struct OrderDetailView: View {
     }
 }
 
+// MARK: - ReturnsSheet
+
+/// Bottom sheet form for submitting a return request. Sets order.returnRequested via onSubmit and fires a toast through ToastManager.
 struct ReturnsSheet: View {
     let orderId: String
     let toastManager: ToastManager
@@ -366,6 +404,8 @@ struct ReturnsSheet: View {
         "Missing parts / accessories",
         "Other"
     ]
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -455,9 +495,13 @@ struct ReturnsSheet: View {
     }
 }
 
+// MARK: - StatusBadge
+
+/// Colored capsule badge used across OrderRow and OrderDetailView to indicate the current OrderStatus.
 struct StatusBadge: View {
     let status: OrderStatus
 
+    /// Maps each OrderStatus to its corresponding display color.
     var color: Color {
         switch status {
         case .pending:    return .orange
@@ -467,6 +511,8 @@ struct StatusBadge: View {
         case .cancelled:  return AppTheme.Colors.danger
         }
     }
+
+    // MARK: - Body
 
     var body: some View {
         HStack(spacing: 4) {

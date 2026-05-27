@@ -12,24 +12,32 @@ struct SearchView: View {
 
     static let trendingSearches = ["Wireless Headphones", "Running Shoes", "Coffee Maker", "Yoga Mat", "Mechanical Keyboard"]
 
+    // MARK: - Computed Properties
+
+    /// Decodes the @AppStorage pipe-delimited string into a reversed array of recent query strings shown in SearchView.
     var recentSearches: [String] {
         recentSearchesData.components(separatedBy: "|||").filter { !$0.isEmpty }.reversed()
     }
 
+    /// Full product list matching the current search text with no category filter applied; used to derive resultCategories.
     var allSearchResults: [Product] {
         let q = searchText.trimmingCharacters(in: .whitespaces)
         guard !q.isEmpty else { return [] }
         return productStore.filtered(search: q, category: nil)
     }
 
+    /// Category-filtered subset of allSearchResults; bound to the active FilterChip selection in SearchView.
     var searchResults: [Product] {
         guard let cat = resultsCategory else { return allSearchResults }
         return allSearchResults.filter { $0.category == cat }
     }
 
+    /// Unique, sorted categories present in allSearchResults; used to build the horizontal filter chip row in SearchView.
     var resultCategories: [ProductCategory] {
         Array(Set(allSearchResults.map { $0.category })).sorted { $0.rawValue < $1.rawValue }
     }
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -56,6 +64,9 @@ struct SearchView: View {
         }
     }
 
+    // MARK: - Search Bar
+
+    /// Styled text field with leading icon and trailing clear button pinned below the nav bar in SearchView.
     private var searchBar: some View {
         HStack {
             Image(systemName: "magnifyingglass")
@@ -80,6 +91,9 @@ struct SearchView: View {
         .background(Color(.systemGroupedBackground))
     }
 
+    // MARK: - Idle State
+
+    /// Default scroll content shown in SearchView when the search field is empty; contains recent history, trending chips, and category cards.
     private var recentAndCategoriesView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -188,6 +202,9 @@ struct SearchView: View {
         }
     }
 
+    // MARK: - No Results State
+
+    /// Full-screen placeholder shown in SearchView when a query returns zero products from ProductStore.
     private var noResultsView: some View {
         VStack(spacing: 16) {
             Image(systemName: "magnifyingglass")
@@ -205,6 +222,9 @@ struct SearchView: View {
         .padding(.bottom, 60)
     }
 
+    // MARK: - Results
+
+    /// Two-column product grid with a category filter chip row shown in SearchView when the query has matches.
     private var resultsView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 8) {
@@ -247,6 +267,9 @@ struct SearchView: View {
         }
     }
 
+    // MARK: - Actions
+
+    /// Appends a query to the @AppStorage recent-searches string (capped at 8, deduped); called on submit and on product tap in SearchView.
     private func saveSearch(_ query: String) {
         let q = query.trimmingCharacters(in: .whitespaces)
         guard !q.isEmpty else { return }

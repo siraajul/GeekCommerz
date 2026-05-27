@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 
+/// Codable address model stored in AppStorage as JSON. Used by ProfileView and AddAddressSheet.
 struct SavedAddress: Codable, Identifiable {
     var id: UUID = UUID()
     var label: String
@@ -9,6 +10,8 @@ struct SavedAddress: Codable, Identifiable {
     var city: String
     var phone: String
 }
+
+// MARK: - ProfileView
 
 struct ProfileView: View {
     @Query private var orders: [Order]
@@ -21,6 +24,9 @@ struct ProfileView: View {
     @State private var showEditProfile = false
     @State private var showAddAddress = false
 
+    // MARK: - Computed Properties
+
+    /// Decodes the JSON-encoded address list from AppStorage into typed SavedAddress values.
     var savedAddresses: [SavedAddress] {
         guard let data = savedAddressesData.data(using: .utf8),
               let decoded = try? JSONDecoder().decode([SavedAddress].self, from: data)
@@ -28,6 +34,7 @@ struct ProfileView: View {
         return decoded
     }
 
+    /// Encodes an updated address array and writes it back to AppStorage as JSON.
     func persistAddresses(_ addresses: [SavedAddress]) {
         if let data = try? JSONEncoder().encode(addresses),
            let str = String(data: data, encoding: .utf8) {
@@ -35,8 +42,10 @@ struct ProfileView: View {
         }
     }
 
+    /// Sums the total value of all SwiftData orders for display in the stats section.
     var totalSpent: Double { orders.reduce(0) { $0 + $1.total } }
 
+    /// Derives one- or two-letter initials from the user's profile name for the avatar circle.
     var avatarInitials: String {
         let parts = profileName.split(separator: " ").filter { !$0.isEmpty }
         guard !parts.isEmpty else { return "G" }
@@ -44,6 +53,8 @@ struct ProfileView: View {
         let last = parts.count > 1 ? String(parts[parts.count - 1].prefix(1)).uppercased() : ""
         return first + last
     }
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -70,6 +81,9 @@ struct ProfileView: View {
         }
     }
 
+    // MARK: - Profile Header
+
+    /// Avatar circle with initials, display name, email, and an edit-profile button.
     private var profileHeader: some View {
         Section {
             HStack(spacing: 16) {
@@ -100,6 +114,9 @@ struct ProfileView: View {
         }
     }
 
+    // MARK: - Stats Section
+
+    /// Three-column stat row showing total orders, total amount spent, and delivered order count.
     private var statsSection: some View {
         Section("Shopping Summary") {
             HStack(spacing: 0) {
@@ -115,6 +132,9 @@ struct ProfileView: View {
         }
     }
 
+    // MARK: - Loyalty Section
+
+    /// Loyalty tier card showing current points, Gold/Silver badge, and a progress bar toward the next Gold threshold.
     private var loyaltySection: some View {
         Section("Loyalty Rewards") {
             HStack(spacing: 16) {
@@ -148,6 +168,9 @@ struct ProfileView: View {
         }
     }
 
+    // MARK: - Addresses Section
+
+    /// List of saved shipping addresses with swipe-to-delete and an Add Address button that presents AddAddressSheet.
     private var addressesSection: some View {
         Section("Saved Addresses") {
             if savedAddresses.isEmpty {
@@ -186,6 +209,9 @@ struct ProfileView: View {
         }
     }
 
+    // MARK: - Settings Section
+
+    /// Preferences section with notification and dark-mode toggles, plus navigation links to Orders and Wishlist.
     private var settingsSection: some View {
         Section("Preferences") {
             Toggle(isOn: $notificationsEnabled) {
@@ -203,6 +229,9 @@ struct ProfileView: View {
         }
     }
 
+    // MARK: - About Section
+
+    /// Static app-info section showing version number, Privacy Policy link, and Terms of Service link.
     private var aboutSection: some View {
         Section("About") {
             LabeledContent("App Version", value: AppConstants.App.version)
@@ -216,11 +245,16 @@ struct ProfileView: View {
     }
 }
 
+// MARK: - StatBox
+
+/// Single stat cell used in the ProfileView shopping-summary row. Displays an icon, a numeric value, and a label.
 struct StatBox: View {
     let icon: String
     let value: String
     let label: String
     let color: Color
+
+    // MARK: - Body
 
     var body: some View {
         VStack(spacing: 6) {
@@ -237,12 +271,17 @@ struct StatBox: View {
     }
 }
 
+// MARK: - EditProfileView
+
+/// Modal sheet for editing the user's display name and email. Writes back to ProfileView bindings on Save.
 struct EditProfileView: View {
     @Binding var name: String
     @Binding var email: String
     @Environment(\.dismiss) private var dismiss
     @State private var tempName = ""
     @State private var tempEmail = ""
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -283,6 +322,9 @@ struct EditProfileView: View {
     }
 }
 
+// MARK: - AddAddressSheet
+
+/// Half-height bottom sheet for creating a new SavedAddress. Calls onSave with the completed address and dismisses.
 struct AddAddressSheet: View {
     let onSave: (SavedAddress) -> Void
     @Environment(\.dismiss) private var dismiss
@@ -294,11 +336,14 @@ struct AddAddressSheet: View {
 
     let labelOptions = ["Home", "Work", "Other"]
 
+    /// Returns true when the required name, street, and city fields are non-empty.
     var isValid: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty &&
         !street.trimmingCharacters(in: .whitespaces).isEmpty &&
         !city.trimmingCharacters(in: .whitespaces).isEmpty
     }
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {

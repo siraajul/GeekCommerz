@@ -1,9 +1,11 @@
 import SwiftUI
 
+/// Three-page onboarding carousel shown on first launch. Sets `hasSeenOnboarding` to true to dismiss itself.
 struct OnboardingView: View {
     @AppStorage(AppConstants.StorageKeys.hasSeenOnboarding) private var hasSeenOnboarding = false
     @State private var currentPage = 0
 
+    /// Data model for a single onboarding slide.
     private struct Page {
         let icon: String
         let color: Color
@@ -11,6 +13,7 @@ struct OnboardingView: View {
         let subtitle: String
     }
 
+    /// Ordered list of onboarding pages displayed in the TabView carousel.
     private let pages: [Page] = [
         Page(icon: "bag.fill",
              color: AppTheme.Colors.primary,
@@ -25,6 +28,8 @@ struct OnboardingView: View {
              title: "Earn Rewards Every Order",
              subtitle: "Collect loyalty points on every purchase. Redeem them for exclusive discounts and perks."),
     ]
+
+    // MARK: - Body
 
     var body: some View {
         ZStack {
@@ -44,6 +49,8 @@ struct OnboardingView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .always))
                 .animation(.easeInOut, value: currentPage)
+
+                // MARK: - Navigation Buttons
 
                 VStack(spacing: 16) {
                     if currentPage < pages.count - 1 {
@@ -91,17 +98,25 @@ struct OnboardingView: View {
     }
 }
 
+// MARK: - OnboardingPage
+
+/// Single carousel slide with a spring-animated icon, title, and subtitle. Resets its animation state on disappear.
 struct OnboardingPage: View {
     let icon: String
     let color: Color
     let title: String
     let subtitle: String
 
+    /// Tracks whether the icon entrance animation has fired for this page.
     @State private var appeared = false
+
+    // MARK: - Body
 
     var body: some View {
         VStack(spacing: 32) {
             Spacer()
+
+            // MARK: - Icon
 
             ZStack {
                 Circle()
@@ -122,6 +137,8 @@ struct OnboardingPage: View {
                 }
             }
             .onDisappear { appeared = false }
+
+            // MARK: - Text
 
             VStack(spacing: 16) {
                 Text(title)

@@ -8,10 +8,15 @@ struct WishlistView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var selectedProduct: Product? = nil
 
+    // MARK: - Computed Properties
+
+    /// Filters ProductStore to only the products whose UUIDs appear in the @AppStorage wishlist string; drives WishlistView's grid.
     var wishlistedProducts: [Product] {
         let ids = wishlistData.components(separatedBy: ",").filter { !$0.isEmpty }
         return productStore.products.filter { ids.contains($0.id.uuidString) }
     }
+
+    // MARK: - Body
 
     var body: some View {
         Group {
@@ -29,6 +34,9 @@ struct WishlistView: View {
         }
     }
 
+    // MARK: - Empty State
+
+    /// Placeholder shown in WishlistView when no products are saved; includes a CTA that navigates to ShopView.
     private var emptyWishlist: some View {
         VStack(spacing: 20) {
             Image(systemName: "heart.slash")
@@ -54,6 +62,9 @@ struct WishlistView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
+    // MARK: - Wishlist Grid
+
+    /// Two-column lazy grid of ProductCard tiles in WishlistView; each card has an overlaid remove button.
     private var wishlistGrid: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
@@ -84,6 +95,9 @@ struct WishlistView: View {
         }
     }
 
+    // MARK: - Actions
+
+    /// Removes a product's UUID from the @AppStorage wishlist string; triggered by the heart button overlay in WishlistView.
     private func removeFromWishlist(_ product: Product) {
         HapticFeedback.impact(.medium)
         var ids = wishlistData.components(separatedBy: ",").filter { !$0.isEmpty }

@@ -9,9 +9,18 @@ struct CartView: View {
     @State private var showCheckout = false
     @AppStorage(AppConstants.StorageKeys.wishlist) private var wishlistData: String = ""
 
+    // MARK: - Computed Totals
+
+    /// Subtotal across all cart items; drives the order summary and grand total in CartView.
     var total: Double { cartItems.reduce(0) { $0 + $1.subtotal } }
+
+    /// Shipping cost derived from CartStore rules (free over $50); displayed in the order summary in CartView.
     var shipping: Double { CartStore.shipping(for: total) }
+
+    /// Final amount shown to the user and passed to CheckoutView; subtotal plus any shipping cost.
     var grandTotal: Double { total + shipping }
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -33,6 +42,9 @@ struct CartView: View {
         }
     }
 
+    // MARK: - Empty State
+
+    /// Placeholder shown in CartView when there are no cart items; includes a CTA that navigates to ShopView.
     private var emptyCart: some View {
         VStack(spacing: 20) {
             Image(systemName: "cart")
@@ -61,6 +73,9 @@ struct CartView: View {
         .background(Color(.systemGroupedBackground))
     }
 
+    // MARK: - Cart Content
+
+    /// Scrollable list of CartItemRow entries with swipe actions (wishlist left, delete right) in CartView.
     private var cartContent: some View {
         VStack(spacing: 0) {
             List {
@@ -96,6 +111,9 @@ struct CartView: View {
         }
     }
 
+    // MARK: - Order Summary
+
+    /// Breakdown panel showing subtotal, shipping, and grand total at the bottom of CartView.
     private var orderSummary: some View {
         VStack(spacing: 10) {
             Divider()
@@ -123,6 +141,9 @@ struct CartView: View {
         .background(Color(.systemBackground))
     }
 
+    // MARK: - Actions
+
+    /// Appends the cart item's productId to @AppStorage wishlist string and shows a toast; triggered by leading swipe in CartView.
     private func saveToWishlist(_ item: CartItem) {
         var ids = wishlistData.components(separatedBy: ",").filter { !$0.isEmpty }
         if !ids.contains(item.productId) {
@@ -135,6 +156,9 @@ struct CartView: View {
         }
     }
 
+    // MARK: - Checkout Button
+
+    /// Sticky gradient CTA anchored to the safe-area bottom in CartView; sets showCheckout to present CheckoutView as a sheet.
     private var checkoutButton: some View {
         Button { showCheckout = true } label: {
             HStack {
@@ -158,12 +182,16 @@ struct CartView: View {
     }
 }
 
+// MARK: - CartItemRow
+
 struct CartItemRow: View {
     let item: CartItem
     @Environment(\.modelContext) private var modelContext
     @Environment(CartStore.self) private var cartStore
     @State private var incBounce = false
     @State private var decBounce = false
+
+    // MARK: - Body
 
     var body: some View {
         HStack(spacing: 12) {
@@ -239,9 +267,13 @@ struct CartItemRow: View {
     }
 }
 
+// MARK: - SummaryRow
+
 struct SummaryRow: View {
     let label: String
     let value: String
+
+    // MARK: - Body
 
     var body: some View {
         HStack {

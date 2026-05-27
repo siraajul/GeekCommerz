@@ -14,13 +14,17 @@ extension Date {
 struct NotificationsView: View {
     @Environment(NotificationStore.self) private var notifStore
 
+    /// Notifications whose date falls within today; used to populate the "Today" section in NotificationsView.
     var todayItems: [AppNotification] {
         notifStore.notifications.filter { Calendar.current.isDateInToday($0.date) }
     }
 
+    /// Notifications older than today; used to populate the "Earlier" section in NotificationsView.
     var earlierItems: [AppNotification] {
         notifStore.notifications.filter { !Calendar.current.isDateInToday($0.date) }
     }
+
+    // MARK: - Body
 
     var body: some View {
         Group {
@@ -45,6 +49,9 @@ struct NotificationsView: View {
         }
     }
 
+    // MARK: - Empty State
+
+    /// Full-screen placeholder shown in NotificationsView when the notification list is empty; communicates that the user is caught up.
     private var emptyState: some View {
         VStack(spacing: 20) {
             Image(systemName: "bell.slash")
@@ -62,6 +69,9 @@ struct NotificationsView: View {
         .background(Color(.systemGroupedBackground))
     }
 
+    // MARK: - Notification List
+
+    /// Sectioned list of today and earlier notifications in NotificationsView; includes a destructive "Clear All" footer button.
     private var notificationList: some View {
         List {
             if !todayItems.isEmpty {
@@ -94,6 +104,9 @@ struct NotificationsView: View {
         .listStyle(.insetGrouped)
     }
 
+    // MARK: - Row Builder
+
+    /// Wraps a NotificationRow with unread background tint, tap-to-read, and leading/trailing swipe actions. Used inside both list sections of NotificationsView.
     @ViewBuilder
     private func notificationRow(_ notif: AppNotification) -> some View {
         NotificationRow(notification: notif)
@@ -122,8 +135,13 @@ struct NotificationsView: View {
     }
 }
 
+// MARK: - NotificationRow
+
+/// Single notification cell used in both the Today and Earlier sections of NotificationsView; shows icon, title, body, timestamp, and an unread dot.
 struct NotificationRow: View {
     let notification: AppNotification
+
+    // MARK: - Body
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -163,8 +181,13 @@ struct NotificationRow: View {
     }
 }
 
+// MARK: - BellBadgeIcon
+
+/// Bell icon with a red unread-count badge overlay; placed in HomeView's toolbar to give quick access to NotificationsView.
 struct BellBadgeIcon: View {
     let count: Int
+
+    // MARK: - Body
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
