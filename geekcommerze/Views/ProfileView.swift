@@ -422,5 +422,7 @@ struct AddAddressSheet: View {
 
 #Preview {
     ProfileView()
+        .environment(CartStore())
+        .environment(AuthStore())
         .modelContainer(for: [CartItem.self, Order.self, OrderItem.self], inMemory: true)
 }

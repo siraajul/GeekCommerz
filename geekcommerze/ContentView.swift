@@ -152,5 +152,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environment(AuthStore())
         .modelContainer(for: [CartItem.self, Order.self, OrderItem.self], inMemory: true)
 }
