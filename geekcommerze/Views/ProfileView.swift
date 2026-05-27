@@ -15,6 +15,9 @@ struct SavedAddress: Codable, Identifiable {
 
 struct ProfileView: View {
     @Query private var orders: [Order]
+    @Environment(\.modelContext) private var modelContext
+    @Environment(CartStore.self) private var cartStore
+    @Environment(AuthStore.self) private var authStore
     @AppStorage(AppConstants.StorageKeys.profileName) private var profileName = ""
     @AppStorage(AppConstants.StorageKeys.profileEmail) private var profileEmail = ""
     @AppStorage(AppConstants.StorageKeys.notificationsEnabled) private var notificationsEnabled = true
@@ -65,6 +68,7 @@ struct ProfileView: View {
                 addressesSection
                 settingsSection
                 aboutSection
+                signOutSection
             }
             .listStyle(.insetGrouped)
             .navigationTitle("Profile")
@@ -243,6 +247,25 @@ struct ProfileView: View {
             }
             Link(destination: URL(string: AppConstants.App.termsURL)!) {
                 Label("Terms of Service", systemImage: "doc.text")
+            }
+        }
+    }
+
+    // MARK: - Sign Out Section
+
+    private var signOutSection: some View {
+        Section {
+            Button(role: .destructive) {
+                Task {
+                    cartStore.clearAllUserData(context: modelContext)
+                    await authStore.signOut()
+                }
+            } label: {
+                HStack {
+                    Spacer()
+                    Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
+                    Spacer()
+                }
             }
         }
     }

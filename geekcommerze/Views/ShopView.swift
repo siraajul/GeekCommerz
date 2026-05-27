@@ -23,6 +23,7 @@ enum SortOption: String, CaseIterable, Identifiable {
 struct ShopView: View {
     @Environment(ProductStore.self) private var productStore
     @Environment(CartStore.self) private var cartStore
+    @Query private var cartItems: [CartItem]
     @Environment(TabRouter.self) private var tabRouter
     @State private var selectedProduct: Product? = nil
     @State private var searchText: String = ""
@@ -67,7 +68,7 @@ struct ShopView: View {
                         }
                         .accessibilityLabel(activeFilterCount > 0 ? "Sort and filter (\(activeFilterCount) active)" : "Sort and filter")
                         Button { tabRouter.selectedTab = 3 } label: {
-                            CartBadgeIcon(count: cartStore.itemCount)
+                            CartBadgeIcon(count: cartItems.reduce(0) { $0 + $1.quantity })
                         }
                     }
                 }

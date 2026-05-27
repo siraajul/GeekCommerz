@@ -36,9 +36,7 @@ struct CartView: View {
             .sheet(isPresented: $showCheckout) {
                 CheckoutView()
             }
-            .onAppear {
-                cartStore.refresh(with: cartItems)
-            }
+
         }
     }
 

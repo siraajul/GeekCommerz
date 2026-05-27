@@ -10,6 +10,7 @@ struct HomeView: View {
     @Environment(ProductStore.self) private var productStore
     @Environment(CartStore.self) private var cartStore
     @Environment(NotificationStore.self) private var notifStore
+    @Query private var cartItems: [CartItem]
     @Environment(TabRouter.self) private var tabRouter
     @State private var selectedProduct: Product? = nil
     @AppStorage(AppConstants.StorageKeys.recentlyViewed) private var recentlyViewedData: String = ""
@@ -76,7 +77,7 @@ struct HomeView: View {
                         }
                         .accessibilityLabel("Wishlist")
                         Button { tabRouter.selectedTab = 3 } label: {
-                            CartBadgeIcon(count: cartStore.itemCount)
+                            CartBadgeIcon(count: cartItems.reduce(0) { $0 + $1.quantity })
                         }
                     }
                 }

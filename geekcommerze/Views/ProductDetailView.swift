@@ -28,6 +28,7 @@ struct ProductDetailView: View {
     let product: Product
     @Environment(\.modelContext) private var modelContext
     @Environment(CartStore.self) private var cartStore
+    @Query private var cartItems: [CartItem]
     @Environment(ProductStore.self) private var productStore
     @Environment(\.dismiss) private var dismiss
     @Environment(ToastManager.self) private var toastManager
@@ -237,7 +238,7 @@ struct ProductDetailView: View {
                                 .foregroundColor(isWishlisted ? .red : .primary)
                         }
                         NavigationLink(destination: CartView()) {
-                            CartBadgeIcon(count: cartStore.itemCount)
+                            CartBadgeIcon(count: cartItems.reduce(0) { $0 + $1.quantity })
                         }
                     }
                 }

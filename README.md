@@ -47,13 +47,16 @@ graph LR
 ```
 geekcommerze/
 ├── Models/          CartItem · Order · OrderItem · Product (Codable)
-├── Stores/          CartStore · ProductStore · AuthStore
-├── Views/           14 screens  (+ AuthView)
-├── SupabaseService  Nil-safe SupabaseClient singleton
-├── ToastManager     Toast · HapticFeedback · CartAnimationManager · TabRouter
+├── Stores/                CartStore · ProductStore · AuthStore
+├── Views/                 14 screens  (+ AuthView)
+├── SupabaseService        Nil-safe SupabaseClient singleton
+├── ToastManager           Toast banner presenter
+├── TabRouter              Programmatic tab-switching store
+├── HapticFeedback         UIKit haptic helpers
+├── CartAnimationManager   Flying cart particle coordinator
 ├── NotificationStore
-├── AppConfig        All service keys + offline-mode detection
-└── AppConstants     All magic values in one place
+├── AppConfig              All service keys + offline-mode detection
+└── AppConstants           All magic values in one place
 ```
 
 ---
@@ -71,7 +74,7 @@ geekcommerze/
 | 💳 **Checkout** | Saved addresses · promo codes · biometric confirm (passcode fallback) · Apple Pay (demo) · confetti |
 | 📋 **Orders** | Status timeline · reorder · return request (persisted) |
 | ❤️ **Wishlist** | Heart toggle from any screen · spring-exit on remove · quick-access heart icon in HomeView toolbar |
-| 👤 **Profile** | Loyalty tier · address book · dark mode · stats |
+| 👤 **Profile** | Loyalty tier · address book · dark mode · stats · sign out (clears local cart/order data) |
 | 🔔 **Notifications** | In-app centre · badge · swipe actions · seeded on first launch |
 | 🚀 **Splash** | Branded gradient splash on every return launch · skipped on first launch |
 | 🎬 **Onboarding** | 3-page flow · shown once on first launch · no splash before it |
@@ -388,9 +391,12 @@ enum Monitoring {
 - `Views/ShopView.swift` — ShopView, FilterChip, ActiveFilterChip, SortFilterSheet, ProductCard
 - `Views/NotificationsView.swift` — NotificationsView, NotificationRow, BellBadgeIcon
 - `Views/CheckoutView.swift` — CheckoutView, TrustBadge, SavedAddressPickerSheet, CheckoutField
-- `Stores/CartStore.swift` — CartStore (itemCount, freeShippingThreshold, shippingCost, shipping(for:), refresh, addProduct, removeItem, updateQuantity, clearCart, refreshFromContext)
+- `Stores/CartStore.swift` — CartStore mutations-only store (freeShippingThreshold, shippingCost, shipping(for:), addProduct, removeItem, updateQuantity, clearCart, clearAllUserData)
 - `Stores/ProductStore.swift` — ProductStore (products, isLoading, loadError, loadProducts, filtered, featuredProducts, products(for:), product(id:), mockProducts)
-- `ToastManager.swift` — ToastManager, ToastItem, ToastOverlay, HapticFeedback, TabRouter, CartAnimationManager (Particle, particles, cartTabCenter, trigger, remove), FlyingCartParticle
+- `ToastManager.swift` — ToastManager, ToastItem, ToastOverlay
+- `TabRouter.swift` — TabRouter (programmatic tab switching)
+- `HapticFeedback.swift` — HapticFeedback (impact, notification, selection)
+- `CartAnimationManager.swift` — CartAnimationManager, Particle, FlyingCartParticle
 - `Views/ProductDetailView.swift` — ProductDetailView, ProductReview (all stored properties), all computed vars (isWishlisted, relatedProducts, frequentlyBoughtTogether, socialProofViewing, socialProofSoldToday, colorVariants, sizeVariants, priceHistory, mockReviews, ratingBreakdown), all private view-builder vars (productImageSection, productInfoSection, tabSection, priceSparkline, reviewsSection, ratingOverview, deliveryReturnsSection, frequentlyBoughtSection, peopleAlsoBuySection, addToCartBar), all action/helper functions (toggleWishlist, trackRecentlyViewed, notifyWhenAvailable, miniProductCard), and helper structs (WriteReviewSheet, ReviewCard, DeliveryRow, DetailRow)
 
 Each property, function, and type declaration is annotated with a one-line `///` doc comment describing what it stores or does, which screens use it, and why it exists.

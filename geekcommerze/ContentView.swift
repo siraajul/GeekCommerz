@@ -9,8 +9,10 @@ struct ContentView: View {
     /// Observable store for product catalog data; injected into the environment for child views.
     @State private var productStore = ProductStore()
 
-    /// Observable store for cart contents and item count; injected into the environment for child views.
+    /// Observable store for cart mutations; badge count is queried live from SwiftData via `@Query`.
     @State private var cartStore = CartStore()
+
+    @Query private var cartItems: [CartItem]
 
     /// Observable manager for transient toast banners shown above the tab bar.
     @State private var toastManager = ToastManager()
@@ -75,7 +77,7 @@ struct ContentView: View {
                         }
                     }
                     .tag(3)
-                    .badge(cartStore.itemCount > 0 ? cartStore.itemCount : 0)
+                    .badge(cartItems.reduce(0) { $0 + $1.quantity })
 
                 ProfileView()
                     .tabItem { Label("Profile", systemImage: "person.circle") }
