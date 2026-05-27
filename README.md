@@ -103,7 +103,7 @@ Wishlist item →  scale+opacity exit transition on remove
 | Layer | Technology |
 |---|---|
 | UI | SwiftUI 5 · `AppTheme` design system (adaptive indigo/violet — full dark mode support · consistent radius/typography tokens · accessibility labels throughout) |
-| Local persistence | SwiftData |
+| Local persistence | SwiftData · `VersionedSchema` migration plan · safe store-wipe fallback |
 | Lightweight state | `@AppStorage` |
 | Remote backend | Supabase (optional — offline fallback built-in) |
 | Auth | Supabase Auth (email/password · session restore) |

@@ -3,6 +3,27 @@ import SwiftData
 import Sentry
 import OneSignalFramework
 
+// MARK: - Schema Versioning
+//
+// Every schema change needs a new VersionedSchema enum and a MigrationStage entry.
+// Adding optional properties → .lightweight migration (no data transform needed).
+// Renaming / changing types  → .custom migration stage with explicit data transform.
+
+enum SchemaV1: VersionedSchema {
+    static var versionIdentifier = Schema.Version(1, 0, 0)
+    static var models: [any PersistentModel.Type] = [
+        CartItem.self,
+        Order.self,
+        OrderItem.self,
+    ]
+}
+
+enum AppMigrationPlan: SchemaMigrationPlan {
+    static var schemas: [any VersionedSchema.Type] = [SchemaV1.self]
+    // Add .lightweight or .custom stages here when a new SchemaV2 is introduced.
+    static var stages: [MigrationStage] = []
+}
+
 @main
 struct geekcommerzeApp: App {
     @AppStorage(AppConstants.StorageKeys.hasSeenOnboarding) private var hasSeenOnboarding = false
@@ -32,16 +53,26 @@ struct geekcommerzeApp: App {
     }
 
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            CartItem.self,
-            Order.self,
-            OrderItem.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try ModelContainer(
+                for: CartItem.self, Order.self, OrderItem.self,
+                migrationPlan: AppMigrationPlan.self
+            )
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            // Migration failed — wipe the local store so the user is never permanently
+            // locked out of the app. Local cart/order history is lost, but that is
+            // preferable to an unrecoverable crash on every launch.
+            let fm = FileManager.default
+            if let supportDir = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+                for name in ["default.store", "default.store-shm", "default.store-wal"] {
+                    try? fm.removeItem(at: supportDir.appending(path: name))
+                }
+            }
+            // After wiping, a fresh empty container must succeed.
+            return try! ModelContainer(
+                for: CartItem.self, Order.self, OrderItem.self,
+                migrationPlan: AppMigrationPlan.self
+            )
         }
     }()
 
