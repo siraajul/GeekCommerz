@@ -183,27 +183,26 @@ struct NotificationRow: View {
 
 // MARK: - BellBadgeIcon
 
-/// Bell icon with a red unread-count badge overlay; placed in HomeView's toolbar to give quick access to NotificationsView.
+/// Bell icon with a red unread-count badge; badge lives inside the fixed 32×32 frame so toolbar containers can never clip it.
 struct BellBadgeIcon: View {
     let count: Int
 
     // MARK: - Body
 
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            Image(systemName: "bell")
-                .font(.title3)
-                .padding(.top, 7)
-                .padding(.trailing, 7)
-            if count > 0 {
-                Text(count > 9 ? "9+" : "\(count)")
-                    .font(.system(size: 9, weight: .bold))
-                    .foregroundColor(.white)
-                    .frame(minWidth: 16, minHeight: 16)
-                    .background(Color.red)
-                    .clipShape(Circle())
+        Image(systemName: "bell")
+            .font(.system(size: 18, weight: .medium))
+            .frame(width: 32, height: 32)
+            .overlay(alignment: .topTrailing) {
+                if count > 0 {
+                    Text(count > 9 ? "9+" : "\(count)")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(minWidth: 16, minHeight: 16)
+                        .background(Color.red)
+                        .clipShape(Circle())
+                }
             }
-        }
     }
 }
 

@@ -13,6 +13,11 @@ struct HomeView: View {
     @Environment(TabRouter.self) private var tabRouter
     @State private var selectedProduct: Product? = nil
     @AppStorage(AppConstants.StorageKeys.recentlyViewed) private var recentlyViewedData: String = ""
+    @AppStorage(AppConstants.StorageKeys.wishlist) private var wishlistData: String = ""
+
+    private var wishlistCount: Int {
+        wishlistData.components(separatedBy: ",").filter { !$0.isEmpty }.count
+    }
     @State private var currentBannerIndex: Int = 0
     @State private var showNotifications = false
     @State private var navigateToShop = false
@@ -65,10 +70,9 @@ struct HomeView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    HStack(spacing: 16) {
+                    HStack(spacing: 4) {
                         NavigationLink(destination: WishlistView()) {
-                            Image(systemName: "heart")
-                                .font(.title3)
+                            WishlistBadgeIcon(count: wishlistCount)
                         }
                         .accessibilityLabel("Wishlist")
                         Button { tabRouter.selectedTab = 3 } label: {
@@ -540,7 +544,36 @@ struct SectionHeader<D: View>: View {
     }
 }
 
-/// Animated cart icon with a red badge count shown in the HomeView navigation bar trailing position; bounces on count change.
+// MARK: - WishlistBadgeIcon
+
+/// Heart icon with an optional red item-count badge; fills red when the wishlist is non-empty.
+/// Badge lives inside the fixed 32×32 frame so toolbar containers can never clip it.
+struct WishlistBadgeIcon: View {
+    let count: Int
+
+    // MARK: - Body
+
+    var body: some View {
+        Image(systemName: count > 0 ? "heart.fill" : "heart")
+            .font(.system(size: 18, weight: .medium))
+            .foregroundColor(count > 0 ? .red : .primary)
+            .frame(width: 32, height: 32)
+            .overlay(alignment: .topTrailing) {
+                if count > 0 {
+                    Text(count > 9 ? "9+" : "\(count)")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(minWidth: 16, minHeight: 16)
+                        .background(Color.red)
+                        .clipShape(Circle())
+                }
+            }
+    }
+}
+
+// MARK: - CartBadgeIcon
+
+/// Animated cart icon with a red badge count; badge lives inside the fixed 32×32 frame so toolbar containers can never clip it.
 struct CartBadgeIcon: View {
     let count: Int
     @State private var scale: CGFloat = 1.0
@@ -548,20 +581,19 @@ struct CartBadgeIcon: View {
     // MARK: - Body
 
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            Image(systemName: "cart")
-                .font(.title3)
-                .padding(.top, 8)
-                .padding(.trailing, 8)
-            if count > 0 {
-                Text(count > 9 ? "9+" : "\(count)")
-                    .font(.system(size: 9, weight: .bold))
-                    .foregroundColor(.white)
-                    .frame(minWidth: 16, minHeight: 16)
-                    .background(Color.red)
-                    .clipShape(Circle())
+        Image(systemName: "cart")
+            .font(.system(size: 18, weight: .medium))
+            .frame(width: 32, height: 32)
+            .overlay(alignment: .topTrailing) {
+                if count > 0 {
+                    Text(count > 9 ? "9+" : "\(count)")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(minWidth: 16, minHeight: 16)
+                        .background(Color.red)
+                        .clipShape(Circle())
+                }
             }
-        }
         .scaleEffect(scale)
         .onChange(of: count) { _, newCount in
             guard newCount > 0 else { return }
