@@ -310,5 +310,8 @@ struct SummaryRow: View {
         .environment(AuthStore())
         .environment(ProductStore())
         .environment(ToastManager())
+        .environment(TabRouter())
+        .environment(CartAnimationManager())
+        .environment(NotificationStore())
         .modelContainer(for: [CartItem.self, Order.self, OrderItem.self], inMemory: true)
 }

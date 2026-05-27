@@ -111,6 +111,11 @@ struct WishlistView: View {
         WishlistView()
             .environment(ProductStore())
             .environment(CartStore())
+            .environment(ToastManager())
+            .environment(TabRouter())
+            .environment(CartAnimationManager())
+            .environment(NotificationStore())
+            .environment(AuthStore())
     }
     .modelContainer(for: [CartItem.self, Order.self, OrderItem.self], inMemory: true)
 }
