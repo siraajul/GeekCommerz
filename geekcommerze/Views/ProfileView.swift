@@ -26,6 +26,7 @@ struct ProfileView: View {
     @AppStorage(AppConstants.StorageKeys.savedAddresses) private var savedAddressesData: String = ""
     @State private var showEditProfile = false
     @State private var showAddAddress = false
+    @State private var showAuthSheet = false
 
     // MARK: - Computed Properties
 
@@ -68,7 +69,7 @@ struct ProfileView: View {
                 addressesSection
                 settingsSection
                 aboutSection
-                signOutSection
+                authSection
             }
             .listStyle(.insetGrouped)
             .navigationTitle("Profile")
@@ -81,6 +82,12 @@ struct ProfileView: View {
                     current.append(newAddress)
                     persistAddresses(current)
                 }
+            }
+            .sheet(isPresented: $showAuthSheet) {
+                AuthView()
+            }
+            .onChange(of: authStore.needsAuth) { _, needsAuth in
+                if !needsAuth { showAuthSheet = false }
             }
         }
     }
@@ -251,20 +258,49 @@ struct ProfileView: View {
         }
     }
 
-    // MARK: - Sign Out Section
+    // MARK: - Auth Section
 
-    private var signOutSection: some View {
-        Section {
-            Button(role: .destructive) {
-                Task {
-                    cartStore.clearAllUserData(context: modelContext)
-                    await authStore.signOut()
+    /// Renders the appropriate auth row: offline notice, sign-in button, or sign-out button.
+    @ViewBuilder
+    private var authSection: some View {
+        if authStore.isOfflineMode {
+            Section {
+                HStack(spacing: 12) {
+                    Image(systemName: "wifi.slash")
+                        .foregroundStyle(.secondary)
+                    Text("Offline mode — add Supabase keys to AppConfig to enable accounts")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                 }
-            } label: {
-                HStack {
-                    Spacer()
-                    Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
-                    Spacer()
+                .padding(.vertical, 4)
+            }
+        } else if authStore.session == nil {
+            Section {
+                Button {
+                    showAuthSheet = true
+                } label: {
+                    HStack {
+                        Spacer()
+                        Label("Sign In / Create Account", systemImage: "person.crop.circle.badge.plus")
+                            .font(.headline)
+                        Spacer()
+                    }
+                }
+                .foregroundStyle(AppTheme.Colors.primary)
+            }
+        } else {
+            Section {
+                Button(role: .destructive) {
+                    Task {
+                        cartStore.clearAllUserData(context: modelContext)
+                        await authStore.signOut()
+                    }
+                } label: {
+                    HStack {
+                        Spacer()
+                        Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
+                        Spacer()
+                    }
                 }
             }
         }

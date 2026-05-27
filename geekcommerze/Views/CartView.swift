@@ -4,9 +4,11 @@ import SwiftData
 struct CartView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(CartStore.self) private var cartStore
+    @Environment(AuthStore.self) private var authStore
     @Environment(ToastManager.self) private var toastManager
     @Query private var cartItems: [CartItem]
     @State private var showCheckout = false
+    @State private var showAuthSheet = false
     @AppStorage(AppConstants.StorageKeys.wishlist) private var wishlistData: String = ""
 
     // MARK: - Computed Totals
@@ -36,7 +38,17 @@ struct CartView: View {
             .sheet(isPresented: $showCheckout) {
                 CheckoutView()
             }
-
+            .sheet(isPresented: $showAuthSheet) {
+                AuthView()
+            }
+            .onChange(of: authStore.needsAuth) { _, needsAuth in
+                if !needsAuth && showAuthSheet {
+                    showAuthSheet = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        showCheckout = true
+                    }
+                }
+            }
         }
     }
 
@@ -156,9 +168,15 @@ struct CartView: View {
 
     // MARK: - Checkout Button
 
-    /// Sticky gradient CTA anchored to the safe-area bottom in CartView; sets showCheckout to present CheckoutView as a sheet.
+    /// Sticky gradient CTA anchored to the safe-area bottom in CartView; gates on auth before presenting CheckoutView.
     private var checkoutButton: some View {
-        Button { showCheckout = true } label: {
+        Button {
+            if authStore.needsAuth {
+                showAuthSheet = true
+            } else {
+                showCheckout = true
+            }
+        } label: {
             HStack {
                 Text("Proceed to Checkout")
                     .font(AppTheme.Typography.button)
@@ -289,6 +307,8 @@ struct SummaryRow: View {
 #Preview {
     CartView()
         .environment(CartStore())
+        .environment(AuthStore())
         .environment(ProductStore())
+        .environment(ToastManager())
         .modelContainer(for: [CartItem.self, Order.self, OrderItem.self], inMemory: true)
 }

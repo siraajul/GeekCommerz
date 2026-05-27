@@ -70,11 +70,11 @@ geekcommerze/
 | 🔍 **Search** | Real-time results · trending chips · recent history (max 8) · category browse |
 | 🛒 **Shop** | 2-col grid · sort & filter sheet · long-press context menu · pull-to-refresh |
 | 📦 **Product Detail** | Pinch-to-zoom · full-screen 4-slide gallery · color/size variants · size guide sheet (clothing) · 30-day price chart · reviews · collapsible bundle & related sections |
-| 🛍 **Cart** | Pill stepper · swipe → wishlist / delete · live shipping threshold |
+| 🛍 **Cart** | Pill stepper · swipe → wishlist / delete · live shipping threshold · auth gate on checkout (login prompt if Supabase configured and not signed in) |
 | 💳 **Checkout** | Saved addresses · promo codes · biometric confirm (passcode fallback) · Apple Pay (demo) · confetti |
 | 📋 **Orders** | Status timeline · reorder · return request (persisted) |
 | ❤️ **Wishlist** | Heart toggle from any screen · spring-exit on remove · quick-access heart icon in HomeView toolbar |
-| 👤 **Profile** | Loyalty tier · address book · dark mode · stats · sign out (clears local cart/order data) |
+| 👤 **Profile** | Loyalty tier · address book · dark mode · stats · auth-aware footer: offline notice / Sign In button / Sign Out based on auth state |
 | 🔔 **Notifications** | In-app centre · badge · swipe actions · seeded on first launch |
 | 🚀 **Splash** | Branded gradient splash on every return launch · skipped on first launch |
 | 🎬 **Onboarding** | 3-page flow · shown once on first launch · no splash before it |
