@@ -61,6 +61,105 @@ geekcommerze/
 
 ---
 
+## Screenshots
+
+<div align="center">
+
+### Discover & Shop
+
+<table>
+<tr>
+<td align="center" width="25%"><b>Home</b><br/><sub>banner · flash sale · featured</sub></td>
+<td align="center" width="25%"><b>Search</b><br/><sub>trending · categories</sub></td>
+<td align="center" width="25%"><b>Shop Grid</b><br/><sub>2-col · categories · bestseller</sub></td>
+<td align="center" width="25%"><b>Sort & Filter</b><br/><sub>bottom sheet</sub></td>
+</tr>
+<tr>
+<td><img src="screenshots/02.png" width="100%" alt="Home"/></td>
+<td><img src="screenshots/21.png" width="100%" alt="Search"/></td>
+<td><img src="screenshots/10.png" width="100%" alt="Shop"/></td>
+<td><img src="screenshots/11.png" width="100%" alt="Sort & Filter"/></td>
+</tr>
+</table>
+
+### Product Detail
+
+<table>
+<tr>
+<td align="center" width="25%"><b>Variants</b><br/><sub>color · size · stock</sub></td>
+<td align="center" width="25%"><b>Bundles</b><br/><sub>delivery · returns · FBT</sub></td>
+<td align="center" width="25%"><b>Specs & Price Chart</b><br/><sub>30-day Swift Charts</sub></td>
+<td align="center" width="25%"><b>Reviews</b><br/><sub>rating breakdown</sub></td>
+</tr>
+<tr>
+<td><img src="screenshots/12.png" width="100%" alt="Variants"/></td>
+<td><img src="screenshots/13.png" width="100%" alt="Bundles"/></td>
+<td><img src="screenshots/14.png" width="100%" alt="Price History"/></td>
+<td><img src="screenshots/15.png" width="100%" alt="Reviews"/></td>
+</tr>
+</table>
+
+### Cart & Checkout
+
+<table>
+<tr>
+<td align="center" width="25%"><b>Empty Cart</b><br/><sub>CTA → Shop</sub></td>
+<td align="center" width="25%"><b>Cart</b><br/><sub>stepper · live totals</sub></td>
+<td align="center" width="25%"><b>Checkout</b><br/><sub>secure · trust badges</sub></td>
+<td align="center" width="25%"><b>Payment</b><br/><sub>methods · order summary</sub></td>
+</tr>
+<tr>
+<td><img src="screenshots/05.png" width="100%" alt="Empty Cart"/></td>
+<td><img src="screenshots/16.png" width="100%" alt="Cart"/></td>
+<td><img src="screenshots/17.png" width="100%" alt="Checkout"/></td>
+<td><img src="screenshots/18.png" width="100%" alt="Payment"/></td>
+</tr>
+</table>
+
+### Orders, Profile & Engagement
+
+<table>
+<tr>
+<td align="center" width="25%"><b>Order Confirmed</b><br/><sub>confetti animation</sub></td>
+<td align="center" width="25%"><b>My Orders</b><br/><sub>status chips</sub></td>
+<td align="center" width="25%"><b>Order Timeline</b><br/><sub>pending → delivered</sub></td>
+<td align="center" width="25%"><b>Receipt</b><br/><sub>branded · shareable</sub></td>
+</tr>
+<tr>
+<td><img src="screenshots/19.png" width="100%" alt="Order Confirmed"/></td>
+<td><img src="screenshots/07.png" width="100%" alt="Orders"/></td>
+<td><img src="screenshots/08.png" width="100%" alt="Order Timeline"/></td>
+<td><img src="screenshots/09.png" width="100%" alt="Receipt"/></td>
+</tr>
+<tr>
+<td align="center"><b>Profile</b><br/><sub>Gold loyalty tier · stats</sub></td>
+<td align="center"><b>Empty Wishlist</b><br/><sub>quick access from Home</sub></td>
+<td align="center"><b>Notifications</b><br/><sub>in-app centre</sub></td>
+<td align="center"><b>Help & Support</b><br/><sub>FAQ accordion</sub></td>
+</tr>
+<tr>
+<td><img src="screenshots/06.png" width="100%" alt="Profile"/></td>
+<td><img src="screenshots/04.png" width="100%" alt="Wishlist"/></td>
+<td><img src="screenshots/03.png" width="100%" alt="Notifications"/></td>
+<td><img src="screenshots/20.png" width="100%" alt="Support"/></td>
+</tr>
+</table>
+
+### Promo Popup
+
+<table>
+<tr>
+<td align="center" width="100%"><b>Once-per-launch SAVE20 offer</b> — appears on app resume after onboarding</td>
+</tr>
+<tr>
+<td><img src="screenshots/01.png" width="25%" alt="Promo Popup"/></td>
+</tr>
+</table>
+
+</div>
+
+---
+
 ## Feature Map
 
 | Screen | Highlights |
