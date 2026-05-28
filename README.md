@@ -56,7 +56,8 @@ geekcommerze/
 ├── CartAnimationManager   Flying cart particle coordinator
 ├── NotificationStore
 ├── AppConfig              All service keys + offline-mode detection
-└── AppConstants           All magic values in one place
+├── AppConstants           All magic values in one place
+└── maestro/               Maestro UI smoke flows (YAML)
 ```
 
 ---
@@ -214,9 +215,32 @@ Wishlist item →  scale+opacity exit transition on remove
 | Haptics | UIImpactFeedbackGenerator |
 | Concurrency | Swift async/await |
 | Architecture | `@Observable` (Observation framework) |
-| Testing | Swift Testing + XCUIAutomation |
+| Testing | Swift Testing + XCUIAutomation · Maestro UI smoke suite |
 
 > Runs **fully offline with mock data** out of the box. Add keys to `AppConfig.swift` to go live.
+
+---
+
+## UI Testing (Maestro)
+
+Black-box smoke flows live under [`maestro/`](maestro/) and exercise the app through the real UI on a booted iOS simulator.
+
+| Flow | Coverage |
+|---|---|
+| `01_smoke.yaml` | Launch · dismiss SAVE20 welcome popup · assert Home + tab bar + Categories / Featured rails |
+| `02_search.yaml` | Search tab · type query · assert results appear |
+| `03_add_to_cart.yaml` | Shop → product detail → Add to Cart → close sheet → Cart tab → assert line item |
+| `04_tabs.yaml` | Round-trip every tab (Home / Search / Shop / Cart / Profile) |
+| `subflows/dismiss_promo.yaml` | Conditional helper — dismisses the welcome popup only when visible |
+
+**Run the suite:**
+
+```bash
+# Boot a simulator first (Xcode → Open Developer Tool → Simulator), then:
+maestro test maestro/ --include-tags smoke
+```
+
+> Install Maestro with `brew tap mobile-dev-inc/tap && brew install maestro`. The flows target `appId: geekssort.geekcommerze` and assume a Debug build is installed on the booted simulator (`⌘R` from Xcode once is enough).
 
 ---
 
