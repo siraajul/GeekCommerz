@@ -1,0 +1,28 @@
+appId: geekssort.geekcommerze
+tags:
+  - smoke
+---
+- launchApp:
+    clearState: false
+- runFlow: subflows/dismiss_promo.yaml
+- tapOn:
+    text: "Shop"
+    index: 0
+- waitForAnimationToEnd
+- tapOn:
+    text: "Wireless Headphones Pro"
+- assertVisible:
+    text: "Add to Cart"
+- tapOn:
+    text: "Add to Cart"
+- waitForAnimationToEnd
+- assertVisible:
+    id: "cart"
+- tapOn:
+    id: "xmark"
+- waitForAnimationToEnd
+- tapOn:
+    text: "Cart"
+    index: 0
+- assertVisible:
+    text: ".*Wireless Headphones.*"

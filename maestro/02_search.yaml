@@ -1,0 +1,19 @@
+appId: geekssort.geekcommerze
+tags:
+  - smoke
+---
+- launchApp:
+    clearState: false
+- runFlow: subflows/dismiss_promo.yaml
+- tapOn:
+    text: "Search"
+    index: 0
+- assertVisible:
+    text: "Search"
+- tapOn:
+    id: "magnifyingglass"
+    index: 1
+- inputText: "Headphones"
+- waitForAnimationToEnd
+- assertVisible:
+    text: ".*Headphones.*"

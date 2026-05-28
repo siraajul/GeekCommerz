@@ -1,0 +1,9 @@
+appId: geekssort.geekcommerze
+---
+- runFlow:
+    when:
+      visible:
+        text: "Special Welcome Offer!"
+    commands:
+      - tapOn:
+          text: "Maybe Later"

@@ -1,0 +1,19 @@
+appId: geekssort.geekcommerze
+tags:
+  - smoke
+---
+- launchApp:
+    clearState: false
+- runFlow: subflows/dismiss_promo.yaml
+- assertVisible:
+    text: "GeekCommerz"
+- assertVisible:
+    id: "house"
+- assertVisible:
+    id: "magnifyingglass"
+- assertVisible:
+    id: "cart"
+- assertVisible:
+    text: "Categories"
+- assertVisible:
+    text: "Featured"

@@ -1,0 +1,28 @@
+appId: geekssort.geekcommerze
+tags:
+  - smoke
+---
+- launchApp:
+    clearState: false
+- runFlow: subflows/dismiss_promo.yaml
+- tapOn:
+    text: "Search"
+    index: 0
+- assertVisible:
+    id: "magnifyingglass"
+- tapOn:
+    text: "Shop"
+    index: 0
+- assertVisible:
+    text: ".*[Ss]hop.*"
+- tapOn:
+    text: "Cart"
+    index: 0
+- tapOn:
+    text: "Profile"
+    index: 0
+- tapOn:
+    text: "Home"
+    index: 0
+- assertVisible:
+    text: "Featured"
