@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="screenshots/app-icon.png" width="120" alt="GeekCommerz app icon" />
+<img src="screenshots/app-icon-rounded.png" width="120" alt="GeekCommerz app icon" />
 
 # GeekCommerz
 
