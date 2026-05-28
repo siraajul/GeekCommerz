@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="screenshots/app-icon.png" width="120" alt="GeekCommerz app icon" />
+
 # GeekCommerz
 
 **Production-grade iOS e-commerce — offline-first, Supabase-ready**
